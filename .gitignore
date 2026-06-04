@@ -38,3 +38,5 @@ next-env.d.ts
 
 # uploads (local dev fallback)
 /public/uploads
+
+.vercel
