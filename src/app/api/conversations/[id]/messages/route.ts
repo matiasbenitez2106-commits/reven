@@ -1,0 +1,88 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/auth";
+import { messageSchema } from "@/lib/validations";
+
+type Params = { params: { id: string } };
+
+async function ensureParticipant(conversationId: string, userId: string) {
+  const convo = await prisma.conversation.findUnique({
+    where: { id: conversationId },
+    select: { buyerId: true, sellerId: true },
+  });
+  if (!convo) return { ok: false as const, status: 404, error: "Conversación no encontrada" };
+  if (convo.buyerId !== userId && convo.sellerId !== userId) {
+    return { ok: false as const, status: 403, error: "No autorizado" };
+  }
+  return { ok: true as const };
+}
+
+// Mensajes de una conversación (soporta ?after=ISO para polling)
+export async function GET(req: Request, { params }: Params) {
+  const user = await getCurrentUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
+  const check = await ensureParticipant(params.id, user.id);
+  if (!check.ok) return NextResponse.json({ error: check.error }, { status: check.status });
+
+  const after = new URL(req.url).searchParams.get("after");
+  const where: { conversationId: string; createdAt?: { gt: Date } } = {
+    conversationId: params.id,
+  };
+  if (after) {
+    const d = new Date(after);
+    if (!isNaN(d.getTime())) where.createdAt = { gt: d };
+  }
+
+  const messages = await prisma.message.findMany({ where, orderBy: { createdAt: "asc" } });
+
+  // Marca como leídos los mensajes del otro participante
+  await prisma.message.updateMany({
+    where: { conversationId: params.id, senderId: { not: user.id }, readAt: null },
+    data: { readAt: new Date() },
+  });
+
+  return NextResponse.json({
+    messages: messages.map((m) => ({
+      id: m.id,
+      body: m.body,
+      senderId: m.senderId,
+      createdAt: m.createdAt,
+    })),
+  });
+}
+
+// Enviar un mensaje
+export async function POST(req: Request, { params }: Params) {
+  const user = await getCurrentUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
+  const dbUser = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: { verification: true },
+  });
+  if (dbUser?.verification !== "VERIFIED") {
+    return NextResponse.json({ error: "Verificá tu identidad para enviar mensajes." }, { status: 403 });
+  }
+
+  const check = await ensureParticipant(params.id, user.id);
+  if (!check.ok) return NextResponse.json({ error: check.error }, { status: check.status });
+
+  const parsed = messageSchema.safeParse(await req.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Mensaje inválido" }, { status: 400 });
+  }
+
+  const msg = await prisma.message.create({
+    data: { conversationId: params.id, senderId: user.id, body: parsed.data.body },
+  });
+  await prisma.conversation.update({
+    where: { id: params.id },
+    data: { updatedAt: new Date() },
+  });
+
+  return NextResponse.json(
+    { id: msg.id, body: msg.body, senderId: msg.senderId, createdAt: msg.createdAt },
+    { status: 201 }
+  );
+}

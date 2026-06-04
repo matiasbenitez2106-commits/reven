@@ -1,0 +1,309 @@
+// Reven — esquema de base de datos
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ──────────────────────────────────────────────
+// Enums
+// ──────────────────────────────────────────────
+
+enum Role {
+  USER
+  ADMIN
+}
+
+// Estado de verificación de identidad del usuario
+enum VerificationStatus {
+  UNVERIFIED // registrado, todavía no envió documentación
+  PENDING    // envió documentación, en revisión
+  VERIFIED   // identidad confirmada
+  REJECTED   // rechazado
+}
+
+// Condición del artículo: bueno / muy bueno / como nuevo
+enum Condition {
+  GOOD
+  VERY_GOOD
+  LIKE_NEW
+}
+
+enum ListingStatus {
+  ACTIVE
+  SOLD
+  PAUSED
+  DELETED
+}
+
+// Planes de publicación destacada
+enum PaymentType {
+  BOOST_3     // Boost 3 días
+  FEATURED_7  // Destacado 7 días
+  FEATURED_14 // Destacado 14 días
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+// Planes de suscripción del vendedor
+enum SubscriptionPlan {
+  PRO
+  PRO_PLUS
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+  CANCELLED
+  EXPIRED
+}
+
+// ──────────────────────────────────────────────
+// Modelos
+// ──────────────────────────────────────────────
+
+model User {
+  id           String             @id @default(cuid())
+  firstName    String
+  lastName     String
+  email        String             @unique
+  passwordHash String
+  province     String
+  city         String
+  // Ubicación aproximada del usuario (para búsquedas por proximidad)
+  latitude     Float?
+  longitude    Float?
+  role         Role               @default(USER)
+  verification VerificationStatus @default(UNVERIFIED)
+  avatarUrl    String?
+  // Suscripción de vendedor (desnormalizado para ranking/badge)
+  proPlan      SubscriptionPlan?
+  proUntil     DateTime?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  verificationData      Verification?
+  subscription          Subscription?
+  listings              Listing[]
+  favorites             Favorite[]
+  payments              Payment[]
+  conversationsAsBuyer  Conversation[] @relation("BuyerConversations")
+  conversationsAsSeller Conversation[] @relation("SellerConversations")
+  messages              Message[]      @relation("SentMessages")
+  reportsMade           Report[]       @relation("ReportsMade")
+
+  @@index([verification])
+}
+
+// Datos sensibles de verificación. Los campos personales se guardan ENCRIPTADOS
+// (AES-256-GCM, ver src/lib/crypto.ts). Solo accesibles por un admin ante denuncia.
+model Verification {
+  id              String             @id @default(cuid())
+  userId          String             @unique
+  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status          VerificationStatus @default(PENDING)
+  provider        String             @default("mock") // mock | onfido
+  providerRef     String? // id del check en el proveedor externo
+  // URLs encriptadas (las imágenes viven en almacenamiento privado)
+  dniFrontUrlEnc  String?
+  dniBackUrlEnc   String?
+  selfieUrlEnc    String?
+  // Nº de documento encriptado
+  dniNumberEnc    String?
+  livenessScore   Float? // resultado del liveness check (0..1)
+  matchScore      Float? // similitud selfie vs DNI (0..1)
+  rejectionReason String?
+  reviewedAt      DateTime?
+  reviewedBy      String? // id del admin o "system"
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  slug     String    @unique
+  icon     String? // nombre de ícono (lucide)
+  order    Int       @default(0)
+  listings Listing[]
+}
+
+model Listing {
+  id             String         @id @default(cuid())
+  title          String
+  description    String
+  price          Decimal        @db.Decimal(12, 2)
+  currency       String         @default("ARS")
+  condition      Condition
+  status         ListingStatus  @default(ACTIVE)
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  // Ubicación del artículo
+  province     String
+  city         String
+  neighborhood String?
+  latitude     Float?
+  longitude    Float?
+
+  sellerId String
+  seller   User   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+
+  images        ListingImage[]
+  conversations Conversation[]
+  favorites     Favorite[]
+  payments      Payment[]
+  reports       Report[]
+
+  // Publicación destacada (monetización): vigente mientras featuredUntil > now()
+  featuredUntil DateTime?
+  viewCount     Int       @default(0)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  soldAt    DateTime?
+
+  @@index([status])
+  @@index([categoryId])
+  @@index([price])
+  @@index([createdAt])
+  @@index([sellerId])
+  @@index([featuredUntil])
+}
+
+model ListingImage {
+  id        String   @id @default(cuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  url       String
+  publicId  String? // id en Cloudinary (para poder borrarla)
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([listingId])
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, listingId])
+  @@index([userId])
+  @@index([listingId])
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  listingId String
+  listing   Listing   @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyerId   String
+  buyer     User      @relation("BuyerConversations", fields: [buyerId], references: [id], onDelete: Cascade)
+  sellerId  String
+  seller    User      @relation("SellerConversations", fields: [sellerId], references: [id], onDelete: Cascade)
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Un comprador tiene una sola conversación por publicación
+  @@unique([listingId, buyerId])
+  @@index([buyerId])
+  @@index([sellerId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  body           String
+  readAt         DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId])
+}
+
+// Pagos de publicaciones destacadas (MercadoPago). Sin comisiones entre partes.
+model Payment {
+  id            String        @id @default(cuid())
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listingId     String
+  listing       Listing       @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  type          PaymentType
+  amount        Int // ARS (sin decimales)
+  status        PaymentStatus @default(PENDING)
+  mpPreferenceId String?
+  mpPaymentId   String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([listingId])
+}
+
+// Suscripción del vendedor (PRO / PRO+). Recurrente vía MercadoPago (preapproval).
+model Subscription {
+  id               String             @id @default(cuid())
+  userId           String             @unique
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan             SubscriptionPlan
+  status           SubscriptionStatus @default(PENDING)
+  currentPeriodEnd DateTime
+  boostsIncluded   Int                @default(0)
+  boostsUsed       Int                @default(0)
+  mpPreapprovalId  String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+// Motivo de la denuncia de una publicación
+enum ReportReason {
+  FRAUD       // estafa
+  FAKE        // producto falso / inexistente
+  PROHIBITED  // artículo prohibido
+  SPAM        // spam / publica cualquier cosa
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING   // sin revisar
+  REVIEWED  // revisada, sin acción
+  DISMISSED // desestimada
+  ACTIONED  // se tomó acción (p.ej. se eliminó la publicación)
+}
+
+// Denuncia de una publicación (la hace un comprador; la revisa un admin)
+model Report {
+  id         String       @id @default(cuid())
+  listingId  String
+  listing    Listing      @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  reporterId String
+  reporter   User         @relation("ReportsMade", fields: [reporterId], references: [id], onDelete: Cascade)
+  reason     ReportReason
+  details    String?
+  status     ReportStatus @default(PENDING)
+  reviewedAt DateTime?
+  reviewedBy String?
+  createdAt  DateTime     @default(now())
+
+  // Un usuario denuncia una publicación una sola vez
+  @@unique([reporterId, listingId])
+  @@index([status])
+  @@index([listingId])
+}
