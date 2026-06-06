@@ -1,8 +1,15 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import { MapPin } from "lucide-react";
 
-// Mapa de ubicación APROXIMADA (no muestra dirección exacta).
-// Usa OpenStreetMap embebido (gratis, sin API key ni tarjeta).
-// El círculo translúcido representa la zona aproximada (~500 m).
+// El mapa Leaflet se carga solo en el cliente (usa window).
+const OsmMap = dynamic(() => import("./OsmMap"), {
+  ssr: false,
+  loading: () => <div className="h-full w-full animate-pulse bg-gray-100" />,
+});
+
+// Ubicación APROXIMADA (no muestra dirección exacta). Gratis, sin API key.
 export function LocationMap({
   lat,
   lng,
@@ -20,24 +27,10 @@ export function LocationMap({
     );
   }
 
-  // Bounding box de ~600 m alrededor del punto (sin marcador = zona aproximada)
-  const d = 0.006;
-  const bbox = `${lng - d}%2C${lat - d}%2C${lng + d}%2C${lat + d}`;
-  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik`;
-
   return (
     <div className="relative h-48 overflow-hidden rounded-xl border border-gray-200">
-      <iframe
-        title="Ubicación aproximada"
-        src={src}
-        className="h-full w-full"
-        style={{ border: 0 }}
-        loading="lazy"
-      />
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="h-24 w-24 rounded-full bg-brand-500/20 ring-4 ring-brand-500/30" />
-      </div>
-      <div className="pointer-events-none absolute bottom-2 left-2 rounded bg-white/90 px-2 py-1 text-xs text-gray-600 shadow">
+      <OsmMap lat={lat} lng={lng} />
+      <div className="pointer-events-none absolute bottom-2 left-2 z-[1000] rounded-md bg-white/90 px-2 py-1 text-xs text-gray-600 shadow-sm">
         <MapPin className="mr-1 inline h-3 w-3" /> Zona aproximada · {label}
       </div>
     </div>
