@@ -93,7 +93,25 @@ export async function geocode(query: string): Promise<LatLng | null> {
     }
   }
 
-  // Fallback por diccionario
+  // Nominatim (OpenStreetMap) — gratis, sin API key
+  try {
+    const url =
+      `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=ar&q=` +
+      encodeURIComponent(query);
+    const res = await fetch(url, {
+      headers: { "User-Agent": "Reven/1.0 (https://reven-reven-projects.vercel.app)" },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.[0]?.lat && data?.[0]?.lon) {
+        return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+      }
+    }
+  } catch (err) {
+    console.error("Nominatim geocoding falló, usando fallback:", err);
+  }
+
+  // Fallback por diccionario de ciudades AR
   const key = normalize(query.split(",")[0]);
   return AR_CITIES[key] ?? null;
 }
