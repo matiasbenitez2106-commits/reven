@@ -3,8 +3,8 @@
 import { MapContainer, TileLayer, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Mapa minimalista (tiles claros de CARTO Positron, gratis, sin API key).
-// No interactivo: se ve como un mapa estático y prolijo, acorde a la UI.
+// Mapa estilo Apple Maps (tiles cálidos de CARTO Voyager, gratis, sin API key):
+// tonos crema, parques verdes, agua celeste. Círculo celeste de zona aproximada.
 export default function OsmMap({ lat, lng }: { lat: number; lng: number }) {
   return (
     <MapContainer
@@ -20,17 +20,17 @@ export default function OsmMap({ lat, lng }: { lat: number; lng: number }) {
       style={{ height: "100%", width: "100%", background: "#f8fafc" }}
     >
       <TileLayer
-        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
         subdomains="abcd"
       />
       <Circle
         center={[lat, lng]}
         radius={500}
         pathOptions={{
-          color: "#177853",
+          color: "#007aff",
           weight: 1.5,
-          fillColor: "#229668",
-          fillOpacity: 0.15,
+          fillColor: "#007aff",
+          fillOpacity: 0.12,
         }}
       />
     </MapContainer>
