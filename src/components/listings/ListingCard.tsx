@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, BadgeCheck, ImageOff, Sparkles } from "lucide-react";
+import { MapPin, ImageOff, Sparkles } from "lucide-react";
 import { formatPrice, formatDistance } from "@/lib/utils";
 import { CONDITION_LABELS } from "@/lib/constants";
 import { Condition, SubscriptionPlan } from "@prisma/client";
@@ -38,18 +38,11 @@ export function ListingCard({ item }: { item: ListingCardItem }) {
             <ImageOff className="h-10 w-10" />
           </div>
         )}
-        <div className="absolute left-2 top-2 flex flex-col items-start gap-1">
-          {item.sellerVerified && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-2 py-0.5 text-[11px] font-medium text-brand-700 shadow">
-              <BadgeCheck className="h-3.5 w-3.5" /> Verificado
-            </span>
-          )}
-          {item.sellerPro && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-indigo-600 px-2 py-0.5 text-[11px] font-semibold text-white shadow">
-              {item.sellerPro === "PRO_PLUS" ? "PRO+" : "PRO"}
-            </span>
-          )}
-        </div>
+        {item.sellerPro && (
+          <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-indigo-600 px-2 py-0.5 text-[11px] font-semibold text-white shadow">
+            {item.sellerPro === "PRO_PLUS" ? "PRO+" : "PRO"}
+          </span>
+        )}
         {item.featured && (
           <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-amber-400 px-2 py-0.5 text-[11px] font-semibold text-amber-950 shadow">
             <Sparkles className="h-3.5 w-3.5" /> Destacado
