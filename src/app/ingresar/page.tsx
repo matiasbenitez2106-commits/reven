@@ -26,6 +26,12 @@ export default async function LoginPage() {
         </Suspense>
       </div>
 
+      <p className="mt-3 text-center text-sm">
+        <Link href="/recuperar" className="text-brand-600 hover:underline">
+          ¿Olvidaste tu contraseña?
+        </Link>
+      </p>
+
       <div className="mt-4 rounded-lg bg-brand-50 p-3 text-xs text-brand-800">
         <p className="font-medium">Cuenta de prueba (seed):</p>
         <p>demo@reven.ar · demo1234 — usuario verificado</p>

@@ -7,12 +7,14 @@ declare module "next-auth" {
       id: string;
       role: Role;
       verification: VerificationStatus;
+      emailVerified: boolean;
     } & DefaultSession["user"];
   }
 
   interface User {
     role: Role;
     verification: VerificationStatus;
+    emailVerified: boolean;
   }
 }
 
@@ -21,5 +23,6 @@ declare module "next-auth/jwt" {
     id: string;
     role: Role;
     verification: VerificationStatus;
+    emailVerified: boolean;
   }
 }

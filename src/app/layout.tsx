@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { BottomNav } from "@/components/BottomNav";
+import { EmailVerifyBanner } from "@/components/EmailVerifyBanner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col font-sans">
         <Providers>
           <Navbar />
+          <EmailVerifyBanner />
           <main className="flex-1 pb-16 sm:pb-0">{children}</main>
           <Footer />
           <BottomNav />

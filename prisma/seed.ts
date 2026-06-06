@@ -41,6 +41,7 @@ async function main() {
       city: "CABA",
       role: "ADMIN",
       verification: "VERIFIED",
+      emailVerified: new Date(),
     },
   });
   console.log("✓ admin@reven.ar (pass: admin1234)");
@@ -60,6 +61,7 @@ async function main() {
       latitude: -34.6037,
       longitude: -58.3816,
       verification: "VERIFIED",
+      emailVerified: new Date(),
     },
   });
   console.log("✓ demo@reven.ar (pass: demo1234) — verificado");

@@ -60,3 +60,36 @@ export function escapeHtml(s: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
+
+const wrap = (inner: string) =>
+  `<div style="font-family:system-ui,sans-serif;max-width:480px;margin:auto">
+    <h2 style="color:#177853">Reven</h2>${inner}
+    <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
+    <p style="color:#999;font-size:12px">Reven · compraventa de usados entre personas verificadas.</p>
+  </div>`;
+
+export async function sendVerificationEmail(to: string, link: string): Promise<void> {
+  await sendEmail({
+    to,
+    subject: "Verificá tu email · Reven",
+    html: wrap(
+      `<p>¡Bienvenido/a a Reven! Confirmá tu email para activar tu cuenta:</p>
+       <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Verificar mi email</a></p>
+       <p style="color:#666;font-size:13px">O pegá este link: ${link}</p>
+       <p style="color:#666;font-size:13px">Si no creaste la cuenta, ignorá este mensaje.</p>`
+    ),
+  });
+}
+
+export async function sendPasswordResetEmail(to: string, link: string): Promise<void> {
+  await sendEmail({
+    to,
+    subject: "Recuperá tu contraseña · Reven",
+    html: wrap(
+      `<p>Recibimos un pedido para restablecer tu contraseña.</p>
+       <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Crear nueva contraseña</a></p>
+       <p style="color:#666;font-size:13px">O pegá este link: ${link}</p>
+       <p style="color:#666;font-size:13px">El link vence en 1 hora. Si no fuiste vos, ignorá este mensaje.</p>`
+    ),
+  });
+}

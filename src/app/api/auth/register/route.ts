@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { registerSchema } from "@/lib/validations";
 import { geocode } from "@/lib/geo";
+import { createAuthToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/email";
 
 export async function POST(req: Request) {
   const json = await req.json().catch(() => null);
@@ -44,6 +46,15 @@ export async function POST(req: Request) {
     data: { firstName, lastName, email, passwordHash, province, city, latitude, longitude },
     select: { id: true, email: true },
   });
+
+  // Envío de email de verificación (no bloqueante)
+  try {
+    const token = await createAuthToken(user.id, "EMAIL_VERIFY");
+    const baseUrl = new URL(req.url).origin;
+    await sendVerificationEmail(email, `${baseUrl}/verificar-email?token=${token}`);
+  } catch (e) {
+    console.error("No se pudo enviar el email de verificación:", e);
+  }
 
   return NextResponse.json(user, { status: 201 });
 }

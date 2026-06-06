@@ -32,6 +32,7 @@ export const authOptions: NextAuthOptions = {
           name: `${user.firstName} ${user.lastName}`,
           role: user.role,
           verification: user.verification,
+          emailVerified: !!user.emailVerified,
         };
       },
     }),
@@ -42,15 +43,17 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.role = user.role;
         token.verification = user.verification;
+        token.emailVerified = !!user.emailVerified;
       } else if (trigger === "update" && token.id) {
-        // Refresca verificación y nombre cuando se llama a session.update()
+        // Refresca verificación, email y nombre cuando se llama a session.update()
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { role: true, verification: true, firstName: true, lastName: true },
+          select: { role: true, verification: true, firstName: true, lastName: true, emailVerified: true },
         });
         if (dbUser) {
           token.role = dbUser.role;
           token.verification = dbUser.verification;
+          token.emailVerified = !!dbUser.emailVerified;
           token.name = `${dbUser.firstName} ${dbUser.lastName}`;
         }
       }
@@ -61,6 +64,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string;
         session.user.role = token.role;
         session.user.verification = token.verification;
+        session.user.emailVerified = token.emailVerified;
       }
       return session;
     },
