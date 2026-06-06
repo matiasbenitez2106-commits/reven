@@ -38,11 +38,6 @@ export function ListingCard({ item }: { item: ListingCardItem }) {
             <ImageOff className="h-10 w-10" />
           </div>
         )}
-        {item.sellerPro && (
-          <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-indigo-600 px-2 py-0.5 text-[11px] font-semibold text-white shadow">
-            {item.sellerPro === "PRO_PLUS" ? "PRO+" : "PRO"}
-          </span>
-        )}
         {item.featured && (
           <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-amber-400 px-2 py-0.5 text-[11px] font-semibold text-amber-950 shadow">
             <Sparkles className="h-3.5 w-3.5" /> Destacado
