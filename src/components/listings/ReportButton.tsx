@@ -50,9 +50,9 @@ export function ReportButton({ listingId }: { listingId: string }) {
     <>
       <button
         onClick={openDialog}
-        className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-red-600"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-600 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"
       >
-        <Flag className="h-3.5 w-3.5" /> Denunciar publicación
+        <Flag className="h-4 w-4" /> Denunciar esta publicación
       </button>
 
       {open && (
