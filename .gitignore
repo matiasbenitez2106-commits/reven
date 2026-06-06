@@ -40,3 +40,6 @@ next-env.d.ts
 /public/uploads
 
 .vercel
+
+# carpetas ajenas a Reven que viven en este directorio
+/Projects
