@@ -35,6 +35,7 @@ export const RATE_LIMITS = {
   contact: { limit: 20, window: "10 m", windowMs: min(10) },
   upload: { limit: 50, window: "10 m", windowMs: min(10) },
   write: { limit: 40, window: "10 m", windowMs: min(10) },
+  deleteAccount: { limit: 5, window: "1 h", windowMs: min(60) },
 } satisfies Record<string, RateLimitConfig>;
 
 export interface RateLimitResult {

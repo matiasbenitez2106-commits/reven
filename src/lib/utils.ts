@@ -24,6 +24,15 @@ export function formatRelative(date: Date | string): string {
   return formatDistanceToNow(d, { addSuffix: true, locale: es });
 }
 
+/** Fecha absoluta legible: "7 de junio de 2026, 14:30". */
+export function formatDate(date: Date | string): string {
+  const d = typeof date === "string" ? new Date(date) : date;
+  return new Intl.DateTimeFormat("es-AR", {
+    dateStyle: "long",
+    timeStyle: "short",
+  }).format(d);
+}
+
 /** Iniciales para avatares. */
 export function getInitials(firstName: string, lastName?: string): string {
   return `${firstName?.[0] ?? ""}${lastName?.[0] ?? ""}`.toUpperCase();

@@ -7,6 +7,7 @@ import { activePlan } from "@/lib/subscriptions";
 import { Avatar } from "@/components/ui/Avatar";
 import { VerificationBadge } from "@/components/VerificationBadge";
 import { ProBadge } from "@/components/ProBadge";
+import { DeleteAccountButton } from "@/components/account/DeleteAccountButton";
 
 export const metadata = { title: "Mi cuenta" };
 
@@ -105,6 +106,10 @@ export default async function AccountPage() {
           </Link>
         </p>
       )}
+
+      <div className="mt-8">
+        <DeleteAccountButton />
+      </div>
     </div>
   );
 }

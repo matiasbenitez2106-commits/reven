@@ -1,4 +1,5 @@
-import { ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { ShieldCheck, FileText } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { formatRelative } from "@/lib/utils";
 import { Avatar } from "@/components/ui/Avatar";
@@ -58,6 +59,12 @@ export default async function AdminVerificationsPage() {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <AdminVerificationViewer userId={u.id} />
+            <Link
+              href={`/admin/identidad/${u.id}`}
+              className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium hover:bg-gray-50"
+            >
+              <FileText className="h-3.5 w-3.5" /> Dossier
+            </Link>
             <AdminVerificationActions userId={u.id} />
           </div>
         </div>

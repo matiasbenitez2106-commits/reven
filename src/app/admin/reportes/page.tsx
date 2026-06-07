@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Flag, ImageOff } from "lucide-react";
+import { Flag, ImageOff, FileText } from "lucide-react";
 import { ReportStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { REPORT_REASON_LABELS } from "@/lib/constants";
@@ -21,7 +21,13 @@ export default async function AdminReportsPage() {
     orderBy: [{ status: "asc" }, { createdAt: "desc" }],
     include: {
       listing: {
-        select: { id: true, title: true, status: true, images: { orderBy: { position: "asc" }, take: 1 } },
+        select: {
+          id: true,
+          title: true,
+          status: true,
+          images: { orderBy: { position: "asc" }, take: 1 },
+          seller: { select: { id: true, firstName: true, lastName: true } },
+        },
       },
       reporter: { select: { firstName: true, lastName: true, email: true } },
     },
@@ -70,8 +76,15 @@ export default async function AdminReportsPage() {
                   Denunciado por {r.reporter.firstName} {r.reporter.lastName} ({r.reporter.email}) ·{" "}
                   {formatRelative(r.createdAt)}
                 </p>
-                <div className="mt-3">
+                <div className="mt-3 flex flex-wrap items-center gap-2">
                   <AdminReportActions reportId={r.id} listingId={r.listing.id} />
+                  <Link
+                    href={`/admin/identidad/${r.listing.seller.id}`}
+                    className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium hover:bg-gray-50"
+                    title="Datos de identidad del vendedor para entregar a la autoridad"
+                  >
+                    <FileText className="h-3.5 w-3.5" /> Identidad del vendedor
+                  </Link>
                 </div>
               </div>
             </div>

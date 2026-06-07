@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { verificationSubmitSchema } from "@/lib/validations";
 import { uploadPrivateImage } from "@/lib/storage";
 import { encrypt } from "@/lib/crypto";
+import { purgeVerificationImages } from "@/lib/account";
 import { runIdentityCheck } from "@/lib/identity";
 import { notifyAdmin } from "@/lib/email";
 import { notify } from "@/lib/notifications";
@@ -56,8 +57,15 @@ export async function POST(req: Request) {
 
   const { dniNumber, dniFront, dniBack, selfie, matchScore, livenessScore } = parsed.data;
 
-  // Subida de imágenes con entrega PRIVADA (no quedan en el CDN público).
-  // Guardamos el publicId (o la ruta local en dev), no una URL pública.
+  // Imágenes de un intento anterior (las purgamos: conservamos solo la última versión)
+  const previous = await prisma.verification.findUnique({
+    where: { userId: user.id },
+    select: { dniFrontUrlEnc: true, dniBackUrlEnc: true, selfieUrlEnc: true },
+  });
+
+  // Subida con entrega PRIVADA (no quedan en el CDN público). Las imágenes se
+  // CONSERVAN encriptadas para poder responder a requerimientos de la justicia/policía
+  // ante un delito. Acceso restringido a administradores (ver visor/export admin).
   const [front, back, self] = await Promise.all([
     uploadPrivateImage(dniFront, "verification"),
     uploadPrivateImage(dniBack, "verification"),
@@ -97,7 +105,10 @@ export async function POST(req: Request) {
     if (status === "REJECTED") rejectionReason = "No se pudo confirmar tu identidad.";
   }
 
-  // Guardado: datos sensibles ENCRIPTADOS (AES-256-GCM)
+  // Purga de las imágenes del INTENTO ANTERIOR (evita duplicados/huérfanos en Cloudinary)
+  if (previous) await purgeVerificationImages(previous);
+
+  // Guardado: datos sensibles ENCRIPTADOS (AES-256-GCM).
   const data = {
     status,
     provider,

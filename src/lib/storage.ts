@@ -117,13 +117,45 @@ async function saveLocally(dataUri: string, folder: string): Promise<UploadResul
   return { url: `/uploads/${folder}/${filename}`, publicId: null };
 }
 
-/** Borra una imagen de Cloudinary por su publicId (no-op para fallback local). */
-export async function deleteImage(publicId: string | null): Promise<void> {
-  if (publicId && isCloudinaryConfigured()) {
-    try {
-      await cloudinary.uploader.destroy(publicId);
-    } catch (err) {
-      console.error("No se pudo borrar la imagen de Cloudinary:", err);
-    }
+/**
+ * Borra una imagen PÚBLICA de Cloudinary por su publicId.
+ * Devuelve true si se borró o no había nada que borrar; false si la operación falló.
+ */
+export async function deleteImage(publicId: string | null): Promise<boolean> {
+  if (!publicId || !isCloudinaryConfigured()) return true; // nada que borrar
+  try {
+    await cloudinary.uploader.destroy(publicId);
+    return true;
+  } catch (err) {
+    console.error("No se pudo borrar la imagen de Cloudinary:", err);
+    return false;
   }
+}
+
+/**
+ * Borra una imagen PRIVADA (type "authenticated") de Cloudinary por su publicId.
+ * Devuelve true si se borró o no había nada que borrar; false si la operación falló.
+ */
+export async function deletePrivateImage(publicId: string | null): Promise<boolean> {
+  if (!publicId || !isCloudinaryConfigured()) return true;
+  try {
+    await cloudinary.uploader.destroy(publicId, { type: "authenticated" });
+    return true;
+  } catch (err) {
+    console.error("No se pudo borrar la imagen privada de Cloudinary:", err);
+    return false;
+  }
+}
+
+/**
+ * Extrae el publicId de una URL de Cloudinary (para poder borrar el avatar, que
+ * se guarda como URL y no como publicId). Devuelve null si no parece de Cloudinary.
+ */
+export function publicIdFromUrl(url: string | null | undefined): string | null {
+  if (!url || !url.includes("res.cloudinary.com")) return null;
+  // .../image/upload/<transformaciones?>/v123/<publicId>.<ext>
+  const withVersion = url.match(/\/upload\/(?:[^/]+\/)*?v\d+\/(.+)\.[a-zA-Z0-9]+$/);
+  if (withVersion) return withVersion[1]!;
+  const noVersion = url.match(/\/upload\/(.+)\.[a-zA-Z0-9]+$/);
+  return noVersion ? noVersion[1]!.replace(/^v\d+\//, "") : null;
 }

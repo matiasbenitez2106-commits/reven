@@ -113,6 +113,14 @@ export const PRIVACY_DOC: LegalDocContent = {
       ],
     },
     {
+      heading: "Cooperación con autoridades y prevención de fraude",
+      body: [
+        "Conservamos los datos de verificación de identidad (número de DNI, fotos del documento y selfie), encriptados y con acceso restringido a administradores, para prevenir fraudes y poder colaborar con la justicia.",
+        "Si ocurre un delito vinculado a una operación (por ejemplo, una estafa o un robo), podemos divulgar estos datos a la autoridad competente —policía, fiscalía o juzgado— cuando exista un requerimiento legal o una denuncia que lo justifique. Importante: estos datos NO se entregan directamente a otras personas usuarias; la información de identidad de un tercero solo se comparte con las autoridades por los canales legales correspondientes.",
+        "Por este motivo, si tenés una denuncia en revisión en tu contra, es posible que no puedas eliminar tu cuenta hasta que se resuelva.",
+      ],
+    },
+    {
       heading: "Tus derechos sobre tus datos",
       body: [
         "Como titular de los datos, la ley te reconoce los siguientes derechos, que podés ejercer en forma gratuita:",
@@ -147,11 +155,11 @@ export const PRIVACY_DOC: LegalDocContent = {
       ],
       bullets: [
         "Datos de cuenta: se conservan mientras tu cuenta esté activa. Si te das de baja, los eliminamos o anonimizamos, salvo lo que debamos conservar por obligación legal.",
-        "Imágenes de DNI y selfie: se conservan solo el tiempo imprescindible para verificar tu identidad. Una vez confirmada la verificación, se borran o anonimizan dentro de un plazo acotado, conservando únicamente el resultado (verificado: sí/no) y un mínimo de evidencia para fines antifraude y legales.",
-        "Scores de reconocimiento facial (match y liveness): se conservan como prueba de la decisión de verificación, también por un plazo acotado.",
+        "Imágenes de DNI y selfie: se conservan, encriptadas y con acceso restringido a administradores, mientras tu cuenta esté activa y por un plazo prudencial posterior, con el fin de prevenir fraudes y de poder responder a requerimientos de la justicia o de autoridades competentes (por ejemplo, ante la denuncia de un delito). No se publican ni se entregan a otras personas usuarias.",
+        "Scores de reconocimiento facial (match y liveness): se conservan como prueba de la decisión de verificación.",
         "Descriptores y plantillas biométricas: no se conservan, porque el reconocimiento facial corre en tu dispositivo y nunca llegan a nuestros servidores.",
         "Datos de pagos: la información mínima de operaciones puede conservarse por el plazo que exijan las normas fiscales y legales aplicables.",
-        "Al ejercer la supresión o al darte de baja, eliminamos efectivamente las imágenes (incluida su baja en Cloudinary) y los datos sensibles asociados, salvo lo que la ley nos obligue a conservar.",
+        "Al ejercer la supresión o al darte de baja, eliminamos efectivamente las imágenes (incluida su baja en Cloudinary) y los datos sensibles asociados, salvo que exista una denuncia o investigación en curso, o una obligación legal que nos exija conservarlos por un plazo determinado.",
       ],
     },
     {

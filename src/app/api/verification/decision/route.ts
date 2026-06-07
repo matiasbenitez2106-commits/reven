@@ -20,6 +20,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Parámetros inválidos" }, { status: 400 });
   }
 
+  // Nota: las imágenes de identidad se CONSERVAN (no se purgan al decidir) para poder
+  // responder a requerimientos de la justicia/policía ante un eventual delito.
   await prisma.$transaction([
     prisma.verification.update({
       where: { userId },
