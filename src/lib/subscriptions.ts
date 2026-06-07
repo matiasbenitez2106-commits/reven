@@ -1,6 +1,7 @@
 import { SubscriptionPlan } from "@prisma/client";
 import { prisma } from "./prisma";
 import { SUBSCRIPTION_PLANS, INCLUDED_BOOST_DAYS } from "./constants";
+import { notify } from "./notifications";
 
 export const SUBSCRIPTION_PERIOD_DAYS = 30;
 
@@ -49,6 +50,14 @@ export async function activateSubscription(
       data: { proPlan: plan, proUntil: periodEnd },
     }),
   ]);
+
+  await notify({
+    userId,
+    type: "SUBSCRIPTION",
+    title: `Tu plan ${cfg.label} está activo 🎉`,
+    body: `Beneficios PRO activos hasta el ${periodEnd.toLocaleDateString("es-AR")}.`,
+    link: "/suscripcion",
+  });
 }
 
 /**

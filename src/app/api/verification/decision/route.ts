@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { notify } from "@/lib/notifications";
 
 // Revisión manual de verificaciones (solo ADMIN).
 // Útil para aprobar/rechazar casos en estado PENDING o probar el flujo.
@@ -31,6 +32,14 @@ export async function POST(req: Request) {
     }),
     prisma.user.update({ where: { id: userId }, data: { verification: decision } }),
   ]);
+
+  await notify({
+    userId,
+    type: "VERIFICATION",
+    title: decision === "VERIFIED" ? "¡Tu identidad fue verificada! ✅" : "Tu verificación fue rechazada",
+    body: decision === "VERIFIED" ? "Ya podés publicar y contactar vendedores." : reason || "Podés reintentar con fotos más nítidas.",
+    link: decision === "VERIFIED" ? "/cuenta" : "/verificacion",
+  });
 
   return NextResponse.json({ ok: true });
 }

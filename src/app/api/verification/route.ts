@@ -6,6 +6,7 @@ import { uploadImage } from "@/lib/storage";
 import { encrypt } from "@/lib/crypto";
 import { runIdentityCheck } from "@/lib/identity";
 import { notifyAdmin } from "@/lib/email";
+import { notify } from "@/lib/notifications";
 
 // Estado de verificación del usuario actual
 export async function GET() {
@@ -95,6 +96,24 @@ export async function POST(req: Request) {
       `<p>Un usuario envió documentación para verificar su identidad.</p>
        <p><a href="${baseUrl}/admin/verificaciones">Revisar en el panel</a></p>`
     );
+  }
+
+  if (status === "VERIFIED") {
+    await notify({
+      userId: user.id,
+      type: "VERIFICATION",
+      title: "¡Tu identidad fue verificada! ✅",
+      body: "Ya podés publicar y contactar vendedores.",
+      link: "/cuenta",
+    });
+  } else if (status === "REJECTED") {
+    await notify({
+      userId: user.id,
+      type: "VERIFICATION",
+      title: "Tu verificación fue rechazada",
+      body: "Podés reintentar con fotos más nítidas.",
+      link: "/verificacion",
+    });
   }
 
   return NextResponse.json({ status });

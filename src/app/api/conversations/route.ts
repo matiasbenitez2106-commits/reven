@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { notify } from "@/lib/notifications";
 
 // Lista de conversaciones del usuario
 export async function GET() {
@@ -88,7 +89,7 @@ export async function POST(req: Request) {
 
   const listing = await prisma.listing.findUnique({
     where: { id: listingId },
-    select: { id: true, sellerId: true, status: true },
+    select: { id: true, sellerId: true, status: true, title: true },
   });
   if (!listing || listing.status === "DELETED") {
     return NextResponse.json({ error: "Publicación no encontrada" }, { status: 404 });
@@ -97,11 +98,24 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "No podés contactarte a vos mismo." }, { status: 400 });
   }
 
-  const convo = await prisma.conversation.upsert({
+  const existing = await prisma.conversation.findUnique({
     where: { listingId_buyerId: { listingId, buyerId: user.id } },
-    create: { listingId, buyerId: user.id, sellerId: listing.sellerId },
-    update: {},
     select: { id: true },
+  });
+  if (existing) return NextResponse.json(existing, { status: 200 });
+
+  const convo = await prisma.conversation.create({
+    data: { listingId, buyerId: user.id, sellerId: listing.sellerId },
+    select: { id: true },
+  });
+
+  // Aviso al vendedor: nuevo interesado
+  await notify({
+    userId: listing.sellerId,
+    type: "CONTACT",
+    title: "Tenés un nuevo interesado",
+    body: listing.title,
+    link: `/mensajes/${convo.id}`,
   });
 
   return NextResponse.json(convo, { status: 201 });

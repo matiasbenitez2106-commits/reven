@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Avatar } from "./ui/Avatar";
 import { VerificationBadge } from "./VerificationBadge";
+import { NotificationBell } from "./NotificationBell";
 
 export function Navbar() {
   const { data: session, status } = useSession();
@@ -138,6 +139,7 @@ export function Navbar() {
               >
                 <Heart className="h-5 w-5" />
               </Link>
+              <NotificationBell />
               <Link
                 href="/mensajes"
                 className="relative rounded-lg p-2 text-gray-600 hover:bg-gray-100"

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { messageSchema } from "@/lib/validations";
+import { notify } from "@/lib/notifications";
 
 type Params = { params: { id: string } };
 
@@ -80,6 +81,22 @@ export async function POST(req: Request, { params }: Params) {
     where: { id: params.id },
     data: { updatedAt: new Date() },
   });
+
+  // Notifica al otro participante
+  const convo = await prisma.conversation.findUnique({
+    where: { id: params.id },
+    select: { buyerId: true, sellerId: true },
+  });
+  if (convo) {
+    const recipientId = convo.buyerId === user.id ? convo.sellerId : convo.buyerId;
+    await notify({
+      userId: recipientId,
+      type: "MESSAGE",
+      title: `Nuevo mensaje de ${user.name ?? "alguien"}`,
+      body: parsed.data.body.slice(0, 80),
+      link: `/mensajes/${params.id}`,
+    });
+  }
 
   return NextResponse.json(
     { id: msg.id, body: msg.body, senderId: msg.senderId, createdAt: msg.createdAt },
