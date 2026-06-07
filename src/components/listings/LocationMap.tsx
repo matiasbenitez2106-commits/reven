@@ -28,7 +28,7 @@ export function LocationMap({
   }
 
   return (
-    <div className="relative h-48 overflow-hidden rounded-xl border border-gray-200">
+    <div className="relative isolate h-48 overflow-hidden rounded-xl border border-gray-200">
       <OsmMap lat={lat} lng={lng} />
       <div className="pointer-events-none absolute bottom-2 left-2 z-[1000] rounded-md bg-white/90 px-2 py-1 text-xs text-gray-600 shadow-sm">
         <MapPin className="mr-1 inline h-3 w-3" /> Zona aproximada · {label}
