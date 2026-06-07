@@ -55,6 +55,49 @@ export async function uploadImage(
   return saveLocally(dataUri, folder);
 }
 
+/**
+ * Sube una imagen SENSIBLE (DNI, selfie) con entrega PRIVADA.
+ * En Cloudinary usa `type: "authenticated"`: el archivo NO es accesible por su URL
+ * pública ni navegando la carpeta; solo se puede ver con una URL firmada (ver
+ * `signedImageUrl`). Devuelve el publicId, que es lo que se guarda (encriptado) en la BD.
+ *
+ * Fallback local (sin Cloudinary): guarda en /public/uploads — solo apto para desarrollo.
+ */
+export async function uploadPrivateImage(
+  dataUri: string,
+  folder = "verification"
+): Promise<UploadResult> {
+  if (isCloudinaryConfigured()) {
+    const res = await cloudinary.uploader.upload(dataUri, {
+      folder: `reven/${folder}`,
+      resource_type: "image",
+      type: "authenticated", // entrega privada (requiere URL firmada)
+      transformation: [{ quality: "auto" }],
+    });
+    return { url: res.secure_url, publicId: res.public_id };
+  }
+  return saveLocally(dataUri, folder);
+}
+
+/**
+ * Genera una URL firmada para ver un asset privado (`type: "authenticated"`).
+ * La firma se deriva del publicId + API secret, así que la URL no es adivinable.
+ * Pensada para usarse solo desde endpoints restringidos a admin.
+ */
+export function signedImageUrl(publicId: string): string {
+  return cloudinary.url(publicId, {
+    type: "authenticated",
+    resource_type: "image",
+    secure: true,
+    sign_url: true,
+  });
+}
+
+/** ¿El valor guardado es un publicId de Cloudinary (no una URL/ruta legacy)? */
+export function isCloudinaryPublicId(value: string): boolean {
+  return isCloudinaryConfigured() && !/^(https?:)?\/\//.test(value) && !value.startsWith("/");
+}
+
 async function saveLocally(dataUri: string, folder: string): Promise<UploadResult> {
   const match = dataUri.match(/^data:(image\/[a-zA-Z+]+);base64,(.+)$/);
   if (!match) {

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { resizeImage, resizeDataUrl } from "@/lib/image-client";
+import { describeFace, faceSimilarity, preloadFaceModels } from "@/lib/face-client";
 
 type StepKey = "front" | "back" | "selfie" | "review";
 const STEPS: { key: StepKey; label: string }[] = [
@@ -34,6 +35,12 @@ export function VerificationFlow() {
   const [dniNumber, setDniNumber] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [faceStatus, setFaceStatus] = useState<string | null>(null);
+
+  // Pre-carga los modelos de IA al entrar (para que el envío sea más rápido)
+  useEffect(() => {
+    preloadFaceModels();
+  }, []);
 
   const step = STEPS[stepIndex];
 
@@ -48,11 +55,38 @@ export function VerificationFlow() {
     if (!front || !back || !selfie) return;
     setSubmitting(true);
     setError(null);
+
+    // Reconocimiento facial en el navegador: compara la cara del DNI con la selfie
+    let matchScore: number | undefined;
+    let livenessScore: number | undefined;
+    try {
+      setFaceStatus("Analizando rostro...");
+      const [dniFace, selfieFace] = await Promise.all([
+        describeFace(front),
+        describeFace(selfie),
+      ]);
+      if (selfieFace) livenessScore = selfieFace.faceScore;
+      if (dniFace && selfieFace) {
+        matchScore = await faceSimilarity(dniFace.descriptor, selfieFace.descriptor);
+      }
+    } catch {
+      // Si la IA falla (CDN bloqueado, sin WebGL, etc.) seguimos sin scores → revisión manual
+    } finally {
+      setFaceStatus(null);
+    }
+
     try {
       const res = await fetch("/api/verification", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dniNumber, dniFront: front, dniBack: back, selfie }),
+        body: JSON.stringify({
+          dniNumber,
+          dniFront: front,
+          dniBack: back,
+          selfie,
+          matchScore,
+          livenessScore,
+        }),
       });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
@@ -143,8 +177,9 @@ export function VerificationFlow() {
             <p className="mt-1 text-xs text-gray-400">Solo números, sin puntos.</p>
           </div>
           <p className="text-xs text-gray-400">
-            Al enviar, tus datos se guardan encriptados y se procesan para verificar tu
-            identidad.
+            Al enviar, comparamos la cara de tu DNI con la selfie (en tu dispositivo) y
+            guardamos tus datos encriptados. Asegurate de que en el frente del DNI se vea
+            bien tu foto.
           </p>
         </div>
       )}
@@ -161,7 +196,7 @@ export function VerificationFlow() {
 
         {step.key === "review" ? (
           <Button onClick={submit} loading={submitting} disabled={!canAdvance()}>
-            Enviar verificación
+            {faceStatus || "Enviar verificación"}
           </Button>
         ) : (
           <Button onClick={() => setStepIndex((i) => i + 1)} disabled={!canAdvance()}>

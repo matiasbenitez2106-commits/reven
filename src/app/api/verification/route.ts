@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { verificationSubmitSchema } from "@/lib/validations";
-import { uploadImage } from "@/lib/storage";
+import { uploadPrivateImage } from "@/lib/storage";
 import { encrypt } from "@/lib/crypto";
 import { runIdentityCheck } from "@/lib/identity";
 import { notifyAdmin } from "@/lib/email";
@@ -50,33 +50,64 @@ export async function POST(req: Request) {
     );
   }
 
-  const { dniNumber, dniFront, dniBack, selfie } = parsed.data;
+  const { dniNumber, dniFront, dniBack, selfie, matchScore, livenessScore } = parsed.data;
 
-  // Subida de imágenes a almacenamiento privado
+  // Subida de imágenes con entrega PRIVADA (no quedan en el CDN público).
+  // Guardamos el publicId (o la ruta local en dev), no una URL pública.
   const [front, back, self] = await Promise.all([
-    uploadImage(dniFront, "verification"),
-    uploadImage(dniBack, "verification"),
-    uploadImage(selfie, "verification"),
+    uploadPrivateImage(dniFront, "verification"),
+    uploadPrivateImage(dniBack, "verification"),
+    uploadPrivateImage(selfie, "verification"),
   ]);
 
-  // Chequeo de identidad (mock / Onfido)
-  const result = await runIdentityCheck({ dniNumber, dniFront, dniBack, selfie });
-  const status = result.decision;
+  // Decisión: si el cliente mandó scores de reconocimiento facial (face-api),
+  // decidimos con ellos; si no, caemos al proveedor (mock/Onfido).
+  let status: "VERIFIED" | "REJECTED" | "PENDING";
+  let provider: string;
+  let providerRef: string | null = null;
+  let mScore: number | null;
+  let lScore: number | null;
+  let rejectionReason: string | null = null;
+
+  if (matchScore != null || livenessScore != null) {
+    provider = "face-api";
+    mScore = matchScore ?? null;
+    lScore = livenessScore ?? null;
+    if (mScore == null) {
+      status = "PENDING"; // no se detectó cara en alguna foto → revisión manual
+    } else if (mScore >= 0.5 && (lScore ?? 0) >= 0.4) {
+      status = "VERIFIED";
+    } else if (mScore < 0.4) {
+      status = "REJECTED";
+      rejectionReason = "La cara de la selfie no coincide con la del DNI.";
+    } else {
+      status = "PENDING"; // zona gris → revisión manual
+    }
+  } else {
+    const result = await runIdentityCheck({ dniNumber, dniFront, dniBack, selfie });
+    status = result.decision;
+    provider = result.provider;
+    providerRef = result.providerRef;
+    mScore = result.matchScore;
+    lScore = result.livenessScore;
+    if (status === "REJECTED") rejectionReason = "No se pudo confirmar tu identidad.";
+  }
 
   // Guardado: datos sensibles ENCRIPTADOS (AES-256-GCM)
   const data = {
     status,
-    provider: result.provider,
-    providerRef: result.providerRef,
-    dniFrontUrlEnc: encrypt(front.url),
-    dniBackUrlEnc: encrypt(back.url),
-    selfieUrlEnc: encrypt(self.url),
+    provider,
+    providerRef,
+    // Para Cloudinary guardamos el publicId (la imagen es privada); en dev local, la ruta.
+    dniFrontUrlEnc: encrypt(front.publicId ?? front.url),
+    dniBackUrlEnc: encrypt(back.publicId ?? back.url),
+    selfieUrlEnc: encrypt(self.publicId ?? self.url),
     dniNumberEnc: encrypt(dniNumber),
-    livenessScore: result.livenessScore,
-    matchScore: result.matchScore,
-    rejectionReason: status === "REJECTED" ? "No se pudo confirmar tu identidad." : null,
+    livenessScore: lScore,
+    matchScore: mScore,
+    rejectionReason,
     reviewedAt: status === "PENDING" ? null : new Date(),
-    reviewedBy: result.provider === "mock" ? "system" : null,
+    reviewedBy: status === "PENDING" ? null : "system",
   };
 
   await prisma.$transaction([

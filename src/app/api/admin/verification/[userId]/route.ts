@@ -2,6 +2,13 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { decryptNullable } from "@/lib/crypto";
+import { signedImageUrl, isCloudinaryPublicId } from "@/lib/storage";
+
+// Convierte el valor guardado (publicId de Cloudinary o URL/ruta legacy) en algo visible.
+function toViewable(value: string | null): string | null {
+  if (!value) return null;
+  return isCloudinaryPublicId(value) ? signedImageUrl(value) : value;
+}
 
 // Devuelve la documentación de verificación DESENCRIPTADA (solo ADMIN).
 // Datos sensibles: acceso restringido al rol admin (regla de negocio).
@@ -17,9 +24,9 @@ export async function GET(_req: Request, { params }: { params: { userId: string 
   try {
     return NextResponse.json({
       dniNumber: decryptNullable(v.dniNumberEnc),
-      dniFront: decryptNullable(v.dniFrontUrlEnc),
-      dniBack: decryptNullable(v.dniBackUrlEnc),
-      selfie: decryptNullable(v.selfieUrlEnc),
+      dniFront: toViewable(decryptNullable(v.dniFrontUrlEnc)),
+      dniBack: toViewable(decryptNullable(v.dniBackUrlEnc)),
+      selfie: toViewable(decryptNullable(v.selfieUrlEnc)),
       livenessScore: v.livenessScore,
       matchScore: v.matchScore,
       status: v.status,

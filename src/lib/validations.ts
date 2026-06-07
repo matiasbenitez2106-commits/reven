@@ -47,6 +47,9 @@ export const verificationSubmitSchema = z.object({
   dniFront: z.string().startsWith("data:image/", "Foto del frente del DNI requerida"),
   dniBack: z.string().startsWith("data:image/", "Foto del dorso del DNI requerida"),
   selfie: z.string().startsWith("data:image/", "Selfie requerida"),
+  // Scores calculados en el cliente con face-api (opcionales; si faltan, se revisa a mano)
+  matchScore: z.coerce.number().min(0).max(1).optional(),
+  livenessScore: z.coerce.number().min(0).max(1).optional(),
 });
 export type VerificationSubmitInput = z.infer<typeof verificationSubmitSchema>;
 
