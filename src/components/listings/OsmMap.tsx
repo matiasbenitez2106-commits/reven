@@ -6,6 +6,11 @@ import "leaflet/dist/leaflet.css";
 // Mapa estilo Apple Maps (tiles cálidos de CARTO Voyager, gratis, sin API key):
 // tonos crema, parques verdes, agua celeste. Círculo celeste de zona aproximada.
 export default function OsmMap({ lat, lng }: { lat: number; lng: number }) {
+  const key = process.env.NEXT_PUBLIC_MAPTILER_KEY;
+  const tileUrl = key
+    ? `https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}@2x.png?key=${key}`
+    : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
+
   return (
     <MapContainer
       center={[lat, lng]}
@@ -19,10 +24,7 @@ export default function OsmMap({ lat, lng }: { lat: number; lng: number }) {
       attributionControl={false}
       style={{ height: "100%", width: "100%", background: "#f8fafc" }}
     >
-      <TileLayer
-        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-        subdomains="abcd"
-      />
+      <TileLayer url={tileUrl} subdomains="abcd" />
       <Circle
         center={[lat, lng]}
         radius={500}

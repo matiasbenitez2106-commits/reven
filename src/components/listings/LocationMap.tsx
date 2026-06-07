@@ -33,6 +33,9 @@ export function LocationMap({
       <div className="pointer-events-none absolute bottom-2 left-2 z-[1000] rounded-md bg-white/90 px-2 py-1 text-xs text-gray-600 shadow-sm">
         <MapPin className="mr-1 inline h-3 w-3" /> Zona aproximada · {label}
       </div>
+      <div className="pointer-events-none absolute bottom-1 right-1 z-[1000] rounded bg-white/70 px-1 text-[9px] leading-tight text-gray-400">
+        © MapTiler · OpenStreetMap
+      </div>
     </div>
   );
 }
