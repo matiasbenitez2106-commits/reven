@@ -93,3 +93,43 @@ export async function sendPasswordResetEmail(to: string, link: string): Promise<
     ),
   });
 }
+
+const fmtFecha = (d: Date) => d.toLocaleDateString("es-AR");
+const appUrl = () => process.env.NEXTAUTH_URL || "";
+
+/** Aviso al activarse (o renovarse) la suscripción PRO. */
+export async function sendSubscriptionActivatedEmail(
+  to: string,
+  planLabel: string,
+  periodEnd: Date
+): Promise<void> {
+  const link = `${appUrl()}/suscripcion`;
+  await sendEmail({
+    to,
+    subject: `Tu plan ${planLabel} está activo · Reven`,
+    html: wrap(
+      `<p>¡Listo! Tu suscripción <strong>${escapeHtml(planLabel)}</strong> quedó activa. 🎉</p>
+       <p>Tenés los beneficios PRO disponibles hasta el <strong>${fmtFecha(periodEnd)}</strong>. Se renueva automáticamente salvo que la canceles.</p>
+       <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Ver mi suscripción</a></p>`
+    ),
+  });
+}
+
+/** Aviso al cancelar la renovación (mantiene beneficios hasta fin del período). */
+export async function sendSubscriptionCancelledEmail(
+  to: string,
+  planLabel: string,
+  activeUntil: Date
+): Promise<void> {
+  const link = `${appUrl()}/suscripcion`;
+  await sendEmail({
+    to,
+    subject: "Cancelaste la renovación de tu suscripción · Reven",
+    html: wrap(
+      `<p>Cancelaste la renovación de tu plan <strong>${escapeHtml(planLabel)}</strong>.</p>
+       <p>Mantenés los beneficios PRO hasta el <strong>${fmtFecha(activeUntil)}</strong>. Después tu cuenta vuelve al plan gratuito; no se hacen más cobros.</p>
+       <p>Si cambiás de idea, podés reactivarla cuando quieras:</p>
+       <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Mi suscripción</a></p>`
+    ),
+  });
+}

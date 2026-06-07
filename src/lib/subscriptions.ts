@@ -2,6 +2,7 @@ import { SubscriptionPlan } from "@prisma/client";
 import { prisma } from "./prisma";
 import { SUBSCRIPTION_PLANS, INCLUDED_BOOST_DAYS } from "./constants";
 import { notify } from "./notifications";
+import { sendSubscriptionActivatedEmail, sendSubscriptionCancelledEmail } from "./email";
 
 export const SUBSCRIPTION_PERIOD_DAYS = 30;
 
@@ -58,6 +59,14 @@ export async function activateSubscription(
     body: `Beneficios PRO activos hasta el ${periodEnd.toLocaleDateString("es-AR")}.`,
     link: "/suscripcion",
   });
+
+  // Email de confirmación (no bloqueante)
+  try {
+    const u = await prisma.user.findUnique({ where: { id: userId }, select: { email: true } });
+    if (u) await sendSubscriptionActivatedEmail(u.email, cfg.label, periodEnd);
+  } catch (e) {
+    console.error("No se pudo enviar el email de activación de suscripción:", e);
+  }
 }
 
 /**
@@ -72,6 +81,24 @@ export async function cancelSubscription(userId: string) {
     data: { status: "CANCELLED" },
   });
   // proUntil queda como está: el ranking/badge sigue activo hasta que venza.
+
+  const cfg = SUBSCRIPTION_PLANS[sub.plan];
+  const until = sub.currentPeriodEnd;
+
+  await notify({
+    userId,
+    type: "SUBSCRIPTION",
+    title: "Cancelaste la renovación",
+    body: `Mantenés los beneficios ${cfg.label} hasta el ${until.toLocaleDateString("es-AR")}.`,
+    link: "/suscripcion",
+  });
+
+  try {
+    const u = await prisma.user.findUnique({ where: { id: userId }, select: { email: true } });
+    if (u) await sendSubscriptionCancelledEmail(u.email, cfg.label, until);
+  } catch (e) {
+    console.error("No se pudo enviar el email de cancelación de suscripción:", e);
+  }
 }
 
 /** Usa un destacado incluido en la suscripción (sin pagar). */
