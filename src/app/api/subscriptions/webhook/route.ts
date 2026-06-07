@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { SubscriptionPlan } from "@prisma/client";
-import { fetchMpPreapproval } from "@/lib/mercadopago";
+import { fetchMpPreapproval, verifyMpWebhook } from "@/lib/mercadopago";
 import { activateSubscription } from "@/lib/subscriptions";
 
 // Webhook de MercadoPago para suscripciones (preapproval).
 export async function POST(req: Request) {
+  if (!verifyMpWebhook(req)) {
+    return NextResponse.json({ error: "Firma inválida" }, { status: 401 });
+  }
+
   const url = new URL(req.url);
   const topic = url.searchParams.get("type") || url.searchParams.get("topic");
   let id = url.searchParams.get("data.id") || url.searchParams.get("id");

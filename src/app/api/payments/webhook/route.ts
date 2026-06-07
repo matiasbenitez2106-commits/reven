@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { fetchMpPayment } from "@/lib/mercadopago";
+import { fetchMpPayment, verifyMpWebhook } from "@/lib/mercadopago";
 import { approvePayment } from "@/lib/payments";
 
 // Webhook de MercadoPago. Notifica cambios de estado de un pago.
-// Confirmamos el estado consultando la API antes de aplicar nada.
+// Validamos la firma y, además, confirmamos el estado consultando la API.
 export async function POST(req: Request) {
+  if (!verifyMpWebhook(req)) {
+    return NextResponse.json({ error: "Firma inválida" }, { status: 401 });
+  }
+
   const url = new URL(req.url);
   let mpPaymentId = url.searchParams.get("data.id") || url.searchParams.get("id");
   const topic = url.searchParams.get("type") || url.searchParams.get("topic");

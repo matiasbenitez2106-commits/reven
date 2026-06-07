@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { PaymentType, SubscriptionPlan } from "@prisma/client";
 import { BOOST_PLANS, SUBSCRIPTION_PLANS } from "./constants";
 
@@ -7,6 +8,57 @@ import { BOOST_PLANS, SUBSCRIPTION_PLANS } from "./constants";
 
 export function isMpConfigured(): boolean {
   return !!process.env.MP_ACCESS_TOKEN;
+}
+
+/**
+ * Valida la firma de un webhook de MercadoPago (header `x-signature`).
+ *
+ * MP firma un "manifest" `id:<data.id>;request-id:<x-request-id>;ts:<ts>;` con HMAC-SHA256
+ * usando la clave secreta del webhook (MP_WEBHOOK_SECRET, la "Clave secreta" del panel).
+ *
+ * - Si NO hay MP_WEBHOOK_SECRET configurado, no podemos validar: devolvemos true (modo
+ *   mock/dev) y avisamos. Igual el webhook re-consulta el estado real a la API de MP.
+ * - Si SÍ está configurado, exigimos firma válida (rechaza spam/forjados).
+ */
+export function verifyMpWebhook(req: Request): boolean {
+  const secret = process.env.MP_WEBHOOK_SECRET;
+  if (!secret) {
+    if (isMpConfigured()) {
+      console.warn("MP_WEBHOOK_SECRET no configurado: no se valida la firma del webhook de MercadoPago.");
+    }
+    return true;
+  }
+
+  const signature = req.headers.get("x-signature");
+  const requestId = req.headers.get("x-request-id");
+  if (!signature) return false;
+
+  // x-signature: "ts=1700000000,v1=hexhash"
+  const parts: Record<string, string> = {};
+  for (const kv of signature.split(",")) {
+    const idx = kv.indexOf("=");
+    if (idx === -1) continue;
+    parts[kv.slice(0, idx).trim()] = kv.slice(idx + 1).trim();
+  }
+  const ts = parts["ts"];
+  const v1 = parts["v1"];
+  if (!ts || !v1) return false;
+
+  // data.id tal como vino en la URL de notificación (alfanumérico → minúsculas).
+  const url = new URL(req.url);
+  const dataId = (url.searchParams.get("data.id") || url.searchParams.get("id") || "").toLowerCase();
+
+  const manifest = `id:${dataId};request-id:${requestId ?? ""};ts:${ts};`;
+  const computed = crypto.createHmac("sha256", secret).update(manifest).digest("hex");
+
+  // Comparación en tiempo constante.
+  try {
+    const a = Buffer.from(computed, "hex");
+    const b = Buffer.from(v1, "hex");
+    return a.length === b.length && crypto.timingSafeEqual(a, b);
+  } catch {
+    return false;
+  }
 }
 
 interface CheckoutArgs {
