@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BadgeCheck, XCircle } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { consumeAuthToken } from "@/lib/tokens";
+import { SessionRefresh } from "@/components/SessionRefresh";
 
 export const metadata = { title: "Verificar email" };
 export const dynamic = "force-dynamic";
@@ -30,6 +31,7 @@ export default async function VerifyEmailPage({
       <div className="card flex flex-col items-center gap-3 p-8 text-center">
         {ok ? (
           <>
+            <SessionRefresh />
             <BadgeCheck className="h-12 w-12 text-green-600" />
             <h1 className="text-xl font-bold">¡Email verificado!</h1>
             <p className="text-sm text-gray-500">
