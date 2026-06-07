@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { notify } from "@/lib/notifications";
+import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
 // Lista de conversaciones del usuario
 export async function GET() {
@@ -71,6 +72,9 @@ export async function GET() {
 export async function POST(req: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
+  const limited = await enforceRateLimit(req, "contact", RATE_LIMITS.contact, user.id);
+  if (limited) return limited;
 
   const dbUser = await prisma.user.findUnique({
     where: { id: user.id },

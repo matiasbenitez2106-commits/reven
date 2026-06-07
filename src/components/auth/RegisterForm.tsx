@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
@@ -13,6 +14,8 @@ import { Button } from "@/components/ui/Button";
 export function RegisterForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [accepted, setAccepted] = useState(false);
+  const [acceptError, setAcceptError] = useState(false);
   const {
     register,
     handleSubmit,
@@ -21,6 +24,10 @@ export function RegisterForm() {
 
   async function onSubmit(data: RegisterInput) {
     setError(null);
+    if (!accepted) {
+      setAcceptError(true);
+      return;
+    }
     const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -96,6 +103,34 @@ export function RegisterForm() {
           <input id="city" className="input" placeholder="Ej: Rosario" {...register("city")} />
           {errors.city && <p className="field-error">{errors.city.message}</p>}
         </div>
+      </div>
+
+      <div>
+        <label className="flex items-start gap-2 text-sm text-gray-600">
+          <input
+            type="checkbox"
+            checked={accepted}
+            onChange={(e) => {
+              setAccepted(e.target.checked);
+              if (e.target.checked) setAcceptError(false);
+            }}
+            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+          />
+          <span>
+            Soy mayor de 18 años y acepto los{" "}
+            <Link href="/terminos" target="_blank" className="text-brand-600 hover:underline">
+              Términos y Condiciones
+            </Link>{" "}
+            y la{" "}
+            <Link href="/privacidad" target="_blank" className="text-brand-600 hover:underline">
+              Política de Privacidad
+            </Link>
+            .
+          </span>
+        </label>
+        {acceptError && (
+          <p className="field-error">Tenés que aceptar los términos para crear la cuenta.</p>
+        )}
       </div>
 
       <Button type="submit" loading={isSubmitting} className="w-full">

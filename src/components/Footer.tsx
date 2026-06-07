@@ -31,17 +31,22 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <p className="font-medium text-gray-900">Seguridad</p>
+              <p className="font-medium text-gray-900">Legal</p>
               <ul className="mt-2 space-y-1 text-gray-500">
-                <li>Identidad verificada</li>
-                <li>Datos encriptados</li>
+                <li><Link href="/terminos" className="hover:text-brand-600">Términos y Condiciones</Link></li>
+                <li><Link href="/privacidad" className="hover:text-brand-600">Política de Privacidad</Link></li>
+                <li className="pt-1 text-gray-400">Identidad verificada · Datos encriptados</li>
               </ul>
             </div>
           </div>
         </div>
-        <p className="mt-8 border-t border-gray-100 pt-6 text-xs text-gray-400">
-          © {new Date().getFullYear()} Reven · MVP · Hecho en Argentina 🇦🇷
-        </p>
+        <div className="mt-8 flex flex-col gap-2 border-t border-gray-100 pt-6 text-xs text-gray-400 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} Reven · MVP · Hecho en Argentina 🇦🇷</p>
+          <p className="flex gap-3">
+            <Link href="/terminos" className="hover:text-brand-600">Términos</Link>
+            <Link href="/privacidad" className="hover:text-brand-600">Privacidad</Link>
+          </p>
+        </div>
       </div>
     </footer>
   );

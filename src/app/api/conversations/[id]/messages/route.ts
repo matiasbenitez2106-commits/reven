@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { messageSchema } from "@/lib/validations";
 import { notify } from "@/lib/notifications";
+import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
 type Params = { params: { id: string } };
 
@@ -57,6 +58,9 @@ export async function GET(req: Request, { params }: Params) {
 export async function POST(req: Request, { params }: Params) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
+  const limited = await enforceRateLimit(req, "message", RATE_LIMITS.message, user.id);
+  if (limited) return limited;
 
   const dbUser = await prisma.user.findUnique({
     where: { id: user.id },

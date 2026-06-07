@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { listingSchema, searchSchema } from "@/lib/validations";
 import { searchListings, findDuplicateActiveListing } from "@/lib/listings";
 import { geocode } from "@/lib/geo";
+import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
 // Búsqueda / listado público de publicaciones
 export async function GET(req: Request) {
@@ -20,6 +21,9 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
+  const limited = await enforceRateLimit(req, "listing", RATE_LIMITS.write, user.id);
+  if (limited) return limited;
 
   const dbUser = await prisma.user.findUnique({
     where: { id: user.id },

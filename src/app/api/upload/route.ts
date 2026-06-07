@@ -2,12 +2,16 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { uploadImage } from "@/lib/storage";
+import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
 // Sube una imagen (data URI) y devuelve { url, publicId }.
 // Para imágenes de publicaciones se requiere identidad verificada.
 export async function POST(req: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
+  const limited = await enforceRateLimit(req, "upload", RATE_LIMITS.upload, user.id);
+  if (limited) return limited;
 
   const body = await req.json().catch(() => null);
   const image: unknown = body?.image;

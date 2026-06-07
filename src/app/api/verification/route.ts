@@ -7,6 +7,7 @@ import { encrypt } from "@/lib/crypto";
 import { runIdentityCheck } from "@/lib/identity";
 import { notifyAdmin } from "@/lib/email";
 import { notify } from "@/lib/notifications";
+import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
 // Estado de verificación del usuario actual
 export async function GET() {
@@ -32,6 +33,9 @@ export async function GET() {
 export async function POST(req: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
+  const limited = await enforceRateLimit(req, "verification", RATE_LIMITS.verification, user.id);
+  if (limited) return limited;
 
   const current = await prisma.user.findUnique({
     where: { id: user.id },

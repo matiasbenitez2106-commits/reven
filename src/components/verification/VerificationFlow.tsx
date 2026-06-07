@@ -13,6 +13,7 @@ import {
   ArrowRight,
   ArrowLeft,
 } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { resizeImage, resizeDataUrl } from "@/lib/image-client";
 import { describeFace, faceSimilarity, preloadFaceModels } from "@/lib/face-client";
@@ -36,6 +37,7 @@ export function VerificationFlow() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [faceStatus, setFaceStatus] = useState<string | null>(null);
+  const [consent, setConsent] = useState(false);
 
   // Pre-carga los modelos de IA al entrar (para que el envío sea más rápido)
   useEffect(() => {
@@ -53,6 +55,10 @@ export function VerificationFlow() {
 
   async function submit() {
     if (!front || !back || !selfie) return;
+    if (!consent) {
+      setError("Necesitamos tu consentimiento para tratar tus datos de identidad.");
+      return;
+    }
     setSubmitting(true);
     setError(null);
 
@@ -181,6 +187,28 @@ export function VerificationFlow() {
             guardamos tus datos encriptados. Asegurate de que en el frente del DNI se vea
             bien tu foto.
           </p>
+
+          <label className="flex items-start gap-2 rounded-lg bg-brand-50/60 p-3 text-xs text-gray-600">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => {
+                setConsent(e.target.checked);
+                if (e.target.checked) setError(null);
+              }}
+              className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+            />
+            <span>
+              Presto mi <strong>consentimiento expreso</strong> para que Reven trate mi DNI,
+              las fotos del documento y mi selfie —que son <strong>datos sensibles</strong>—
+              con el único fin de verificar mi identidad y prevenir fraudes. Sé que darlos es
+              voluntario y que puedo revocar este consentimiento. Leí la{" "}
+              <Link href="/privacidad" target="_blank" className="text-brand-600 hover:underline">
+                Política de Privacidad
+              </Link>
+              .
+            </span>
+          </label>
         </div>
       )}
 
@@ -195,7 +223,7 @@ export function VerificationFlow() {
         </Button>
 
         {step.key === "review" ? (
-          <Button onClick={submit} loading={submitting} disabled={!canAdvance()}>
+          <Button onClick={submit} loading={submitting} disabled={!canAdvance() || !consent}>
             {faceStatus || "Enviar verificación"}
           </Button>
         ) : (

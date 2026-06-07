@@ -4,11 +4,15 @@ import { getCurrentUser } from "@/lib/auth";
 import { reportSchema } from "@/lib/validations";
 import { REPORT_REASON_LABELS } from "@/lib/constants";
 import { notifyAdmin, escapeHtml } from "@/lib/email";
+import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
 // Crear una denuncia sobre una publicación
 export async function POST(req: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
+  const limited = await enforceRateLimit(req, "report", RATE_LIMITS.report, user.id);
+  if (limited) return limited;
 
   const body = await req.json().catch(() => null);
   const listingId: string | undefined = body?.listingId;

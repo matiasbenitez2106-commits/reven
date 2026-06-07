@@ -2,9 +2,13 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { consumeAuthToken } from "@/lib/tokens";
+import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
 // Restablece la contraseña usando un token válido
 export async function POST(req: Request) {
+  const limited = await enforceRateLimit(req, "reset", RATE_LIMITS.passwordReset);
+  if (limited) return limited;
+
   const body = await req.json().catch(() => null);
   const token = String(body?.token || "");
   const newPassword = String(body?.newPassword || "");

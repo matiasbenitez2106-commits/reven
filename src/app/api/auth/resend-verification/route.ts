@@ -3,11 +3,15 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { createAuthToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/email";
+import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
 // Reenvía el email de verificación al usuario logueado
 export async function POST(req: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
+  const limited = await enforceRateLimit(req, "resend", RATE_LIMITS.emailResend, user.id);
+  if (limited) return limited;
 
   const db = await prisma.user.findUnique({
     where: { id: user.id },

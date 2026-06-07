@@ -2,9 +2,13 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createAuthToken } from "@/lib/tokens";
 import { sendPasswordResetEmail } from "@/lib/email";
+import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
 // Pide el reset de contraseña. Siempre responde OK (no revela si el email existe).
 export async function POST(req: Request) {
+  const limited = await enforceRateLimit(req, "forgot", RATE_LIMITS.passwordReset);
+  if (limited) return limited;
+
   const body = await req.json().catch(() => null);
   const email = String(body?.email || "").toLowerCase().trim();
 

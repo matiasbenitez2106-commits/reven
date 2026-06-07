@@ -5,8 +5,12 @@ import { registerSchema } from "@/lib/validations";
 import { geocode } from "@/lib/geo";
 import { createAuthToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/email";
+import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
 export async function POST(req: Request) {
+  const limited = await enforceRateLimit(req, "register", RATE_LIMITS.register);
+  if (limited) return limited;
+
   const json = await req.json().catch(() => null);
   const parsed = registerSchema.safeParse(json);
 

@@ -2,6 +2,7 @@ import { NextAuthOptions, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "./prisma";
+import { checkRateLimitByKey, RATE_LIMITS } from "./ratelimit";
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
@@ -18,9 +19,17 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email.toLowerCase().trim() },
-        });
+        const email = credentials.email.toLowerCase().trim();
+
+        // Rate limit anti fuerza-bruta por cuenta. Al excederse, falla como
+        // credencial inválida (el usuario ve el mensaje genérico de login).
+        const rl = await checkRateLimitByKey("login", email, RATE_LIMITS.login);
+        if (!rl.success) {
+          console.warn(`Login rate-limited para ${email}`);
+          return null;
+        }
+
+        const user = await prisma.user.findUnique({ where: { email } });
         if (!user) return null;
 
         const valid = await bcrypt.compare(credentials.password, user.passwordHash);

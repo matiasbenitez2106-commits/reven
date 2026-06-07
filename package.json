@@ -21,6 +21,8 @@
     "@hookform/resolvers": "^3.9.0",
     "@prisma/client": "^5.18.0",
     "@types/leaflet": "^1.9.21",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
     "@vladmandic/face-api": "^1.7.15",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.4.0",
