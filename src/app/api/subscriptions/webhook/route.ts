@@ -1,41 +1,34 @@
 import { NextResponse } from "next/server";
-import { SubscriptionPlan } from "@prisma/client";
-import { fetchMpPreapproval, verifyMpWebhook } from "@/lib/mercadopago";
-import { activateSubscription } from "@/lib/subscriptions";
+import { verifyMpWebhook } from "@/lib/mercadopago";
+import {
+  handleSubscriptionNotification,
+  extractMpId,
+  extractMpEventType,
+} from "@/lib/mp-webhooks";
 
-// Webhook de MercadoPago para suscripciones (preapproval).
+// Webhook de MercadoPago para SUSCRIPCIONES (preapproval). Se mantiene por
+// compatibilidad; el endpoint recomendado a configurar es /api/mercadopago/webhook.
 export async function POST(req: Request) {
   if (!verifyMpWebhook(req)) {
     return NextResponse.json({ error: "Firma inválida" }, { status: 401 });
   }
 
   const url = new URL(req.url);
-  const topic = url.searchParams.get("type") || url.searchParams.get("topic");
-  let id = url.searchParams.get("data.id") || url.searchParams.get("id");
-
-  let body: { type?: string; data?: { id?: string | number } } | null = null;
+  let body: { type?: string; topic?: string; data?: { id?: string | number } } | null = null;
   try {
     body = await req.json();
   } catch {
     /* puede venir vacío */
   }
-  if (!id && body?.data?.id) id = String(body.data.id);
-  const eventType = String(topic || body?.type || "");
 
-  // Solo eventos de suscripción/preapproval
+  const eventType = extractMpEventType(url, body);
   if (eventType && !eventType.includes("preapproval") && !eventType.includes("subscription")) {
     return NextResponse.json({ ignored: true });
   }
+
+  const id = extractMpId(url, body);
   if (!id) return NextResponse.json({ ok: true });
 
-  const info = await fetchMpPreapproval(id);
-  if (!info || !info.externalReference) return NextResponse.json({ ok: true });
-
-  if (info.status === "authorized") {
-    const [userId, plan] = info.externalReference.split(":");
-    if (userId && (plan === "PRO" || plan === "PRO_PLUS")) {
-      await activateSubscription(userId, plan as SubscriptionPlan, id);
-    }
-  }
+  await handleSubscriptionNotification(id);
   return NextResponse.json({ ok: true });
 }

@@ -114,7 +114,7 @@ export async function createCheckout(args: CheckoutArgs): Promise<CheckoutResult
         pending: `${args.baseUrl}/articulos/${args.listingId}/destacar?status=pending`,
       },
       auto_return: "approved",
-      notification_url: `${args.baseUrl}/api/payments/webhook`,
+      notification_url: `${args.baseUrl}/api/mercadopago/webhook`,
     }),
   });
 
