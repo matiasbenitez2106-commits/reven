@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
@@ -6,6 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { BottomNav } from "@/components/BottomNav";
 import { EmailVerifyBanner } from "@/components/EmailVerifyBanner";
+import { ServiceWorkerRegister } from "./sw-register";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -32,6 +33,15 @@ export const metadata: Metadata = {
     title: "Trato — Comprá y vendé usado",
     description: "Compraventa de usados entre particulares verificados en Argentina.",
   },
+  appleWebApp: {
+    capable: true,
+    title: "Trato",
+    statusBarStyle: "default",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#177853",
 };
 
 export default function RootLayout({
@@ -43,6 +53,7 @@ export default function RootLayout({
     <html lang="es" className={inter.variable}>
       <body className="flex min-h-screen flex-col font-sans">
         <Providers>
+          <ServiceWorkerRegister />
           <Navbar />
           <EmailVerifyBanner />
           <main className="flex-1 pb-16 sm:pb-0">{children}</main>
