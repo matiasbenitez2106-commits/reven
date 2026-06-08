@@ -15,6 +15,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { VerificationBadge } from "@/components/VerificationBadge";
 import { ProBadge } from "@/components/ProBadge";
 import { activePlan } from "@/lib/subscriptions";
+import { geocode } from "@/lib/geo";
 import { formatPrice, formatRelative } from "@/lib/utils";
 import { CONDITION_LABELS } from "@/lib/constants";
 
@@ -100,6 +101,24 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
   });
   const memberSince = new Date(listing.seller.createdAt).getFullYear();
   const sellerPlan = activePlan(listing.seller.proPlan, listing.seller.proUntil);
+
+  // Si la publicación no tiene coordenadas (geocoding falló al crearla), las
+  // calculamos al vuelo para que el mapa de la zona aproximada se muestre igual.
+  let mapLat = listing.latitude;
+  let mapLng = listing.longitude;
+  if (mapLat == null || mapLng == null) {
+    try {
+      const g = await geocode(
+        `${listing.neighborhood ? listing.neighborhood + ", " : ""}${listing.city}, ${listing.province}`
+      );
+      if (g) {
+        mapLat = g.lat;
+        mapLng = g.lng;
+      }
+    } catch {
+      /* sin coordenadas: LocationMap muestra el cartel de zona */
+    }
+  }
 
   // Estadísticas: solo para el dueño con plan PRO+
   let stats: { views: number; favs: number; contacts: number } | null = null;
@@ -250,8 +269,8 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
       <div className="card mt-6 p-6">
         <h2 className="mb-3 font-semibold">Ubicación aproximada</h2>
         <LocationMap
-          lat={listing.latitude}
-          lng={listing.longitude}
+          lat={mapLat}
+          lng={mapLng}
           label={`${listing.neighborhood ? listing.neighborhood + ", " : ""}${listing.city}`}
         />
         <p className="mt-2 text-xs text-gray-400">

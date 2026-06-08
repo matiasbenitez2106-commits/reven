@@ -74,6 +74,24 @@ function normalize(s: string): string {
  * Devuelve null si no encuentra nada.
  */
 export async function geocode(query: string): Promise<LatLng | null> {
+  // 1. MapTiler (usa la misma key que los mapas). Confiable y preciso.
+  const mtKey = process.env.MAPTILER_KEY || process.env.NEXT_PUBLIC_MAPTILER_KEY;
+  if (mtKey) {
+    try {
+      const url =
+        `https://api.maptiler.com/geocoding/${encodeURIComponent(query)}.json` +
+        `?key=${mtKey}&country=ar&limit=1`;
+      const res = await fetch(url);
+      if (res.ok) {
+        const data = await res.json();
+        const c = data.features?.[0]?.center; // [lng, lat]
+        if (Array.isArray(c) && c.length === 2) return { lng: c[0], lat: c[1] };
+      }
+    } catch (err) {
+      console.error("MapTiler geocoding falló, usando fallback:", err);
+    }
+  }
+
   const token = process.env.MAPBOX_TOKEN;
   if (token) {
     try {
@@ -111,7 +129,15 @@ export async function geocode(query: string): Promise<LatLng | null> {
     console.error("Nominatim geocoding falló, usando fallback:", err);
   }
 
-  // Fallback por diccionario de ciudades AR
-  const key = normalize(query.split(",")[0]);
-  return AR_CITIES[key] ?? null;
+  // Fallback por diccionario de ciudades AR: probamos cada parte de la consulta
+  // (barrio, ciudad, provincia) y limpiamos prefijos como "Ciudad de" / "Provincia de".
+  for (const part of query.split(",")) {
+    const p = normalize(part);
+    const cleaned = p
+      .replace(/^ciudad (aut[oó]noma )?de /, "")
+      .replace(/^provincia de /, "");
+    if (AR_CITIES[p]) return AR_CITIES[p];
+    if (AR_CITIES[cleaned]) return AR_CITIES[cleaned];
+  }
+  return null;
 }
