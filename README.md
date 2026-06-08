@@ -1,4 +1,4 @@
-# Reven 🇦🇷
+# Trato 🇦🇷
 
 Plataforma de **compraventa de artículos usados entre particulares verificados** en Argentina.
 Publicá gratis, sin comisiones. La diferencia: **todos los usuarios verifican su identidad**.

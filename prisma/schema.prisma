@@ -1,4 +1,4 @@
-// Reven — esquema de base de datos
+// Trato — esquema de base de datos
 // Docs: https://pris.ly/d/prisma-schema
 
 generator client {

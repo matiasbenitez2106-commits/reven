@@ -2,7 +2,7 @@
   "name": "reven",
   "version": "0.1.0",
   "private": true,
-  "description": "Reven - Compraventa de artículos usados entre particulares verificados (Argentina)",
+  "description": "Trato - Compraventa de artículos usados entre particulares verificados (Argentina)",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",

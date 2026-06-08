@@ -107,7 +107,7 @@ export function Navbar() {
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
         <Link href="/" className="flex items-center gap-1 text-xl font-bold text-brand-600">
           <Package className="h-6 w-6" />
-          Reven
+          Trato
         </Link>
 
         <form onSubmit={onSearch} className="relative ml-2 hidden flex-1 sm:block">

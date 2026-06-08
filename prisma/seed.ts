@@ -34,7 +34,7 @@ async function main() {
     update: {},
     create: {
       firstName: "Admin",
-      lastName: "Reven",
+      lastName: "Trato",
       email: "admin@reven.ar",
       passwordHash: adminPass,
       province: "Buenos Aires",

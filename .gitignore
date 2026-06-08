@@ -41,5 +41,5 @@ next-env.d.ts
 
 .vercel
 
-# carpetas ajenas a Reven que viven en este directorio
+# carpetas ajenas a Trato que viven en este directorio
 /Projects

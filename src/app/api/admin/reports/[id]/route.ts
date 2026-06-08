@@ -38,7 +38,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
     userId: report.reporterId,
     type: "REPORT",
     title: `Tu denuncia fue ${STATUS_TEXT[status] ?? "actualizada"}`,
-    body: "Gracias por ayudarnos a mantener Reven seguro.",
+    body: "Gracias por ayudarnos a mantener Trato seguro.",
     link: `/articulos/${report.listingId}`,
   });
 

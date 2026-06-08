@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     ? `<p><b>Detalle:</b> ${escapeHtml(parsed.data.details)}</p>`
     : "";
   await notifyAdmin(
-    "🚩 Nueva denuncia en Reven",
+    "🚩 Nueva denuncia en Trato",
     `<p>Se denunció la publicación <b>${escapeHtml(listing.title)}</b>.</p>
      <p><b>Motivo:</b> ${REPORT_REASON_LABELS[parsed.data.reason]}</p>
      ${detailsHtml}

@@ -11,11 +11,11 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: {
-    default: "Reven — Comprá y vendé usado, entre personas verificadas",
-    template: "%s · Reven",
+    default: "Trato — Comprá y vendé usado, entre personas verificadas",
+    template: "%s · Trato",
   },
   description:
-    "Reven es la plataforma de compraventa de artículos usados entre particulares verificados en Argentina. Sin comisiones. Publicá gratis.",
+    "Trato es la plataforma de compraventa de artículos usados entre particulares verificados en Argentina. Sin comisiones. Publicá gratis.",
   keywords: ["usados", "compraventa", "Argentina", "marketplace", "segunda mano"],
 };
 

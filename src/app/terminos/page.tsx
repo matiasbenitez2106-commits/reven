@@ -3,8 +3,8 @@ import { LegalDoc } from "@/components/LegalDoc";
 import { TERMS_DOC, LEGAL_UPDATED } from "@/content/legal";
 
 export const metadata: Metadata = {
-  title: "Términos y Condiciones · Reven",
-  description: "Términos y Condiciones de uso de Reven, el marketplace de usados entre particulares verificados.",
+  title: "Términos y Condiciones · Trato",
+  description: "Términos y Condiciones de uso de Trato, el marketplace de usados entre particulares verificados.",
 };
 
 export default function TerminosPage() {

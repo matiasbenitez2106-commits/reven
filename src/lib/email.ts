@@ -12,7 +12,7 @@ interface EmailArgs {
 
 export async function sendEmail({ to, subject, html }: EmailArgs): Promise<void> {
   const key = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM || "Reven <onboarding@resend.dev>";
+  const from = process.env.EMAIL_FROM || "Trato <onboarding@resend.dev>";
 
   if (!key) {
     console.log(`[email:dev] Para: ${to} · Asunto: ${subject}`);
@@ -63,17 +63,17 @@ export function escapeHtml(s: string): string {
 
 const wrap = (inner: string) =>
   `<div style="font-family:system-ui,sans-serif;max-width:480px;margin:auto">
-    <h2 style="color:#177853">Reven</h2>${inner}
+    <h2 style="color:#177853">Trato</h2>${inner}
     <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
-    <p style="color:#999;font-size:12px">Reven · compraventa de usados entre personas verificadas.</p>
+    <p style="color:#999;font-size:12px">Trato · compraventa de usados entre personas verificadas.</p>
   </div>`;
 
 export async function sendVerificationEmail(to: string, link: string): Promise<void> {
   await sendEmail({
     to,
-    subject: "Verificá tu email · Reven",
+    subject: "Verificá tu email · Trato",
     html: wrap(
-      `<p>¡Bienvenido/a a Reven! Confirmá tu email para activar tu cuenta:</p>
+      `<p>¡Bienvenido/a a Trato! Confirmá tu email para activar tu cuenta:</p>
        <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Verificar mi email</a></p>
        <p style="color:#666;font-size:13px">O pegá este link: ${link}</p>
        <p style="color:#666;font-size:13px">Si no creaste la cuenta, ignorá este mensaje.</p>`
@@ -84,7 +84,7 @@ export async function sendVerificationEmail(to: string, link: string): Promise<v
 export async function sendPasswordResetEmail(to: string, link: string): Promise<void> {
   await sendEmail({
     to,
-    subject: "Recuperá tu contraseña · Reven",
+    subject: "Recuperá tu contraseña · Trato",
     html: wrap(
       `<p>Recibimos un pedido para restablecer tu contraseña.</p>
        <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Crear nueva contraseña</a></p>
@@ -106,7 +106,7 @@ export async function sendSubscriptionActivatedEmail(
   const link = `${appUrl()}/suscripcion`;
   await sendEmail({
     to,
-    subject: `Tu plan ${planLabel} está activo · Reven`,
+    subject: `Tu plan ${planLabel} está activo · Trato`,
     html: wrap(
       `<p>¡Listo! Tu suscripción <strong>${escapeHtml(planLabel)}</strong> quedó activa. 🎉</p>
        <p>Tenés los beneficios PRO disponibles hasta el <strong>${fmtFecha(periodEnd)}</strong>. Se renueva automáticamente salvo que la canceles.</p>
@@ -124,7 +124,7 @@ export async function sendSubscriptionCancelledEmail(
   const link = `${appUrl()}/suscripcion`;
   await sendEmail({
     to,
-    subject: "Cancelaste la renovación de tu suscripción · Reven",
+    subject: "Cancelaste la renovación de tu suscripción · Trato",
     html: wrap(
       `<p>Cancelaste la renovación de tu plan <strong>${escapeHtml(planLabel)}</strong>.</p>
        <p>Mantenés los beneficios PRO hasta el <strong>${fmtFecha(activeUntil)}</strong>. Después tu cuenta vuelve al plan gratuito; no se hacen más cobros.</p>

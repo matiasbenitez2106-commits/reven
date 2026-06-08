@@ -68,7 +68,7 @@ export default async function VerificationPage() {
           <div className="mb-6 rounded-lg bg-brand-50 p-4 text-sm text-brand-900">
             <p className="font-medium">¿Por qué verificamos identidad?</p>
             <p className="mt-1">
-              Reven es una comunidad de personas reales. Verificar tu identidad genera
+              Trato es una comunidad de personas reales. Verificar tu identidad genera
               confianza y reduce estafas. Tus datos se guardan{" "}
               <strong>encriptados</strong> y no se muestran públicamente.
             </p>

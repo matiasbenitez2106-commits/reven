@@ -1,35 +1,35 @@
 import type { LegalDocContent } from "@/components/LegalDoc";
 
-// Contenido legal de Reven. Redactado para el MVP en base a la Ley 25.326 (Argentina).
-// IMPORTANTE: reemplazá los correos provisorios (privacidad@reven.app / soporte@reven.app)
+// Contenido legal de Trato. Redactado para el MVP en base a la Ley 25.326 (Argentina).
+// IMPORTANTE: reemplazá los correos provisorios (privacidad@apptrato.com / soporte@apptrato.com)
 // y completá la razón social y el domicilio legal del responsable antes de operar en serio.
 // Este contenido es informativo y no constituye asesoramiento legal.
 
 export const LEGAL_UPDATED = "7 de junio de 2026";
 
 export const PRIVACY_DOC: LegalDocContent = {
-  title: "Política de Privacidad de Reven",
+  title: "Política de Privacidad de Trato",
   intro:
-    "En Reven nos tomamos en serio la protección de tus datos personales. Esta Política de Privacidad explica de forma clara qué datos recolectamos, para qué los usamos, cómo los cuidamos, con quién los compartimos y qué derechos tenés sobre ellos. Te pedimos que la leas con atención antes de crear tu cuenta o usar el servicio. Está redactada de acuerdo con la Ley 25.326 de Protección de los Datos Personales de la República Argentina, su Decreto Reglamentario 1558/2001 y las resoluciones de la Agencia de Acceso a la Información Pública (AAIP). Si algo no te queda claro, escribinos: estamos para ayudarte.",
+    "En Trato nos tomamos en serio la protección de tus datos personales. Esta Política de Privacidad explica de forma clara qué datos recolectamos, para qué los usamos, cómo los cuidamos, con quién los compartimos y qué derechos tenés sobre ellos. Te pedimos que la leas con atención antes de crear tu cuenta o usar el servicio. Está redactada de acuerdo con la Ley 25.326 de Protección de los Datos Personales de la República Argentina, su Decreto Reglamentario 1558/2001 y las resoluciones de la Agencia de Acceso a la Información Pública (AAIP). Si algo no te queda claro, escribinos: estamos para ayudarte.",
   sections: [
     {
       heading: "Quiénes somos (Responsable de los datos)",
       body: [
-        "Reven es un marketplace entre particulares (C2C) para la compraventa de productos usados en la Argentina, en el que las personas usuarias están verificadas. El responsable de la base de datos personales es quien opera el servicio “Reven” (en adelante, “Reven”, “nosotros” o “la app”).",
+        "Trato es un marketplace entre particulares (C2C) para la compraventa de productos usados en la Argentina, en el que las personas usuarias están verificadas. El responsable de la base de datos personales es quien opera el servicio “Trato” (en adelante, “Trato”, “nosotros” o “la app”).",
         "Para cualquier consulta sobre tus datos o esta política, podés contactarnos a través de los canales que figuran al final de este documento. Allí también indicamos la dirección y el correo a los que podés dirigir tus solicitudes.",
       ],
       bullets: [
-        "Responsable: Reven (titular del marketplace).",
-        "Correo para temas de privacidad y datos personales: privacidad@reven.app",
-        "Correo de soporte general: soporte@reven.app",
+        "Responsable: Trato (titular del marketplace).",
+        "Correo para temas de privacidad y datos personales: privacidad@apptrato.com",
+        "Correo de soporte general: soporte@apptrato.com",
       ],
     },
     {
       heading: "Marco legal y alcance",
       body: [
         "Esta política se rige por la Ley 25.326 de Protección de los Datos Personales, su Decreto Reglamentario 1558/2001 y las resoluciones de la Agencia de Acceso a la Información Pública (AAIP), que es la autoridad de aplicación en la Argentina. El derecho a la protección de tus datos (habeas data) tiene rango constitucional (artículo 43 de la Constitución Nacional).",
-        "Esta política aplica a todos los datos personales que tratamos cuando usás Reven: cuando creás tu cuenta, cuando verificás tu identidad, cuando publicás o navegás avisos, cuando chateás con otras personas usuarias y cuando pagás suscripciones o publicaciones destacadas.",
-        "La base de datos de Reven está (o será) inscripta en el Registro Nacional de Bases de Datos de la AAIP, conforme a la obligación legal del responsable.",
+        "Esta política aplica a todos los datos personales que tratamos cuando usás Trato: cuando creás tu cuenta, cuando verificás tu identidad, cuando publicás o navegás avisos, cuando chateás con otras personas usuarias y cuando pagás suscripciones o publicaciones destacadas.",
+        "La base de datos de Trato está (o será) inscripta en el Registro Nacional de Bases de Datos de la AAIP, conforme a la obligación legal del responsable.",
       ],
     },
     {
@@ -44,7 +44,7 @@ export const PRIVACY_DOC: LegalDocContent = {
         "Chat y mensajes: el contenido de los mensajes que intercambiás con otras personas usuarias. Finalidad: permitir la coordinación de las operaciones de compraventa.",
         "Favoritos y vistas de publicaciones: registro de los avisos que marcás como favoritos y de las vistas que reciben las publicaciones. Finalidad: mejorar tu experiencia y ofrecer estadísticas a las personas vendedoras con plan PRO+.",
         "Denuncias y reportes: la información que enviás al denunciar una publicación o a otra persona usuaria. Finalidad: moderar contenidos y mantener la comunidad segura.",
-        "Suscripciones y pagos: los pagos de suscripciones y publicaciones destacadas se procesan a través de MercadoPago. Reven NO almacena los datos de tu tarjeta. Finalidad: cobrar planes y servicios pagos.",
+        "Suscripciones y pagos: los pagos de suscripciones y publicaciones destacadas se procesan a través de MercadoPago. Trato NO almacena los datos de tu tarjeta. Finalidad: cobrar planes y servicios pagos.",
         "Notificaciones: tus preferencias y el envío de notificaciones dentro de la app y por email. Finalidad: avisarte de mensajes, actividad de tus avisos y novedades del servicio.",
         "Cookies de sesión: usamos cookies técnicas de sesión (NextAuth, JWT). Finalidad: mantener tu sesión iniciada. Más detalle en la sección 11.",
       ],
@@ -54,7 +54,7 @@ export const PRIVACY_DOC: LegalDocContent = {
       body: [
         "Para verificar tu identidad necesitamos tratar datos sensibles: tu número de DNI, las fotos del frente y dorso de tu DNI, y una selfie. Bajo la Ley 25.326, el tratamiento de datos sensibles está prohibido salvo excepciones, y la única base que usamos es tu consentimiento expreso, libre e informado. Queremos que entiendas bien tres puntos clave.",
         "Primero: el reconocimiento facial se hace EN TU DISPOSITIVO. La comparación entre la cara de tu DNI y la de tu selfie se ejecuta en tu propio navegador (con la tecnología face-api.js). Los descriptores y plantillas biométricas de tu rostro NO se envían a nuestros servidores ni se almacenan. Al servidor solo llegan dos números: un “match score” (similitud entre la selfie y la cara del DNI) y un “liveness score” (indicio de que hay una persona real frente a la cámara). Esos números los conservamos como evidencia de la decisión de verificación.",
-        "Segundo: los datos sensibles son FACULTATIVOS. No estás obligado a darnos tu DNI, las fotos ni la selfie. Ahora bien, la verificación de identidad es un paso necesario para operar en Reven: si decidís no aportar estos datos, no vas a poder completar la verificación y, por lo tanto, no vas a poder publicar ni realizar ciertas operaciones dentro del marketplace.",
+        "Segundo: los datos sensibles son FACULTATIVOS. No estás obligado a darnos tu DNI, las fotos ni la selfie. Ahora bien, la verificación de identidad es un paso necesario para operar en Trato: si decidís no aportar estos datos, no vas a poder completar la verificación y, por lo tanto, no vas a poder publicar ni realizar ciertas operaciones dentro del marketplace.",
         "Tercero: tu consentimiento se pide por separado. Cuando iniciás el proceso de verificación, te pedimos un consentimiento específico y diferenciado de la aceptación general de los Términos y Condiciones, mediante una casilla dedicada en la que se te advierte el carácter sensible de los datos y la finalidad concreta (verificación de identidad antifraude). Registramos la fecha y hora de ese consentimiento para poder acreditarlo. Podés revocar tu consentimiento en cualquier momento (ver sección 9).",
       ],
     },
@@ -67,7 +67,7 @@ export const PRIVACY_DOC: LegalDocContent = {
       bullets: [
         "Para los datos comunes de cuenta, publicaciones, chat y operación del marketplace: la ejecución de la relación que tenemos con vos como persona usuaria del servicio y tu consentimiento al registrarte y aceptar los Términos y Condiciones.",
         "Para los datos sensibles y biométricos de verificación de identidad (número de DNI, fotos del DNI, selfie y scores de reconocimiento facial): tu CONSENTIMIENTO EXPRESO, LIBRE E INFORMADO, prestado mediante una casilla específica y separada del resto, conforme a los artículos 5 y 7 de la Ley 25.326.",
-        "Para conservar cierta información de pagos y operaciones: el cumplimiento de obligaciones legales (por ejemplo, fiscales) que pesan sobre Reven.",
+        "Para conservar cierta información de pagos y operaciones: el cumplimiento de obligaciones legales (por ejemplo, fiscales) que pesan sobre Trato.",
       ],
     },
     {
@@ -76,8 +76,8 @@ export const PRIVACY_DOC: LegalDocContent = {
         "Antes de recolectar tus datos te informamos, de forma clara y expresa, lo siguiente, conforme al artículo 6 de la Ley 25.326:",
       ],
       bullets: [
-        "Finalidad y destinatarios: usamos tus datos para operar el marketplace, verificar identidades y prevenir fraudes, habilitar la mensajería y procesar pagos de suscripciones y publicaciones destacadas. Los destinatarios son Reven y los encargados de tratamiento (terceros) que detallamos en la sección 8.",
-        "Existencia de la base de datos e identidad del responsable: existe una base de datos de personas usuarias administrada por Reven, cuya identidad y domicilio figuran en este documento.",
+        "Finalidad y destinatarios: usamos tus datos para operar el marketplace, verificar identidades y prevenir fraudes, habilitar la mensajería y procesar pagos de suscripciones y publicaciones destacadas. Los destinatarios son Trato y los encargados de tratamiento (terceros) que detallamos en la sección 8.",
+        "Existencia de la base de datos e identidad del responsable: existe una base de datos de personas usuarias administrada por Trato, cuya identidad y domicilio figuran en este documento.",
         "Carácter obligatorio o facultativo: los datos básicos de cuenta son necesarios para tener una cuenta. Los datos sensibles de verificación son facultativos, pero sin ellos no vas a poder completar la verificación ni operar plenamente en la app.",
         "Consecuencias de dar, no dar o dar datos inexactos: si no completás la verificación, no vas a poder publicar ni realizar ciertas operaciones; si proporcionás datos inexactos, la verificación puede ser rechazada o tu cuenta puede ser suspendida.",
         "Tus derechos: podés ejercer en cualquier momento los derechos de acceso, rectificación, actualización y supresión de tus datos (ver sección 9).",
@@ -107,7 +107,7 @@ export const PRIVACY_DOC: LegalDocContent = {
         "Vercel: hosting e infraestructura donde corre la aplicación.",
         "Cloudinary: almacenamiento de imágenes (las imágenes de DNI y selfie se guardan con entrega privada).",
         "Resend: envío de correos electrónicos (notificaciones y comunicaciones del servicio).",
-        "MercadoPago: procesamiento de pagos de suscripciones y publicaciones destacadas. Reven no almacena datos de tarjetas; los procesa MercadoPago bajo su propia política de privacidad.",
+        "MercadoPago: procesamiento de pagos de suscripciones y publicaciones destacadas. Trato no almacena datos de tarjetas; los procesa MercadoPago bajo su propia política de privacidad.",
         "Servicio de geocodificación basado en OpenStreetMap/Nominatim: para convertir tu ciudad y provincia en una ubicación aproximada y permitir búsquedas por proximidad.",
         "Eventualmente, un proveedor de verificación de identidad (por ejemplo, Onfido), en caso de que en el futuro se incorpore para reforzar el proceso de verificación. Si esto ocurriera, se actualizará esta política en consecuencia.",
       ],
@@ -136,7 +136,7 @@ export const PRIVACY_DOC: LegalDocContent = {
     {
       heading: "Cómo ejercer tus derechos y reclamar",
       body: [
-        "Para ejercer cualquiera de los derechos de la sección anterior, escribinos a privacidad@reven.app o al domicilio del responsable. Para poder atender tu pedido y resguardar tus datos, es posible que necesitemos verificar tu identidad antes de responder.",
+        "Para ejercer cualquiera de los derechos de la sección anterior, escribinos a privacidad@apptrato.com o al domicilio del responsable. Para poder atender tu pedido y resguardar tus datos, es posible que necesitemos verificar tu identidad antes de responder.",
         "Si considerás que no respetamos tus derechos, podés presentar una denuncia ante la Agencia de Acceso a la Información Pública (AAIP), que es el órgano de control en materia de protección de datos personales en la Argentina, o iniciar la acción judicial de habeas data prevista en el artículo 43 de la Constitución Nacional y en la Ley 25.326.",
         "Por transparencia, dejamos constancia de que la ley argentina de protección de datos está en proceso de reforma. Las versiones en discusión prevén nuevos derechos (por ejemplo, portabilidad de datos, oposición al tratamiento y derecho a no ser objeto de decisiones basadas únicamente en tratamientos automatizados). Aún no están vigentes; si se aprueban, adaptaremos esta política.",
       ],
@@ -145,7 +145,7 @@ export const PRIVACY_DOC: LegalDocContent = {
       heading: "Cookies",
       body: [
         "Usamos cookies estrictamente técnicas y necesarias para el funcionamiento del servicio. En particular, cookies de sesión gestionadas por NextAuth (basadas en tokens JWT) que sirven para mantener tu sesión iniciada mientras navegás la app.",
-        "Estas cookies son imprescindibles para que puedas usar Reven de forma segura. No las usamos para publicidad ni para perfilar tu comportamiento. Podés bloquear o borrar las cookies desde la configuración de tu navegador, pero en ese caso es posible que no puedas mantener la sesión iniciada ni usar correctamente el servicio.",
+        "Estas cookies son imprescindibles para que puedas usar Trato de forma segura. No las usamos para publicidad ni para perfilar tu comportamiento. Podés bloquear o borrar las cookies desde la configuración de tu navegador, pero en ese caso es posible que no puedas mantener la sesión iniciada ni usar correctamente el servicio.",
       ],
     },
     {
@@ -173,7 +173,7 @@ export const PRIVACY_DOC: LegalDocContent = {
     {
       heading: "Servicio solo para mayores de 18 años",
       body: [
-        "Reven está dirigido exclusivamente a personas mayores de 18 años con capacidad legal para contratar y para prestar válidamente su consentimiento. No está permitido el uso del servicio por menores de edad.",
+        "Trato está dirigido exclusivamente a personas mayores de 18 años con capacidad legal para contratar y para prestar válidamente su consentimiento. No está permitido el uso del servicio por menores de edad.",
         "Si tomamos conocimiento de que una cuenta corresponde a una persona menor de 18 años, podremos suspenderla y eliminar los datos asociados.",
       ],
     },
@@ -191,8 +191,8 @@ export const PRIVACY_DOC: LegalDocContent = {
         "Si tenés preguntas, quejas o querés ejercer tus derechos sobre tus datos personales, escribinos. Estamos para ayudarte.",
       ],
       bullets: [
-        "Privacidad y protección de datos: privacidad@reven.app",
-        "Soporte general: soporte@reven.app",
+        "Privacidad y protección de datos: privacidad@apptrato.com",
+        "Soporte general: soporte@apptrato.com",
         "Órgano de control: Agencia de Acceso a la Información Pública (AAIP) — ante la cual podés presentar denuncias en materia de protección de datos personales.",
       ],
     },
@@ -200,29 +200,29 @@ export const PRIVACY_DOC: LegalDocContent = {
 };
 
 export const TERMS_DOC: LegalDocContent = {
-  title: "Términos y Condiciones de Reven",
+  title: "Términos y Condiciones de Trato",
   intro:
-    "Bienvenido/a a Reven. Estos Términos y Condiciones (los “Términos”) regulan el acceso y uso de la plataforma Reven (el “Servicio”). Al registrarte, acceder o usar Reven, aceptás estos Términos en su totalidad. Si no estás de acuerdo, no uses el Servicio. Te pedimos que los leas con atención, porque definen tus derechos, tus obligaciones y los límites de la responsabilidad de Reven.",
+    "Bienvenido/a a Trato. Estos Términos y Condiciones (los “Términos”) regulan el acceso y uso de la plataforma Trato (el “Servicio”). Al registrarte, acceder o usar Trato, aceptás estos Términos en su totalidad. Si no estás de acuerdo, no uses el Servicio. Te pedimos que los leas con atención, porque definen tus derechos, tus obligaciones y los límites de la responsabilidad de Trato.",
   sections: [
     {
-      heading: "Qué es Reven (y qué no es)",
+      heading: "Qué es Trato (y qué no es)",
       body: [
-        "Reven es una plataforma digital que CONECTA a compradores y vendedores particulares de productos usados en Argentina. Nuestra función es poner en contacto a las partes y ofrecer herramientas para que publiquen, busquen y se comuniquen entre sí.",
-        "Es muy importante que entiendas el rol de Reven. Reven NO es vendedor ni comprador, NO es parte de la compraventa que se realiza entre los usuarios, y NO interviene en la entrega de los productos ni en el pago entre las partes. Reven tampoco retiene dinero de las transacciones ni cobra comisión por venta.",
-        "Reven obtiene sus ingresos exclusivamente a través de suscripciones (planes pagos) y publicaciones destacadas. Cualquier acuerdo de compraventa se celebra directa y únicamente entre el comprador y el vendedor, que son los responsables exclusivos de cumplirlo.",
+        "Trato es una plataforma digital que CONECTA a compradores y vendedores particulares de productos usados en Argentina. Nuestra función es poner en contacto a las partes y ofrecer herramientas para que publiquen, busquen y se comuniquen entre sí.",
+        "Es muy importante que entiendas el rol de Trato. Trato NO es vendedor ni comprador, NO es parte de la compraventa que se realiza entre los usuarios, y NO interviene en la entrega de los productos ni en el pago entre las partes. Trato tampoco retiene dinero de las transacciones ni cobra comisión por venta.",
+        "Trato obtiene sus ingresos exclusivamente a través de suscripciones (planes pagos) y publicaciones destacadas. Cualquier acuerdo de compraventa se celebra directa y únicamente entre el comprador y el vendedor, que son los responsables exclusivos de cumplirlo.",
       ],
       bullets: [
-        "Reven NO vende ni compra productos.",
-        "Reven NO es parte del contrato de compraventa entre usuarios.",
-        "Reven NO participa en la entrega ni en el pago entre las partes.",
-        "Reven NO retiene dinero ni cobra comisión por las ventas.",
-        "Reven SÍ ofrece, de forma paga, suscripciones y publicaciones destacadas.",
+        "Trato NO vende ni compra productos.",
+        "Trato NO es parte del contrato de compraventa entre usuarios.",
+        "Trato NO participa en la entrega ni en el pago entre las partes.",
+        "Trato NO retiene dinero ni cobra comisión por las ventas.",
+        "Trato SÍ ofrece, de forma paga, suscripciones y publicaciones destacadas.",
       ],
     },
     {
       heading: "Requisitos para usar el Servicio",
       body: [
-        "Para usar Reven necesitás cumplir con todos los requisitos que se detallan a continuación. Si no los cumplís, no podés registrarte ni operar en la plataforma.",
+        "Para usar Trato necesitás cumplir con todos los requisitos que se detallan a continuación. Si no los cumplís, no podés registrarte ni operar en la plataforma.",
         "La verificación de identidad por DNI es un paso obligatorio: sin completarla no vas a poder publicar avisos ni contactar vendedores. Esta medida existe para aumentar la seguridad y la confianza dentro de la comunidad.",
       ],
       bullets: [
@@ -256,14 +256,14 @@ export const TERMS_DOC: LegalDocContent = {
     {
       heading: "Reglas sobre las publicaciones",
       body: [
-        "En Reven solo podés publicar productos usados, legales y que estén efectivamente disponibles para la venta. La información de cada aviso (descripción, fotos, precio, estado del producto) debe ser veraz y no inducir a error.",
+        "En Trato solo podés publicar productos usados, legales y que estén efectivamente disponibles para la venta. La información de cada aviso (descripción, fotos, precio, estado del producto) debe ser veraz y no inducir a error.",
         "Sos el único responsable del contenido que publicás y de que tengas derecho a vender el producto ofrecido.",
       ],
     },
     {
       heading: "Productos y contenido prohibido",
       body: [
-        "Está prohibido publicar, ofrecer o intentar comercializar a través de Reven los siguientes productos o contenidos. Esta lista es enunciativa: también queda prohibido todo aquello que esté prohibido por la ley.",
+        "Está prohibido publicar, ofrecer o intentar comercializar a través de Trato los siguientes productos o contenidos. Esta lista es enunciativa: también queda prohibido todo aquello que esté prohibido por la ley.",
       ],
       bullets: [
         "Armas, municiones y explosivos.",
@@ -280,7 +280,7 @@ export const TERMS_DOC: LegalDocContent = {
     {
       heading: "Conducta prohibida",
       body: [
-        "Para mantener un entorno seguro y confiable, no está permitido realizar ninguna de las siguientes conductas dentro de Reven o en relación con el Servicio.",
+        "Para mantener un entorno seguro y confiable, no está permitido realizar ninguna de las siguientes conductas dentro de Trato o en relación con el Servicio.",
       ],
       bullets: [
         "Cometer fraudes, estafas o cualquier engaño en perjuicio de otros usuarios.",
@@ -294,8 +294,8 @@ export const TERMS_DOC: LegalDocContent = {
     {
       heading: "Transacciones entre particulares",
       body: [
-        "Las compraventas que se inicien a través de Reven se coordinan, acuerdan y ejecutan exclusivamente entre el comprador y el vendedor. Reven no participa en la negociación, la entrega ni el pago, y no es responsable por el cumplimiento del acuerdo entre las partes.",
-        "Reven no garantiza la veracidad, exactitud ni legalidad de las publicaciones, ni la identidad real, la solvencia o la conducta de los usuarios. Cada parte debe actuar con prudencia y diligencia.",
+        "Las compraventas que se inicien a través de Trato se coordinan, acuerdan y ejecutan exclusivamente entre el comprador y el vendedor. Trato no participa en la negociación, la entrega ni el pago, y no es responsable por el cumplimiento del acuerdo entre las partes.",
+        "Trato no garantiza la veracidad, exactitud ni legalidad de las publicaciones, ni la identidad real, la solvencia o la conducta de los usuarios. Cada parte debe actuar con prudencia y diligencia.",
         "Te recomendamos seguir estas pautas de seguridad para reducir riesgos:",
       ],
       bullets: [
@@ -310,7 +310,7 @@ export const TERMS_DOC: LegalDocContent = {
     {
       heading: "Planes pagos: PRO y PRO+",
       body: [
-        "Reven ofrece suscripciones pagas que habilitan funciones y beneficios adicionales dentro del Servicio. Los planes disponibles y sus precios son:",
+        "Trato ofrece suscripciones pagas que habilitan funciones y beneficios adicionales dentro del Servicio. Los planes disponibles y sus precios son:",
         "El cobro de las suscripciones se realiza a través de MercadoPago. Al contratar un plan, autorizás el cobro recurrente correspondiente a través de ese medio de pago.",
       ],
       bullets: ["Plan PRO: $4.000 por mes.", "Plan PRO+: $9.000 por mes."],
@@ -339,7 +339,7 @@ export const TERMS_DOC: LegalDocContent = {
     {
       heading: "Cambios de precio",
       body: [
-        "Reven puede modificar los precios de los planes y de las publicaciones destacadas. Si cambiamos el precio de tu suscripción, te lo vamos a avisar con anticipación razonable.",
+        "Trato puede modificar los precios de los planes y de las publicaciones destacadas. Si cambiamos el precio de tu suscripción, te lo vamos a avisar con anticipación razonable.",
         "Si no estás de acuerdo con el nuevo precio, podés cancelar la suscripción antes de que entre en vigencia. Si continuás usando el plan luego de la fecha del cambio, se entiende que aceptaste el nuevo precio.",
       ],
     },
@@ -347,13 +347,13 @@ export const TERMS_DOC: LegalDocContent = {
       heading: "Licencia sobre el contenido que publicás",
       body: [
         "El contenido que cargás en tus publicaciones (textos, fotos y demás materiales) sigue siendo tuyo. Vos sos responsable de tener los derechos sobre ese contenido.",
-        "Al publicar en Reven, le otorgás a Reven una licencia gratuita y no exclusiva para alojar, mostrar, reproducir y promocionar tus publicaciones dentro del Servicio, con la finalidad de hacerlas visibles a otros usuarios y difundir la plataforma. Esta licencia se limita a lo necesario para prestar y promocionar el Servicio.",
+        "Al publicar en Trato, le otorgás a Trato una licencia gratuita y no exclusiva para alojar, mostrar, reproducir y promocionar tus publicaciones dentro del Servicio, con la finalidad de hacerlas visibles a otros usuarios y difundir la plataforma. Esta licencia se limita a lo necesario para prestar y promocionar el Servicio.",
       ],
     },
     {
       heading: "Moderación, suspensión y eliminación de cuentas",
       body: [
-        "Reven puede revisar denuncias y moderar el contenido de la plataforma para hacer cumplir estos Términos y la ley.",
+        "Trato puede revisar denuncias y moderar el contenido de la plataforma para hacer cumplir estos Términos y la ley.",
         "Cuando detectemos incumplimientos, podremos adoptar medidas proporcionales al caso, incluyendo despublicar avisos, restringir funciones, y suspender o eliminar cuentas. En casos graves o de actividad ilícita, podremos actuar de inmediato y, si corresponde, colaborar con las autoridades competentes.",
       ],
       bullets: [
@@ -363,24 +363,24 @@ export const TERMS_DOC: LegalDocContent = {
       ],
     },
     {
-      heading: "Propiedad intelectual de Reven",
+      heading: "Propiedad intelectual de Trato",
       body: [
-        "La marca Reven, su logo, el software, el diseño, la interfaz y todos los elementos que componen la plataforma son propiedad de Reven o de sus licenciantes, y están protegidos por las leyes de propiedad intelectual.",
-        "No podés copiar, modificar, distribuir, descompilar ni usar la marca o el software de Reven sin autorización previa y por escrito. El uso del Servicio no te transfiere ningún derecho de propiedad intelectual sobre Reven.",
+        "La marca Trato, su logo, el software, el diseño, la interfaz y todos los elementos que componen la plataforma son propiedad de Trato o de sus licenciantes, y están protegidos por las leyes de propiedad intelectual.",
+        "No podés copiar, modificar, distribuir, descompilar ni usar la marca o el software de Trato sin autorización previa y por escrito. El uso del Servicio no te transfiere ningún derecho de propiedad intelectual sobre Trato.",
       ],
     },
     {
       heading: "Defensa del Consumidor y derecho de arrepentimiento",
       body: [
-        "En lo que corresponda, las relaciones de consumo con Reven se rigen por la Ley 24.240 de Defensa del Consumidor y sus normas complementarias.",
+        "En lo que corresponda, las relaciones de consumo con Trato se rigen por la Ley 24.240 de Defensa del Consumidor y sus normas complementarias.",
         "Derecho de arrepentimiento: como los planes pagos y las publicaciones destacadas se contratan online (a distancia), tenés derecho a arrepentirte de la contratación dentro de los 10 (diez) días corridos contados desde la contratación del servicio, sin necesidad de expresar la causa y sin penalidad alguna, conforme a la Ley 24.240. Para ejercerlo, escribinos al contacto indicado más abajo. Tené en cuenta que este derecho puede no aplicar cuando el servicio contratado ya fue íntegramente prestado o comenzó a ejecutarse con tu conformidad antes de vencido el plazo, en los términos que prevé la ley.",
       ],
     },
     {
       heading: "Limitación de responsabilidad",
       body: [
-        "Reven actúa como intermediario que conecta a usuarios particulares. Dentro de los límites permitidos por la ley, Reven no es responsable por:",
-        "Reven no garantiza que el Servicio esté disponible de forma ininterrumpida o libre de errores, aunque trabajamos para que funcione correctamente. Nada en esta sección limita los derechos que la ley te reconoce como consumidor ni la responsabilidad que la ley no permite excluir.",
+        "Trato actúa como intermediario que conecta a usuarios particulares. Dentro de los límites permitidos por la ley, Trato no es responsable por:",
+        "Trato no garantiza que el Servicio esté disponible de forma ininterrumpida o libre de errores, aunque trabajamos para que funcione correctamente. Nada en esta sección limita los derechos que la ley te reconoce como consumidor ni la responsabilidad que la ley no permite excluir.",
       ],
       bullets: [
         "El cumplimiento, la calidad, la legalidad o la veracidad de las operaciones entre comprador y vendedor.",
@@ -392,8 +392,8 @@ export const TERMS_DOC: LegalDocContent = {
     {
       heading: "Modificaciones de los Términos",
       body: [
-        "Reven puede modificar estos Términos para adaptarlos a cambios legales, técnicos o del Servicio. Cuando haya cambios relevantes, te los vamos a avisar por los medios disponibles (por ejemplo, dentro de la plataforma o por correo electrónico) con anticipación razonable.",
-        "Si seguís usando el Servicio después de que los cambios entren en vigencia, se entiende que aceptás los Términos modificados. Si no estás de acuerdo, podés dejar de usar Reven y cancelar tu cuenta.",
+        "Trato puede modificar estos Términos para adaptarlos a cambios legales, técnicos o del Servicio. Cuando haya cambios relevantes, te los vamos a avisar por los medios disponibles (por ejemplo, dentro de la plataforma o por correo electrónico) con anticipación razonable.",
+        "Si seguís usando el Servicio después de que los cambios entren en vigencia, se entiende que aceptás los Términos modificados. Si no estás de acuerdo, podés dejar de usar Trato y cancelar tu cuenta.",
       ],
     },
     {
@@ -407,7 +407,7 @@ export const TERMS_DOC: LegalDocContent = {
       heading: "Contacto",
       body: [
         "Si tenés dudas, reclamos o querés ejercer alguno de tus derechos (incluido el de arrepentimiento), escribinos. Vamos a responderte a la brevedad.",
-        "Correo de contacto: soporte@reven.app",
+        "Correo de contacto: soporte@apptrato.com",
       ],
     },
   ],
