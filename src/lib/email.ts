@@ -115,6 +115,27 @@ export async function sendSubscriptionActivatedEmail(
   });
 }
 
+/** Aviso de mensaje nuevo en el chat (con preview del texto). */
+export async function sendNewMessageEmail(
+  to: string,
+  fromName: string,
+  listingTitle: string,
+  preview: string,
+  conversationId: string
+): Promise<void> {
+  const link = `${appUrl()}/mensajes/${conversationId}`;
+  await sendEmail({
+    to,
+    subject: `Nuevo mensaje de ${fromName} · Trato`,
+    html: wrap(
+      `<p><strong>${escapeHtml(fromName)}</strong> te escribió por <strong>${escapeHtml(listingTitle)}</strong>:</p>
+       <p style="border-left:3px solid #177853;padding:8px 12px;color:#444;background:#f6f6f6;border-radius:4px">${escapeHtml(preview)}</p>
+       <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Responder</a></p>
+       <p style="color:#999;font-size:12px">Recibís este aviso porque tenés un mensaje sin leer en Trato.</p>`
+    ),
+  });
+}
+
 /** Aviso al cancelar la renovación (mantiene beneficios hasta fin del período). */
 export async function sendSubscriptionCancelledEmail(
   to: string,

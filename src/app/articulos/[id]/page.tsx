@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MapPin, Tag, CalendarDays, Eye, Heart, MessageCircle, Crown } from "lucide-react";
@@ -17,12 +18,42 @@ import { activePlan } from "@/lib/subscriptions";
 import { formatPrice, formatRelative } from "@/lib/utils";
 import { CONDITION_LABELS } from "@/lib/constants";
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
   const l = await prisma.listing.findUnique({
     where: { id: params.id },
-    select: { title: true },
+    select: {
+      title: true,
+      price: true,
+      city: true,
+      condition: true,
+      status: true,
+      images: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
+    },
   });
-  return { title: l?.title ?? "Artículo" };
+  if (!l || l.status === "DELETED") return { title: "Artículo" };
+
+  const desc = `${formatPrice(Number(l.price))} · ${CONDITION_LABELS[l.condition]} · ${l.city}`;
+  const img = l.images[0]?.url;
+  return {
+    title: l.title,
+    description: desc,
+    openGraph: {
+      type: "website",
+      title: l.title,
+      description: desc,
+      images: img ? [{ url: img }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: l.title,
+      description: desc,
+      images: img ? [img] : undefined,
+    },
+  };
 }
 
 export default async function ListingDetailPage({ params }: { params: { id: string } }) {

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { messageSchema } from "@/lib/validations";
 import { notify } from "@/lib/notifications";
+import { sendNewMessageEmail } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
 type Params = { params: { id: string } };
@@ -78,6 +79,11 @@ export async function POST(req: Request, { params }: Params) {
     return NextResponse.json({ error: "Mensaje inválido" }, { status: 400 });
   }
 
+  // ¿El destinatario ya tenía mensajes sin leer de este remitente? (para no spamear emails)
+  const priorUnread = await prisma.message.count({
+    where: { conversationId: params.id, senderId: user.id, readAt: null },
+  });
+
   const msg = await prisma.message.create({
     data: { conversationId: params.id, senderId: user.id, body: parsed.data.body },
   });
@@ -86,10 +92,10 @@ export async function POST(req: Request, { params }: Params) {
     data: { updatedAt: new Date() },
   });
 
-  // Notifica al otro participante
+  // Notifica al otro participante (in-app siempre; email solo la 1ª vez que queda sin leer)
   const convo = await prisma.conversation.findUnique({
     where: { id: params.id },
-    select: { buyerId: true, sellerId: true },
+    select: { buyerId: true, sellerId: true, listing: { select: { title: true } } },
   });
   if (convo) {
     const recipientId = convo.buyerId === user.id ? convo.sellerId : convo.buyerId;
@@ -100,6 +106,26 @@ export async function POST(req: Request, { params }: Params) {
       body: parsed.data.body.slice(0, 80),
       link: `/mensajes/${params.id}`,
     });
+
+    if (priorUnread === 0) {
+      try {
+        const recipient = await prisma.user.findUnique({
+          where: { id: recipientId },
+          select: { email: true },
+        });
+        if (recipient) {
+          await sendNewMessageEmail(
+            recipient.email,
+            user.name ?? "Alguien",
+            convo.listing.title,
+            parsed.data.body,
+            params.id
+          );
+        }
+      } catch (e) {
+        console.error("No se pudo enviar el email de mensaje nuevo:", e);
+      }
+    }
   }
 
   return NextResponse.json(
