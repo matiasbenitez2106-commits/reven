@@ -8,7 +8,7 @@ export function Footer() {
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <Link href="/" className="flex items-center gap-1 text-lg font-bold text-brand-600">
-              <Package className="h-5 w-5" /> Trato
+              <Package className="h-5 w-5" /> trato
             </Link>
             <p className="mt-2 max-w-xs text-sm text-gray-500">
               Compraventa de usados entre personas verificadas. Sin comisiones.
@@ -16,7 +16,7 @@ export function Footer() {
           </div>
           <div className="grid grid-cols-2 gap-8 text-sm sm:grid-cols-3">
             <div>
-              <p className="font-medium text-gray-900">Trato</p>
+              <p className="font-medium text-gray-900">trato</p>
               <ul className="mt-2 space-y-1 text-gray-500">
                 <li><Link href="/buscar" className="hover:text-brand-600">Explorar</Link></li>
                 <li><Link href="/publicar" className="hover:text-brand-600">Publicar</Link></li>
@@ -41,7 +41,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 flex flex-col gap-2 border-t border-gray-100 pt-6 text-xs text-gray-400 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Trato · MVP · Hecho en Argentina 🇦🇷</p>
+          <p>© {new Date().getFullYear()} trato · MVP · Hecho en Argentina 🇦🇷</p>
           <p className="flex gap-3">
             <Link href="/terminos" className="hover:text-brand-600">Términos</Link>
             <Link href="/privacidad" className="hover:text-brand-600">Privacidad</Link>

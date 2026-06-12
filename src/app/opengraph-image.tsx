@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 // Imagen para previews al compartir el link del sitio (WhatsApp, redes, etc.).
 export const runtime = "edge";
-export const alt = "Trato — Comprá y vendé usado, entre personas reales";
+export const alt = "trato — Comprá y vendé usado, entre personas reales";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -24,7 +24,7 @@ export default function OpengraphImage() {
           textAlign: "center",
         }}
       >
-        <div style={{ fontSize: 120, fontWeight: 800, letterSpacing: -3 }}>Trato</div>
+        <div style={{ fontSize: 120, fontWeight: 800, letterSpacing: -3 }}>trato</div>
         <div style={{ fontSize: 44, marginTop: 12, maxWidth: 920, lineHeight: 1.2 }}>
           Comprá y vendé usado, entre personas reales
         </div>

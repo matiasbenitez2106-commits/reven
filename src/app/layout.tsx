@@ -13,29 +13,29 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.apptrato.com"),
   title: {
-    default: "Trato — Comprá y vendé usado, entre personas verificadas",
-    template: "%s · Trato",
+    default: "trato — Comprá y vendé usado, entre personas verificadas",
+    template: "%s · trato",
   },
   description:
-    "Trato es la plataforma de compraventa de artículos usados entre particulares verificados en Argentina. Sin comisiones. Publicá gratis.",
+    "trato es la plataforma de compraventa de artículos usados entre particulares verificados en Argentina. Sin comisiones. Publicá gratis.",
   keywords: ["usados", "compraventa", "Argentina", "marketplace", "segunda mano"],
   openGraph: {
     type: "website",
-    siteName: "Trato",
+    siteName: "trato",
     locale: "es_AR",
     url: "/",
-    title: "Trato — Comprá y vendé usado, entre personas reales",
+    title: "trato — Comprá y vendé usado, entre personas reales",
     description:
       "Compraventa de usados entre particulares verificados en Argentina. Identidad verificada, sin comisiones.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Trato — Comprá y vendé usado",
+    title: "trato — Comprá y vendé usado",
     description: "Compraventa de usados entre particulares verificados en Argentina.",
   },
   appleWebApp: {
     capable: true,
-    title: "Trato",
+    title: "trato",
     statusBarStyle: "default",
   },
 };

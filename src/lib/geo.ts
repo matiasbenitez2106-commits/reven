@@ -117,7 +117,7 @@ export async function geocode(query: string): Promise<LatLng | null> {
       `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=ar&q=` +
       encodeURIComponent(query);
     const res = await fetch(url, {
-      headers: { "User-Agent": "Trato/1.0 (https://reven-reven-projects.vercel.app)" },
+      headers: { "User-Agent": "trato/1.0 (https://reven-reven-projects.vercel.app)" },
     });
     if (res.ok) {
       const data = await res.json();

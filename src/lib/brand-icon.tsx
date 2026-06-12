@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 
-// Ícono de marca (monograma "T" sobre verde Trato). Se usa para generar el
+// Ícono de marca (monograma "T" sobre verde trato). Se usa para generar el
 // favicon, el apple-touch-icon y los íconos del manifest (PWA) con next/og.
 export function brandIcon(size: number): ReactElement {
   return (
@@ -19,7 +19,7 @@ export function brandIcon(size: number): ReactElement {
         lineHeight: 1,
       }}
     >
-      T
+      t
     </div>
   );
 }

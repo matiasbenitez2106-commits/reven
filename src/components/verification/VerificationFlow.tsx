@@ -199,7 +199,7 @@ export function VerificationFlow() {
               className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
             />
             <span>
-              Presto mi <strong>consentimiento expreso</strong> para que Trato trate mi DNI,
+              Presto mi <strong>consentimiento expreso</strong> para que trato trate mi DNI,
               las fotos del documento y mi selfie —que son <strong>datos sensibles</strong>—
               con el único fin de verificar mi identidad y prevenir fraudes. Sé que darlos es
               voluntario y que puedo revocar este consentimiento. Leí la{" "}

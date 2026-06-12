@@ -35,7 +35,7 @@ export default async function VerifyEmailPage({
             <BadgeCheck className="h-12 w-12 text-green-600" />
             <h1 className="text-xl font-bold">¡Email verificado!</h1>
             <p className="text-sm text-gray-500">
-              Tu email quedó confirmado. Ya podés usar Trato con normalidad.
+              Tu email quedó confirmado. Ya podés usar trato con normalidad.
             </p>
           </>
         ) : (

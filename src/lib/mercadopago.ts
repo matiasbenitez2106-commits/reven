@@ -99,7 +99,7 @@ export async function createCheckout(args: CheckoutArgs): Promise<CheckoutResult
       items: [
         {
           id: args.type,
-          title: `Trato · ${plan.label}`,
+          title: `trato · ${plan.label}`,
           description: `Destacar: ${args.listingTitle}`,
           quantity: 1,
           currency_id: "ARS",
@@ -154,7 +154,7 @@ export async function createSubscriptionCheckout(args: {
       Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}`,
     },
     body: JSON.stringify({
-      reason: `Trato ${cfg.label} (suscripción mensual)`,
+      reason: `trato ${cfg.label} (suscripción mensual)`,
       external_reference: args.externalReference,
       payer_email: args.payerEmail,
       auto_recurring: {

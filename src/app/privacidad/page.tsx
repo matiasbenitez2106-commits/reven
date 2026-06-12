@@ -3,8 +3,8 @@ import { LegalDoc } from "@/components/LegalDoc";
 import { PRIVACY_DOC, LEGAL_UPDATED } from "@/content/legal";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidad · Trato",
-  description: "Cómo Trato recolecta, usa y protege tus datos personales, conforme a la Ley 25.326 (Argentina).",
+  title: "Política de Privacidad · trato",
+  description: "Cómo trato recolecta, usa y protege tus datos personales, conforme a la Ley 25.326 (Argentina).",
 };
 
 export default function PrivacidadPage() {

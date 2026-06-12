@@ -138,7 +138,7 @@ export async function POST(req: Request) {
   if (status === "PENDING") {
     const baseUrl = new URL(req.url).origin;
     await notifyAdmin(
-      "🪪 Nueva verificación pendiente en Trato",
+      "🪪 Nueva verificación pendiente en trato",
       `<p>Un usuario envió documentación para verificar su identidad.</p>
        <p><a href="${baseUrl}/admin/verificaciones">Revisar en el panel</a></p>`
     );

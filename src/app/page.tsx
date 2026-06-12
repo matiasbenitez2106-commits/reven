@@ -26,7 +26,7 @@ export default async function Home() {
             Comprá y vendé usado, <span className="text-brand-600">entre personas reales</span>
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-gray-600">
-            Trato es la comunidad de compraventa entre particulares verificados de Argentina.
+            trato es la comunidad de compraventa entre particulares verificados de Argentina.
             Publicá gratis, sin comisiones.
           </p>
           <HomeSearch />

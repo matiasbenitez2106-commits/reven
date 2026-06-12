@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 
-// Manifest de la PWA: permite "instalar" Trato en el celular.
+// Manifest de la PWA: permite "instalar" trato en el celular.
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Trato — Comprá y vendé usado",
-    short_name: "Trato",
+    name: "trato — Comprá y vendé usado",
+    short_name: "trato",
     description:
       "Compraventa de usados entre particulares verificados en Argentina. Sin comisiones.",
     start_url: "/",

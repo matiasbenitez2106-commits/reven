@@ -1,4 +1,4 @@
-// Service worker mínimo para que Trato sea instalable como PWA.
+// Service worker mínimo para que trato sea instalable como PWA.
 // No cachea contenido (un marketplace necesita datos frescos); solo provee el
 // fetch handler que Chrome requiere para ofrecer "Instalar app".
 self.addEventListener("install", () => self.skipWaiting());

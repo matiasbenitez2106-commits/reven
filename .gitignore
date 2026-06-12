@@ -41,7 +41,7 @@ next-env.d.ts
 
 .vercel
 
-# carpetas ajenas a Trato que viven en este directorio
+# carpetas ajenas a trato que viven en este directorio
 /Projects
 # assets personales / material de verificación, diseño y marketing (no van al repo)
 /_verif
