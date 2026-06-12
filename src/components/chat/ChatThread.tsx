@@ -83,7 +83,7 @@ export function ChatThread({
     <div className={cn("flex flex-col", className)}>
       <div className="flex-1 space-y-2 overflow-y-auto p-1">
         {messages.length === 0 && (
-          <p className="py-8 text-center text-sm text-gray-400">
+          <p className="py-8 text-center text-sm text-gray-400 dark:text-stone-500">
             Todavía no hay mensajes. ¡Escribí el primero!
           </p>
         )}
@@ -96,11 +96,11 @@ export function ChatThread({
                   "max-w-[75%] rounded-2xl px-3 py-2 text-sm",
                   mine
                     ? "rounded-br-sm bg-brand-600 text-white"
-                    : "rounded-bl-sm bg-gray-100 text-gray-800"
+                    : "rounded-bl-sm bg-gray-100 dark:bg-stone-800 text-gray-800 dark:text-stone-100"
                 )}
               >
                 <p className="whitespace-pre-wrap break-words">{m.body}</p>
-                <p className={cn("mt-0.5 text-[10px]", mine ? "text-brand-100" : "text-gray-400")}>
+                <p className={cn("mt-0.5 text-[10px]", mine ? "text-brand-100" : "text-gray-400 dark:text-stone-500")}>
                   {new Date(m.createdAt).toLocaleTimeString("es-AR", {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -113,7 +113,7 @@ export function ChatThread({
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={send} className="mt-2 flex items-center gap-2 border-t border-gray-200 pt-3">
+      <form onSubmit={send} className="mt-2 flex items-center gap-2 border-t border-gray-200 dark:border-stone-800 pt-3">
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}

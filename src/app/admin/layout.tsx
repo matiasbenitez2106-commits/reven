@@ -10,17 +10,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       <div className="mb-6 flex items-center gap-2">
-        <ShieldCheck className="h-6 w-6 text-brand-600" />
+        <ShieldCheck className="h-6 w-6 text-brand-600 dark:text-brand-300" />
         <h1 className="text-2xl font-bold">Panel de administración</h1>
       </div>
-      <nav className="mb-6 flex gap-1 border-b border-gray-200 text-sm">
-        <Link href="/admin" className="border-b-2 border-transparent px-3 py-2 font-medium text-gray-600 hover:border-gray-300 hover:text-gray-900">
+      <nav className="mb-6 flex gap-1 border-b border-gray-200 dark:border-stone-800 text-sm">
+        <Link href="/admin" className="border-b-2 border-transparent px-3 py-2 font-medium text-gray-600 dark:text-stone-300 hover:border-gray-300 dark:hover:border-stone-600 hover:text-gray-900 dark:hover:text-stone-100">
           Resumen
         </Link>
-        <Link href="/admin/reportes" className="border-b-2 border-transparent px-3 py-2 font-medium text-gray-600 hover:border-gray-300 hover:text-gray-900">
+        <Link href="/admin/reportes" className="border-b-2 border-transparent px-3 py-2 font-medium text-gray-600 dark:text-stone-300 hover:border-gray-300 dark:hover:border-stone-600 hover:text-gray-900 dark:hover:text-stone-100">
           Denuncias
         </Link>
-        <Link href="/admin/verificaciones" className="border-b-2 border-transparent px-3 py-2 font-medium text-gray-600 hover:border-gray-300 hover:text-gray-900">
+        <Link href="/admin/verificaciones" className="border-b-2 border-transparent px-3 py-2 font-medium text-gray-600 dark:text-stone-300 hover:border-gray-300 dark:hover:border-stone-600 hover:text-gray-900 dark:hover:text-stone-100">
           Verificaciones
         </Link>
       </nav>

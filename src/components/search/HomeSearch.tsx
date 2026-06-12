@@ -16,12 +16,12 @@ export function HomeSearch() {
 
   return (
     <form onSubmit={onSubmit} className="relative mx-auto mt-6 max-w-xl">
-      <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+      <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-stone-500" />
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder="¿Qué estás buscando? Ej: iPhone, bici, sillón..."
-        className="h-14 w-full rounded-full border border-gray-300 bg-white pl-12 pr-28 text-base shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+        className="h-14 w-full rounded-full border border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 pl-12 pr-28 text-base shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
       />
       <button
         type="submit"

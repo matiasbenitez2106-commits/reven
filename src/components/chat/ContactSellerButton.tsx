@@ -62,14 +62,14 @@ export function ContactSellerButton({
         <MessageCircle className="h-4 w-4" /> Contactar al vendedor
       </Button>
       {needsVerify && (
-        <p className="mt-2 text-xs text-red-600">
+        <p className="mt-2 text-xs text-red-600 dark:text-red-400">
           Verificá tu identidad para contactar vendedores.{" "}
           <Link href="/verificacion" className="font-medium underline">
             Verificar ahora
           </Link>
         </p>
       )}
-      {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-2 text-xs text-red-600 dark:text-red-400">{error}</p>}
     </div>
   );
 }

@@ -29,9 +29,9 @@ export default function OsmMap({ lat, lng }: { lat: number; lng: number }) {
         center={[lat, lng]}
         radius={500}
         pathOptions={{
-          color: "#007aff",
+          color: "#66785B",
           weight: 1.5,
-          fillColor: "#007aff",
+          fillColor: "#66785B",
           fillOpacity: 0.12,
         }}
       />

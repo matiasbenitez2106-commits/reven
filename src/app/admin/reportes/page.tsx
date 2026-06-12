@@ -36,8 +36,8 @@ export default async function AdminReportsPage() {
 
   if (reports.length === 0) {
     return (
-      <div className="card flex flex-col items-center gap-2 p-12 text-center text-gray-500">
-        <Flag className="h-10 w-10 text-gray-300" />
+      <div className="card flex flex-col items-center gap-2 p-12 text-center text-gray-500 dark:text-stone-400">
+        <Flag className="h-10 w-10 text-gray-300 dark:text-stone-600" />
         <p>No hay denuncias.</p>
       </div>
     );
@@ -50,29 +50,29 @@ export default async function AdminReportsPage() {
         return (
           <div key={r.id} className="card p-4">
             <div className="flex gap-4">
-              <Link href={`/articulos/${r.listing.id}`} className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+              <Link href={`/articulos/${r.listing.id}`} className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-stone-800">
                 {thumb ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={thumb} alt="" className="h-full w-full object-cover" />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-gray-300">
+                  <div className="flex h-full w-full items-center justify-center text-gray-300 dark:text-stone-600">
                     <ImageOff className="h-6 w-6" />
                   </div>
                 )}
               </Link>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Link href={`/articulos/${r.listing.id}`} className="truncate font-medium hover:text-brand-600">
+                  <Link href={`/articulos/${r.listing.id}`} className="truncate font-medium hover:text-brand-600 dark:hover:text-brand-300">
                     {r.listing.title}
                   </Link>
                   <Badge color={STATUS[r.status].color}>{STATUS[r.status].label}</Badge>
                   {r.listing.status === "DELETED" && <Badge color="red">Publicación eliminada</Badge>}
                 </div>
-                <p className="mt-1 text-sm font-medium text-red-700">
+                <p className="mt-1 text-sm font-medium text-red-700 dark:text-red-300">
                   {REPORT_REASON_LABELS[r.reason]}
                 </p>
-                {r.details && <p className="mt-0.5 text-sm text-gray-600">“{r.details}”</p>}
-                <p className="mt-1 text-xs text-gray-400">
+                {r.details && <p className="mt-0.5 text-sm text-gray-600 dark:text-stone-300">“{r.details}”</p>}
+                <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
                   Denunciado por {r.reporter.firstName} {r.reporter.lastName} ({r.reporter.email}) ·{" "}
                   {formatRelative(r.createdAt)}
                 </p>
@@ -80,7 +80,7 @@ export default async function AdminReportsPage() {
                   <AdminReportActions reportId={r.id} listingId={r.listing.id} />
                   <Link
                     href={`/admin/identidad/${r.listing.seller.id}`}
-                    className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium hover:bg-gray-50"
+                    className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-stone-800"
                     title="Datos de identidad del vendedor para entregar a la autoridad"
                   >
                     <FileText className="h-3.5 w-3.5" /> Identidad del vendedor

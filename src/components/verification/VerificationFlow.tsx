@@ -118,22 +118,22 @@ export function VerificationFlow() {
                 i < stepIndex
                   ? "bg-brand-600 text-white"
                   : i === stepIndex
-                  ? "bg-brand-100 text-brand-700 ring-2 ring-brand-500"
-                  : "bg-gray-100 text-gray-400"
+                  ? "bg-brand-100 dark:bg-brand-800/40 text-brand-700 dark:text-brand-300 ring-2 ring-brand-500"
+                  : "bg-gray-100 dark:bg-stone-800 text-gray-400 dark:text-stone-500"
               }`}
             >
               {i < stepIndex ? <Check className="h-3.5 w-3.5" /> : i + 1}
             </span>
-            <span className={i === stepIndex ? "font-medium text-gray-900" : "text-gray-400"}>
+            <span className={i === stepIndex ? "font-medium text-gray-900 dark:text-stone-100" : "text-gray-400 dark:text-stone-500"}>
               {s.label}
             </span>
-            {i < STEPS.length - 1 && <span className="h-px flex-1 bg-gray-200" />}
+            {i < STEPS.length - 1 && <span className="h-px flex-1 bg-gray-200 dark:bg-stone-700" />}
           </li>
         ))}
       </ol>
 
       {error && (
-        <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+        <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
           <AlertCircle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}
@@ -180,15 +180,15 @@ export function VerificationFlow() {
               value={dniNumber}
               onChange={(e) => setDniNumber(e.target.value.replace(/\D/g, ""))}
             />
-            <p className="mt-1 text-xs text-gray-400">Solo números, sin puntos.</p>
+            <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">Solo números, sin puntos.</p>
           </div>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-400 dark:text-stone-500">
             Al enviar, comparamos la cara de tu DNI con la selfie (en tu dispositivo) y
             guardamos tus datos encriptados. Asegurate de que en el frente del DNI se vea
             bien tu foto.
           </p>
 
-          <label className="flex items-start gap-2 rounded-lg bg-brand-50/60 p-3 text-xs text-gray-600">
+          <label className="flex items-start gap-2 rounded-lg bg-brand-50/60 dark:bg-brand-900/30 p-3 text-xs text-gray-600 dark:text-stone-300">
             <input
               type="checkbox"
               checked={consent}
@@ -196,14 +196,14 @@ export function VerificationFlow() {
                 setConsent(e.target.checked);
                 if (e.target.checked) setError(null);
               }}
-              className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+              className="mt-0.5 h-4 w-4 rounded border-gray-300 dark:border-stone-700 text-brand-600 dark:text-brand-300 focus:ring-brand-500"
             />
             <span>
               Presto mi <strong>consentimiento expreso</strong> para que trato trate mi DNI,
               las fotos del documento y mi selfie —que son <strong>datos sensibles</strong>—
               con el único fin de verificar mi identidad y prevenir fraudes. Sé que darlos es
               voluntario y que puedo revocar este consentimiento. Leí la{" "}
-              <Link href="/privacidad" target="_blank" className="text-brand-600 hover:underline">
+              <Link href="/privacidad" target="_blank" className="text-brand-600 dark:text-brand-300 hover:underline">
                 Política de Privacidad
               </Link>
               .
@@ -268,16 +268,16 @@ function PhotoInput({
     <div className="space-y-3">
       <div>
         <h3 className="font-semibold">{title}</h3>
-        <p className="text-sm text-gray-500">{hint}</p>
+        <p className="text-sm text-gray-500 dark:text-stone-400">{hint}</p>
       </div>
 
       {value ? (
         <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={value} alt={title} className="w-full rounded-lg border border-gray-200" />
+          <img src={value} alt={title} className="w-full rounded-lg border border-gray-200 dark:border-stone-800" />
           <button
             onClick={() => onChange(null)}
-            className="absolute right-2 top-2 flex items-center gap-1 rounded-lg bg-white/90 px-2 py-1 text-xs font-medium shadow"
+            className="absolute right-2 top-2 flex items-center gap-1 rounded-lg bg-white/90 dark:bg-stone-900/90 px-2 py-1 text-xs font-medium shadow"
           >
             <RotateCcw className="h-3.5 w-3.5" /> Cambiar
           </button>
@@ -285,7 +285,7 @@ function PhotoInput({
       ) : (
         <button
           onClick={() => inputRef.current?.click()}
-          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 px-4 py-10 text-gray-500 hover:border-brand-400 hover:bg-brand-50"
+          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 dark:border-stone-700 bg-gray-50 dark:bg-stone-900 px-4 py-10 text-gray-500 dark:text-stone-400 hover:border-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/30"
         >
           <Icon className="h-8 w-8" />
           <span className="text-sm font-medium">
@@ -378,7 +378,7 @@ function SelfieCapture({
     <div className="space-y-3">
       <div>
         <h3 className="font-semibold">Selfie en vivo (prueba de vida)</h3>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-stone-400">
           Mirá a la cámara con buena luz. Para una prueba de vida real, parpadeá o girá
           levemente la cabeza.
         </p>
@@ -387,17 +387,17 @@ function SelfieCapture({
       {value ? (
         <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={value} alt="Selfie" className="mx-auto w-64 rounded-xl border border-gray-200" />
+          <img src={value} alt="Selfie" className="mx-auto w-64 rounded-xl border border-gray-200 dark:border-stone-800" />
           <button
             onClick={() => onChange(null)}
-            className="mx-auto mt-3 flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50"
+            className="mx-auto mt-3 flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
           >
             <RotateCcw className="h-4 w-4" /> Volver a capturar
           </button>
         </div>
       ) : cameraError ? (
         <div className="space-y-3">
-          <div className="flex items-center gap-2 rounded-lg bg-yellow-50 p-3 text-sm text-yellow-800">
+          <div className="flex items-center gap-2 rounded-lg bg-yellow-50 dark:bg-yellow-950/40 p-3 text-sm text-yellow-800 dark:text-yellow-300">
             <AlertCircle className="h-4 w-4 shrink-0" /> {cameraError}
           </div>
           <Button variant="secondary" onClick={() => fileRef.current?.click()}>
@@ -406,7 +406,7 @@ function SelfieCapture({
         </div>
       ) : (
         <div className="space-y-3">
-          <div className="overflow-hidden rounded-xl border border-gray-200 bg-black">
+          <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-stone-800 bg-black">
             <video
               ref={videoRef}
               playsInline
@@ -435,12 +435,12 @@ function SelfieCapture({
 function Thumb({ label, src }: { label: string; src: string | null }) {
   return (
     <div>
-      <p className="mb-1 text-xs font-medium text-gray-500">{label}</p>
+      <p className="mb-1 text-xs font-medium text-gray-500 dark:text-stone-400">{label}</p>
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={label} className="aspect-square w-full rounded-lg border border-gray-200 object-cover" />
+        <img src={src} alt={label} className="aspect-square w-full rounded-lg border border-gray-200 dark:border-stone-800 object-cover" />
       ) : (
-        <div className="aspect-square w-full rounded-lg bg-gray-100" />
+        <div className="aspect-square w-full rounded-lg bg-gray-100 dark:bg-stone-800" />
       )}
     </div>
   );

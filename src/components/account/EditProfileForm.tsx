@@ -89,19 +89,19 @@ export function EditProfileForm({
       <h2 className="font-semibold">Editar perfil</h2>
 
       {error && (
-        <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+        <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
           <AlertCircle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}
       {saved && (
-        <div className="flex items-center gap-2 rounded-lg bg-green-50 p-3 text-sm text-green-700">
+        <div className="flex items-center gap-2 rounded-lg bg-green-50 dark:bg-green-950/40 p-3 text-sm text-green-700 dark:text-green-300">
           <Check className="h-4 w-4 shrink-0" /> Cambios guardados.
         </div>
       )}
 
       <div className="flex items-center gap-4">
         <Avatar firstName={initial.firstName} lastName={initial.lastName} src={avatarUrl} size={64} />
-        <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50">
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-300 dark:border-stone-700 px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-stone-800">
           <Camera className="h-4 w-4" />
           {uploading ? "Subiendo..." : "Cambiar foto"}
           <input type="file" accept="image/*" className="hidden" onChange={onAvatar} />

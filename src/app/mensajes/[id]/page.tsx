@@ -54,8 +54,8 @@ export default async function ConversationPage({ params }: { params: { id: strin
   return (
     <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-3xl flex-col px-4 py-4">
       {/* Encabezado */}
-      <div className="mb-3 flex items-center gap-3 border-b border-gray-200 pb-3">
-        <Link href="/mensajes" className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100">
+      <div className="mb-3 flex items-center gap-3 border-b border-gray-200 dark:border-stone-800 pb-3">
+        <Link href="/mensajes" className="rounded-lg p-1.5 text-gray-500 dark:text-stone-400 hover:bg-gray-100 dark:hover:bg-stone-800">
           <ArrowLeft className="h-5 w-5" />
         </Link>
         <Avatar firstName={other.firstName} lastName={other.lastName} src={other.avatarUrl} size={40} />
@@ -67,21 +67,21 @@ export default async function ConversationPage({ params }: { params: { id: strin
         </div>
         <Link
           href={`/articulos/${convo.listing.id}`}
-          className="flex items-center gap-2 rounded-lg border border-gray-200 p-1.5 hover:bg-gray-50"
+          className="flex items-center gap-2 rounded-lg border border-gray-200 dark:border-stone-800 p-1.5 hover:bg-gray-50 dark:hover:bg-stone-800"
         >
-          <div className="h-9 w-9 overflow-hidden rounded bg-gray-100">
+          <div className="h-9 w-9 overflow-hidden rounded bg-gray-100 dark:bg-stone-800">
             {thumb ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={thumb} alt="" className="h-full w-full object-cover" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-gray-300">
+              <div className="flex h-full w-full items-center justify-center text-gray-300 dark:text-stone-600">
                 <ImageOff className="h-4 w-4" />
               </div>
             )}
           </div>
           <div className="hidden sm:block">
             <p className="max-w-[140px] truncate text-xs font-medium">{convo.listing.title}</p>
-            <p className="text-xs text-gray-500">{formatPrice(Number(convo.listing.price))}</p>
+            <p className="text-xs text-gray-500 dark:text-stone-400">{formatPrice(Number(convo.listing.price))}</p>
           </div>
         </Link>
       </div>

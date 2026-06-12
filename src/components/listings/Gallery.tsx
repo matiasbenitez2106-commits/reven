@@ -31,7 +31,7 @@ export function Gallery({
 
   if (!images.length) {
     return (
-      <div className="flex aspect-square items-center justify-center rounded-xl bg-gray-100 text-gray-300">
+      <div className="flex aspect-square items-center justify-center rounded-xl bg-gray-100 dark:bg-stone-800 text-gray-300 dark:text-stone-600">
         <ImageOff className="h-12 w-12" />
       </div>
     );
@@ -39,7 +39,7 @@ export function Gallery({
 
   return (
     <div>
-      <div className="relative overflow-hidden rounded-xl border border-gray-200 bg-white">
+      <div className="relative overflow-hidden rounded-xl border border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={images[active].url}
@@ -49,7 +49,7 @@ export function Gallery({
         />
         <button
           onClick={() => setZoom(true)}
-          className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow hover:bg-white"
+          className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 dark:bg-stone-900/90 text-gray-700 dark:text-stone-200 shadow hover:bg-white"
           aria-label="Ampliar"
         >
           <ZoomIn className="h-4 w-4" />
@@ -81,7 +81,7 @@ export function Gallery({
           onClick={() => setZoom(false)}
         >
           <button
-            className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+            className="absolute right-4 top-4 rounded-full bg-white/10 dark:bg-stone-900/10 p-2 text-white hover:bg-white/20"
             aria-label="Cerrar"
           >
             <X className="h-6 w-6" />
@@ -93,7 +93,7 @@ export function Gallery({
                   e.stopPropagation();
                   go(-1);
                 }}
-                className="absolute left-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+                className="absolute left-4 rounded-full bg-white/10 dark:bg-stone-900/10 p-2 text-white hover:bg-white/20"
                 aria-label="Anterior"
               >
                 <ChevronLeft className="h-6 w-6" />
@@ -103,7 +103,7 @@ export function Gallery({
                   e.stopPropagation();
                   go(1);
                 }}
-                className="absolute right-4 top-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+                className="absolute right-4 top-1/2 rounded-full bg-white/10 dark:bg-stone-900/10 p-2 text-white hover:bg-white/20"
                 aria-label="Siguiente"
               >
                 <ChevronRight className="h-6 w-6" />

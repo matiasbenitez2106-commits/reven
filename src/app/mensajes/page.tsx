@@ -40,14 +40,14 @@ export default async function MessagesPage() {
 
       {convos.length === 0 ? (
         <div className="card flex flex-col items-center gap-3 p-12 text-center">
-          <MessageCircle className="h-12 w-12 text-gray-300" />
+          <MessageCircle className="h-12 w-12 text-gray-300 dark:text-stone-600" />
           <p className="font-medium">No tenés conversaciones</p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-stone-400">
             Cuando contactes a un vendedor (o te contacten), vas a verlo acá.
           </p>
         </div>
       ) : (
-        <div className="divide-y divide-gray-100 overflow-hidden rounded-xl border border-gray-200 bg-white">
+        <div className="divide-y divide-gray-100 dark:divide-stone-800 overflow-hidden rounded-xl border border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900">
           {convos.map((c) => {
             const other = c.buyerId === user.id ? c.seller : c.buyer;
             const last = c.messages[0];
@@ -57,7 +57,7 @@ export default async function MessagesPage() {
               <Link
                 key={c.id}
                 href={`/mensajes/${c.id}`}
-                className="flex items-center gap-3 p-3 transition hover:bg-gray-50"
+                className="flex items-center gap-3 p-3 transition hover:bg-gray-50 dark:hover:bg-stone-800"
               >
                 <div className="relative">
                   <Avatar firstName={other.firstName} lastName={other.lastName} src={other.avatarUrl} size={44} />
@@ -76,14 +76,14 @@ export default async function MessagesPage() {
                       {other.firstName} {other.lastName}
                     </p>
                     {last && (
-                      <span className="shrink-0 text-xs text-gray-400">
+                      <span className="shrink-0 text-xs text-gray-400 dark:text-stone-500">
                         {formatRelative(last.createdAt)}
                       </span>
                     )}
                   </div>
-                  <p className="truncate text-xs text-gray-500">{c.listing.title}</p>
+                  <p className="truncate text-xs text-gray-500 dark:text-stone-400">{c.listing.title}</p>
                   {last && (
-                    <p className="truncate text-sm text-gray-600">
+                    <p className="truncate text-sm text-gray-600 dark:text-stone-300">
                       {last.senderId === user.id ? "Vos: " : ""}
                       {last.body}
                     </p>

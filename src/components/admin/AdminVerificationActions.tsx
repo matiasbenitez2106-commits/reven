@@ -36,7 +36,7 @@ export function AdminVerificationActions({ userId }: { userId: string }) {
       <button
         onClick={() => decide("REJECTED")}
         disabled={loading !== null}
-        className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-100 disabled:opacity-50"
+        className="inline-flex items-center gap-1 rounded-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 px-3 py-1.5 text-xs font-medium text-red-700 dark:text-red-300 hover:bg-red-100 disabled:opacity-50"
       >
         {loading === "REJECTED" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />}
         Rechazar

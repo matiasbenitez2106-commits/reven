@@ -79,7 +79,7 @@ export function ImageUploader({
     <div>
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
         {value.map((img, i) => (
-          <div key={img.url} className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200">
+          <div key={img.url} className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 dark:border-stone-800">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={img.url} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
             {i === 0 && (
@@ -93,7 +93,7 @@ export function ImageUploader({
                   type="button"
                   onClick={() => makeCover(i)}
                   title="Usar como portada"
-                  className="rounded bg-white/90 p-1 text-gray-700 hover:bg-white"
+                  className="rounded bg-white/90 dark:bg-stone-900/90 p-1 text-gray-700 dark:text-stone-200 hover:bg-white"
                 >
                   <Star className="h-3.5 w-3.5" />
                 </button>
@@ -104,7 +104,7 @@ export function ImageUploader({
                 type="button"
                 onClick={() => remove(i)}
                 title="Quitar"
-                className="rounded bg-white/90 p-1 text-red-600 hover:bg-white"
+                className="rounded bg-white/90 dark:bg-stone-900/90 p-1 text-red-600 dark:text-red-400 hover:bg-white"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -116,7 +116,7 @@ export function ImageUploader({
           <div
             {...getRootProps()}
             className={`flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed text-center text-xs ${
-              isDragActive ? "border-brand-400 bg-brand-50 text-brand-600" : "border-gray-300 text-gray-400 hover:border-brand-300"
+              isDragActive ? "border-brand-400 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-300" : "border-gray-300 dark:border-stone-700 text-gray-400 dark:text-stone-500 hover:border-brand-300 dark:hover:border-brand-600"
             }`}
           >
             <input {...getInputProps()} />
@@ -135,12 +135,12 @@ export function ImageUploader({
         )}
       </div>
 
-      <p className="mt-2 text-xs text-gray-400">
+      <p className="mt-2 text-xs text-gray-400 dark:text-stone-500">
         {value.length}/{MAX_LISTING_IMAGES} fotos · Arrastrá y soltá, o tocá para subir. La
         primera es la portada.
       </p>
       {error && (
-        <p className="mt-1 flex items-center gap-1 text-xs text-red-600">
+        <p className="mt-1 flex items-center gap-1 text-xs text-red-600 dark:text-red-400">
           <AlertCircle className="h-3.5 w-3.5" /> {error}
         </p>
       )}

@@ -133,7 +133,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       <ViewTracker listingId={listing.id} />
-      <Link href="/buscar" className="mb-4 inline-block text-sm text-gray-500 hover:text-brand-600">
+      <Link href="/buscar" className="mb-4 inline-block text-sm text-gray-500 dark:text-stone-400 hover:text-brand-600 dark:hover:text-brand-300">
         ← Volver a explorar
       </Link>
 
@@ -150,24 +150,24 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
 
         {/* Detalle */}
         <div>
-          <span className="text-xs font-medium uppercase tracking-wide text-brand-600">
+          <span className="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-300">
             {listing.category.name}
           </span>
           <h1 className="mt-1 text-2xl font-bold">{listing.title}</h1>
-          <p className="mt-2 text-3xl font-extrabold text-gray-900">{formatPrice(price)}</p>
+          <p className="mt-2 text-3xl font-extrabold text-gray-900 dark:text-stone-100">{formatPrice(price)}</p>
 
           <div className="mt-4 flex flex-wrap gap-2 text-sm">
-            <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1">
-              <Tag className="h-4 w-4 text-gray-500" /> {CONDITION_LABELS[listing.condition]}
+            <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 dark:bg-stone-800 px-3 py-1">
+              <Tag className="h-4 w-4 text-gray-500 dark:text-stone-400" /> {CONDITION_LABELS[listing.condition]}
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1">
-              <MapPin className="h-4 w-4 text-gray-500" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 dark:bg-stone-800 px-3 py-1">
+              <MapPin className="h-4 w-4 text-gray-500 dark:text-stone-400" />
               {listing.neighborhood ? `${listing.neighborhood}, ` : ""}
               {listing.city}
             </span>
           </div>
 
-          <p className="mt-3 flex items-center gap-1 text-xs text-gray-400">
+          <p className="mt-3 flex items-center gap-1 text-xs text-gray-400 dark:text-stone-500">
             <CalendarDays className="h-3.5 w-3.5" /> Publicado {formatRelative(listing.createdAt)}
           </p>
 
@@ -180,7 +180,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                 {listing.status === "ACTIVE" ? (
                   <ContactSellerButton listingId={listing.id} sellerId={listing.sellerId} />
                 ) : (
-                  <p className="rounded-lg bg-gray-100 p-3 text-sm text-gray-500">
+                  <p className="rounded-lg bg-gray-100 dark:bg-stone-800 p-3 text-sm text-gray-500 dark:text-stone-400">
                     Esta publicación no está disponible para contacto.
                   </p>
                 )}
@@ -192,24 +192,24 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
           {/* Estadísticas (PRO+) */}
           {stats && (
             <div className="card mt-4 p-4">
-              <p className="mb-3 text-xs font-medium uppercase tracking-wide text-gray-400">
+              <p className="mb-3 text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-stone-500">
                 Estadísticas · PRO+
               </p>
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div>
-                  <Eye className="mx-auto h-5 w-5 text-gray-400" />
+                  <Eye className="mx-auto h-5 w-5 text-gray-400 dark:text-stone-500" />
                   <p className="mt-1 text-lg font-bold">{stats.views}</p>
-                  <p className="text-xs text-gray-500">Visitas</p>
+                  <p className="text-xs text-gray-500 dark:text-stone-400">Visitas</p>
                 </div>
                 <div>
-                  <Heart className="mx-auto h-5 w-5 text-gray-400" />
+                  <Heart className="mx-auto h-5 w-5 text-gray-400 dark:text-stone-500" />
                   <p className="mt-1 text-lg font-bold">{stats.favs}</p>
-                  <p className="text-xs text-gray-500">Guardados</p>
+                  <p className="text-xs text-gray-500 dark:text-stone-400">Guardados</p>
                 </div>
                 <div>
-                  <MessageCircle className="mx-auto h-5 w-5 text-gray-400" />
+                  <MessageCircle className="mx-auto h-5 w-5 text-gray-400 dark:text-stone-500" />
                   <p className="mt-1 text-lg font-bold">{stats.contacts}</p>
-                  <p className="text-xs text-gray-500">Contactos</p>
+                  <p className="text-xs text-gray-500 dark:text-stone-400">Contactos</p>
                 </div>
               </div>
             </div>
@@ -217,7 +217,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
           {isOwner && sellerPlan !== "PRO_PLUS" && (
             <Link
               href="/suscripcion"
-              className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 p-3 text-sm font-medium text-indigo-700 hover:bg-indigo-100"
+              className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-indigo-200 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/40 p-3 text-sm font-medium text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/40"
             >
               <Crown className="h-4 w-4" /> Ver estadísticas de esta publicación con PRO+
             </Link>
@@ -226,9 +226,9 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
           {/* Vendedor */}
           <Link
             href={`/usuarios/${listing.seller.id}`}
-            className="card mt-6 block p-4 transition hover:bg-gray-50"
+            className="card mt-6 block p-4 transition hover:bg-gray-50 dark:hover:bg-stone-800"
           >
-            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-400">
+            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-stone-500">
               Vendedor
             </p>
             <div className="flex items-center gap-3">
@@ -242,12 +242,12 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                 <p className="font-medium">
                   {listing.seller.firstName} {listing.seller.lastName}
                 </p>
-                <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-500">
+                <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-500 dark:text-stone-400">
                   <VerificationBadge status={listing.seller.verification} />
                   {sellerPlan && <ProBadge plan={sellerPlan} />}
                   <span>· {listing.seller.city}</span>
                 </div>
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
                   Miembro desde {memberSince} · {sellerActiveCount}{" "}
                   {sellerActiveCount === 1 ? "publicación activa" : "publicaciones activas"}
                 </p>
@@ -260,7 +260,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
       {/* Descripción */}
       <div className="mt-8 card p-6">
         <h2 className="mb-2 font-semibold">Descripción</h2>
-        <p className="whitespace-pre-line text-sm leading-relaxed text-gray-700">
+        <p className="whitespace-pre-line text-sm leading-relaxed text-gray-700 dark:text-stone-200">
           {listing.description}
         </p>
       </div>
@@ -273,7 +273,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
           lng={mapLng}
           label={`${listing.neighborhood ? listing.neighborhood + ", " : ""}${listing.city}`}
         />
-        <p className="mt-2 text-xs text-gray-400">
+        <p className="mt-2 text-xs text-gray-400 dark:text-stone-500">
           Por seguridad, solo mostramos la zona aproximada, nunca la dirección exacta.
         </p>
       </div>

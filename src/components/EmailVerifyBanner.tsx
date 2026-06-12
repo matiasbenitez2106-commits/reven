@@ -36,7 +36,7 @@ export function EmailVerifyBanner() {
   }
 
   return (
-    <div className="border-b border-yellow-200 bg-yellow-50 text-sm text-yellow-800">
+    <div className="border-b border-yellow-200 dark:border-yellow-900 bg-yellow-50 dark:bg-yellow-950/40 text-sm text-yellow-800 dark:text-yellow-300">
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-2">
         <MailWarning className="h-4 w-4 shrink-0" />
         <span className="flex-1">

@@ -51,12 +51,12 @@ export function ChangePasswordForm() {
       <h2 className="font-semibold">Cambiar contraseña</h2>
 
       {error && (
-        <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+        <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
           <AlertCircle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}
       {ok && (
-        <div className="flex items-center gap-2 rounded-lg bg-green-50 p-3 text-sm text-green-700">
+        <div className="flex items-center gap-2 rounded-lg bg-green-50 dark:bg-green-950/40 p-3 text-sm text-green-700 dark:text-green-300">
           <Check className="h-4 w-4 shrink-0" /> Contraseña actualizada.
         </div>
       )}

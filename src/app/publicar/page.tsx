@@ -17,7 +17,7 @@ export default async function PublishPage() {
         <div className="card flex flex-col items-center gap-3 p-8 text-center">
           <ShieldAlert className="h-12 w-12 text-yellow-500" />
           <h1 className="text-xl font-bold">Verificá tu identidad para publicar</h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-stone-400">
             Para mantener la comunidad segura, solo las personas verificadas pueden
             publicar artículos. Es rápido.
           </p>
@@ -40,7 +40,7 @@ export default async function PublishPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <h1 className="text-2xl font-bold">Publicar artículo</h1>
-      <p className="mt-1 text-sm text-gray-500">Es gratis y sin comisiones por venta.</p>
+      <p className="mt-1 text-sm text-gray-500 dark:text-stone-400">Es gratis y sin comisiones por venta.</p>
       <div className="mt-6">
         <ListingForm categories={categories} />
       </div>

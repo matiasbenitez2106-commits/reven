@@ -96,7 +96,7 @@ export default async function IdentityDossierPage({
       <div className="flex items-center justify-between print:hidden">
         <Link
           href="/admin/verificaciones"
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-brand-600"
+          className="inline-flex items-center gap-1 text-sm text-gray-500 dark:text-stone-400 hover:text-brand-600 dark:hover:text-brand-300"
         >
           <ArrowLeft className="h-4 w-4" /> Volver
         </Link>
@@ -104,7 +104,7 @@ export default async function IdentityDossierPage({
       </div>
 
       {/* Aviso de confidencialidad */}
-      <div className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800">
+      <div className="flex items-start gap-2 rounded-lg border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 p-4 text-sm text-amber-800 dark:text-amber-300">
         <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0" />
         <p>
           <strong>Documento confidencial.</strong> Contiene datos personales sensibles. Su uso
@@ -113,15 +113,15 @@ export default async function IdentityDossierPage({
         </p>
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white p-6">
-        <h2 className="text-xl font-bold text-gray-900">Dossier de identidad</h2>
-        <p className="mt-1 text-xs text-gray-400">
+      <div className="rounded-xl border border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900 p-6">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-stone-100">Dossier de identidad</h2>
+        <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
           Generado el {formatDate(new Date())} · trato
         </p>
 
         {/* Datos de cuenta */}
         <section className="mt-6">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-stone-400">
             Datos de la cuenta
           </h3>
           <dl className="mt-2 grid grid-cols-1 gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
@@ -136,7 +136,7 @@ export default async function IdentityDossierPage({
 
         {/* Verificación de identidad */}
         <section className="mt-6">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-stone-400">
             Verificación de identidad
           </h3>
           {v ? (
@@ -153,16 +153,16 @@ export default async function IdentityDossierPage({
               <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {images.map((img) => (
                   <div key={img.label}>
-                    <p className="mb-1 text-xs font-medium text-gray-500">{img.label}</p>
+                    <p className="mb-1 text-xs font-medium text-gray-500 dark:text-stone-400">{img.label}</p>
                     {img.src ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={img.src}
                         alt={img.label}
-                        className="w-full rounded-lg border border-gray-200"
+                        className="w-full rounded-lg border border-gray-200 dark:border-stone-800"
                       />
                     ) : (
-                      <div className="flex h-24 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
+                      <div className="flex h-24 items-center justify-center rounded-lg bg-gray-100 dark:bg-stone-800 text-xs text-gray-400 dark:text-stone-500">
                         Sin imagen
                       </div>
                     )}
@@ -171,24 +171,24 @@ export default async function IdentityDossierPage({
               </div>
             </>
           ) : (
-            <p className="mt-2 text-sm text-gray-400">El usuario no completó la verificación.</p>
+            <p className="mt-2 text-sm text-gray-400 dark:text-stone-500">El usuario no completó la verificación.</p>
           )}
         </section>
 
         {/* Denuncias en su contra */}
         <section className="mt-6">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-stone-400">
             Denuncias recibidas ({reports.length})
           </h3>
           {reports.length === 0 ? (
-            <p className="mt-2 text-sm text-gray-400">Sin denuncias.</p>
+            <p className="mt-2 text-sm text-gray-400 dark:text-stone-500">Sin denuncias.</p>
           ) : (
             <ul className="mt-2 space-y-2 text-sm">
               {reports.map((r) => (
-                <li key={r.id} className="rounded-lg border border-gray-100 p-2">
+                <li key={r.id} className="rounded-lg border border-gray-100 dark:border-stone-800 p-2">
                   <span className="font-medium">{r.listing.title}</span> · {r.reason} · {r.status}
-                  {r.details && <span className="text-gray-500"> — “{r.details}”</span>}
-                  <span className="block text-xs text-gray-400">{formatDate(r.createdAt)}</span>
+                  {r.details && <span className="text-gray-500 dark:text-stone-400"> — “{r.details}”</span>}
+                  <span className="block text-xs text-gray-400 dark:text-stone-500">{formatDate(r.createdAt)}</span>
                 </li>
               ))}
             </ul>
@@ -197,17 +197,17 @@ export default async function IdentityDossierPage({
 
         {/* Publicaciones */}
         <section className="mt-6">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-stone-400">
             Publicaciones ({u.listings.length})
           </h3>
           {u.listings.length === 0 ? (
-            <p className="mt-2 text-sm text-gray-400">Sin publicaciones.</p>
+            <p className="mt-2 text-sm text-gray-400 dark:text-stone-500">Sin publicaciones.</p>
           ) : (
             <ul className="mt-2 space-y-1 text-sm">
               {u.listings.map((l) => (
                 <li key={l.id}>
                   <span className="font-medium">{l.title}</span> · {l.status} ·{" "}
-                  <span className="text-gray-400">{formatDate(l.createdAt)}</span>
+                  <span className="text-gray-400 dark:text-stone-500">{formatDate(l.createdAt)}</span>
                 </li>
               ))}
             </ul>
@@ -221,8 +221,8 @@ export default async function IdentityDossierPage({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-xs text-gray-400">{label}</dt>
-      <dd className="font-medium text-gray-900">{value}</dd>
+      <dt className="text-xs text-gray-400 dark:text-stone-500">{label}</dt>
+      <dd className="font-medium text-gray-900 dark:text-stone-100">{value}</dd>
     </div>
   );
 }

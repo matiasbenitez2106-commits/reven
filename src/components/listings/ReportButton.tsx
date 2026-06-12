@@ -50,7 +50,7 @@ export function ReportButton({ listingId }: { listingId: string }) {
     <>
       <button
         onClick={openDialog}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-600 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm font-medium text-gray-600 dark:text-stone-300 transition hover:border-red-300 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-600"
       >
         <Flag className="h-4 w-4" /> Denunciar esta publicación
       </button>
@@ -61,23 +61,23 @@ export function ReportButton({ listingId }: { listingId: string }) {
           onClick={() => setOpen(false)}
         >
           <div
-            className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
+            className="w-full max-w-md rounded-xl bg-white dark:bg-stone-900 p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between">
               <h3 className="flex items-center gap-2 font-semibold">
-                <Flag className="h-4 w-4 text-red-600" /> Denunciar publicación
+                <Flag className="h-4 w-4 text-red-600 dark:text-red-400" /> Denunciar publicación
               </h3>
-              <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setOpen(false)} className="text-gray-400 dark:text-stone-500 hover:text-gray-600 dark:hover:text-stone-300">
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {done ? (
               <div className="flex flex-col items-center gap-2 py-6 text-center">
-                <CheckCircle className="h-10 w-10 text-green-600" />
+                <CheckCircle className="h-10 w-10 text-green-600 dark:text-green-400" />
                 <p className="font-medium">¡Gracias por avisar!</p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-stone-400">
                   Nuestro equipo va a revisar esta publicación.
                 </p>
                 <button
@@ -90,7 +90,7 @@ export function ReportButton({ listingId }: { listingId: string }) {
             ) : (
               <form onSubmit={submit} className="space-y-4">
                 {error && (
-                  <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+                  <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
                     <AlertCircle className="h-4 w-4 shrink-0" /> {error}
                   </div>
                 )}

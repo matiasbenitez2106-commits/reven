@@ -13,7 +13,7 @@ export default async function EditAccountPage() {
   return (
     <div className="mx-auto max-w-xl space-y-6 px-4 py-8">
       <div>
-        <Link href="/cuenta" className="text-sm text-gray-500 hover:text-brand-600">
+        <Link href="/cuenta" className="text-sm text-gray-500 dark:text-stone-400 hover:text-brand-600 dark:hover:text-brand-300">
           ← Mi cuenta
         </Link>
         <h1 className="mt-1 text-2xl font-bold">Editar perfil</h1>

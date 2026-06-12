@@ -34,7 +34,7 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {error && (
-        <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+        <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
           <AlertCircle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}

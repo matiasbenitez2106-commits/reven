@@ -16,7 +16,7 @@ export function ResetForm() {
 
   if (!token) {
     return (
-      <p className="text-sm text-red-600">
+      <p className="text-sm text-red-600 dark:text-red-400">
         Link inválido. Pedí uno nuevo en{" "}
         <Link href="/recuperar" className="underline">recuperar contraseña</Link>.
       </p>
@@ -26,7 +26,7 @@ export function ResetForm() {
   if (done) {
     return (
       <div className="flex flex-col items-center gap-2 py-4 text-center">
-        <CheckCircle className="h-10 w-10 text-green-600" />
+        <CheckCircle className="h-10 w-10 text-green-600 dark:text-green-400" />
         <p className="font-medium">¡Contraseña actualizada!</p>
         <Link
           href="/ingresar"
@@ -71,7 +71,7 @@ export function ResetForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       {error && (
-        <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+        <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
           <AlertCircle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}

@@ -36,7 +36,7 @@ export function BoostPlans({ listingId }: { listingId: string }) {
   return (
     <div>
       {error && (
-        <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+        <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
           <AlertCircle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}
@@ -48,7 +48,7 @@ export function BoostPlans({ listingId }: { listingId: string }) {
             <div
               key={type}
               className={`relative flex flex-col rounded-xl border p-5 ${
-                highlight ? "border-amber-300 bg-amber-50" : "border-gray-200 bg-white"
+                highlight ? "border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40" : "border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900"
               }`}
             >
               {highlight && (
@@ -61,7 +61,7 @@ export function BoostPlans({ listingId }: { listingId: string }) {
                 <h3 className="font-semibold">{plan.label}</h3>
               </div>
               <p className="mt-2 text-2xl font-extrabold">{formatPrice(plan.price)}</p>
-              <p className="mt-1 flex-1 text-sm text-gray-500">{plan.description}</p>
+              <p className="mt-1 flex-1 text-sm text-gray-500 dark:text-stone-400">{plan.description}</p>
               <button
                 onClick={() => choose(type)}
                 disabled={loading !== null}

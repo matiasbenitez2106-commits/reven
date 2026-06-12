@@ -1,6 +1,8 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  // Modo oscuro automático según la preferencia del sistema operativo.
+  darkMode: "media",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,21 +11,39 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Marca "Curado salvia": verde salvia (apagado, vintage). brand-600 = primario.
         brand: {
-          50: "#eef9f4",
-          100: "#d6f0e3",
-          200: "#aee0c9",
-          300: "#7acca8",
-          400: "#45b083",
-          500: "#229668",
-          600: "#177853",
-          700: "#136045",
-          800: "#114c38",
-          900: "#0f3f2f",
+          50: "#f4f6f1",
+          100: "#e6ebdf",
+          200: "#ccd6c0",
+          300: "#abba9a",
+          400: "#899a74",
+          500: "#6f7f5a",
+          600: "#66785b",
+          700: "#515e48",
+          800: "#3e4838",
+          900: "#2e312a",
         },
+        // Acento óxido / terracota apagada.
+        accent: {
+          50: "#fbf1e9",
+          100: "#f1d9c4",
+          200: "#e3b896",
+          300: "#d4976a",
+          400: "#c47e49",
+          500: "#b66b3c",
+          600: "#9c5832",
+          700: "#7c4528",
+          800: "#5e3520",
+          900: "#412517",
+        },
+        // Fondo crema vintage y tinta carbón.
+        cream: "#f3eee1",
+        ink: "#2e312a",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "var(--font-inter)", "system-ui", "sans-serif"],
       },
     },
   },

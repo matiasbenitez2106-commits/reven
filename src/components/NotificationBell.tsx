@@ -96,7 +96,7 @@ export function NotificationBell() {
     <div className="relative" ref={ref}>
       <button
         onClick={toggle}
-        className="relative rounded-lg p-2 text-gray-600 hover:bg-gray-100"
+        className="relative rounded-lg p-2 text-gray-600 dark:text-stone-300 hover:bg-gray-100 dark:hover:bg-stone-800"
         aria-label="Notificaciones"
       >
         <Bell className="h-5 w-5" />
@@ -108,13 +108,13 @@ export function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-80 max-w-[90vw] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
-          <div className="border-b border-gray-100 px-4 py-2 text-sm font-semibold">
+        <div className="absolute right-0 mt-2 w-80 max-w-[90vw] overflow-hidden rounded-xl border border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-lg">
+          <div className="border-b border-gray-100 dark:border-stone-800 px-4 py-2 text-sm font-semibold">
             Notificaciones
           </div>
           <div className="max-h-96 overflow-y-auto">
             {items.length === 0 ? (
-              <p className="px-4 py-8 text-center text-sm text-gray-400">
+              <p className="px-4 py-8 text-center text-sm text-gray-400 dark:text-stone-500">
                 No tenés notificaciones
               </p>
             ) : (
@@ -125,15 +125,15 @@ export function NotificationBell() {
                     key={n.id}
                     onClick={() => openItem(n)}
                     className={cn(
-                      "flex w-full items-start gap-3 border-b border-gray-50 px-4 py-3 text-left last:border-0 hover:bg-gray-50",
-                      !n.read && "bg-brand-50/60"
+                      "flex w-full items-start gap-3 border-b border-gray-50 px-4 py-3 text-left last:border-0 hover:bg-gray-50 dark:hover:bg-stone-800",
+                      !n.read && "bg-brand-50/60 dark:bg-brand-900/30"
                     )}
                   >
-                    <Icon className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
+                    <Icon className="mt-0.5 h-4 w-4 shrink-0 text-brand-600 dark:text-brand-300" />
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-gray-800">{n.title}</p>
-                      {n.body && <p className="truncate text-xs text-gray-500">{n.body}</p>}
-                      <p className="mt-0.5 text-[11px] text-gray-400">
+                      <p className="text-sm font-medium text-gray-800 dark:text-stone-100">{n.title}</p>
+                      {n.body && <p className="truncate text-xs text-gray-500 dark:text-stone-400">{n.body}</p>}
+                      <p className="mt-0.5 text-[11px] text-gray-400 dark:text-stone-500">
                         {formatRelative(n.createdAt)}
                       </p>
                     </div>

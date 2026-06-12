@@ -27,9 +27,9 @@ export function ForgotForm() {
   if (sent) {
     return (
       <div className="flex flex-col items-center gap-2 py-4 text-center">
-        <CheckCircle className="h-10 w-10 text-green-600" />
+        <CheckCircle className="h-10 w-10 text-green-600 dark:text-green-400" />
         <p className="font-medium">Revisá tu email</p>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-stone-400">
           Si existe una cuenta con <strong>{email}</strong>, te enviamos un link para crear
           una nueva contraseña. (Revisá también spam.)
         </p>

@@ -40,32 +40,32 @@ export default async function BoostPage({
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
-      <Link href={`/articulos/${listing.id}`} className="text-sm text-gray-500 hover:text-brand-600">
+      <Link href={`/articulos/${listing.id}`} className="text-sm text-gray-500 dark:text-stone-400 hover:text-brand-600 dark:hover:text-brand-300">
         ← Volver a la publicación
       </Link>
       <h1 className="mt-2 flex items-center gap-2 text-2xl font-bold">
         <Sparkles className="h-6 w-6 text-amber-500" /> Destacar publicación
       </h1>
-      <p className="mt-1 text-sm text-gray-500">“{listing.title}”</p>
+      <p className="mt-1 text-sm text-gray-500 dark:text-stone-400">“{listing.title}”</p>
 
       {status === "success" && (
-        <div className="mt-4 flex items-center gap-2 rounded-lg bg-green-50 p-3 text-sm text-green-700">
+        <div className="mt-4 flex items-center gap-2 rounded-lg bg-green-50 dark:bg-green-950/40 p-3 text-sm text-green-700 dark:text-green-300">
           <CheckCircle className="h-4 w-4 shrink-0" /> ¡Pago aprobado! Tu publicación ya está destacada.
         </div>
       )}
       {status === "failure" && (
-        <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+        <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
           <XCircle className="h-4 w-4 shrink-0" /> El pago no se completó. Probá de nuevo.
         </div>
       )}
       {status === "pending" && (
-        <div className="mt-4 flex items-center gap-2 rounded-lg bg-yellow-50 p-3 text-sm text-yellow-800">
+        <div className="mt-4 flex items-center gap-2 rounded-lg bg-yellow-50 dark:bg-yellow-950/40 p-3 text-sm text-yellow-800 dark:text-yellow-300">
           <Clock className="h-4 w-4 shrink-0" /> Tu pago está pendiente de acreditación.
         </div>
       )}
 
       {featuredActive && (
-        <div className="mt-4 rounded-lg bg-amber-50 p-3 text-sm text-amber-900">
+        <div className="mt-4 rounded-lg bg-amber-50 dark:bg-amber-950/40 p-3 text-sm text-amber-900 dark:text-amber-200">
           <Sparkles className="mr-1 inline h-4 w-4" /> Ya está destacada. Vence{" "}
           {formatRelative(listing.featuredUntil!)}. Podés extenderla:
         </div>
@@ -74,7 +74,7 @@ export default async function BoostPage({
       {includedRemaining > 0 && (
         <div className="mt-6">
           <IncludedBoostButton listingId={listing.id} remaining={includedRemaining} />
-          <p className="mt-4 text-sm font-medium text-gray-500">O comprá un destacado:</p>
+          <p className="mt-4 text-sm font-medium text-gray-500 dark:text-stone-400">O comprá un destacado:</p>
         </div>
       )}
 
@@ -83,7 +83,7 @@ export default async function BoostPage({
       </div>
 
       {!isMpConfigured() && (
-        <div className="mt-6 flex items-start gap-2 rounded-lg bg-blue-50 p-3 text-xs text-blue-800">
+        <div className="mt-6 flex items-start gap-2 rounded-lg bg-blue-50 dark:bg-blue-950/40 p-3 text-xs text-blue-800 dark:text-blue-300">
           <Info className="mt-0.5 h-4 w-4 shrink-0" />
           <span>
             <strong>Modo demo:</strong> MercadoPago no está configurado, así que el pago se

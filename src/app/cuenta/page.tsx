@@ -39,59 +39,59 @@ export default async function AccountPage() {
                 <VerificationBadge status={user.verification} />
                 {plan && <ProBadge plan={plan} />}
               </div>
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
                 Miembro desde {new Date(user.createdAt).getFullYear()}
               </p>
             </div>
           </div>
           <Link
             href="/cuenta/editar"
-            className="inline-flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50"
+            className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
           >
             <Pencil className="h-3.5 w-3.5" /> Editar
           </Link>
         </div>
 
         <dl className="mt-6 space-y-3 text-sm">
-          <div className="flex items-center gap-2 text-gray-600">
-            <Mail className="h-4 w-4 text-gray-400" /> {user.email}
+          <div className="flex items-center gap-2 text-gray-600 dark:text-stone-300">
+            <Mail className="h-4 w-4 text-gray-400 dark:text-stone-500" /> {user.email}
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <MapPin className="h-4 w-4 text-gray-400" /> {user.city}, {user.province}
+          <div className="flex items-center gap-2 text-gray-600 dark:text-stone-300">
+            <MapPin className="h-4 w-4 text-gray-400 dark:text-stone-500" /> {user.city}, {user.province}
           </div>
         </dl>
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Link href="/mis-publicaciones" className="card flex items-center gap-3 p-4 hover:bg-gray-50">
-          <Package className="h-5 w-5 text-brand-600" />
+        <Link href="/mis-publicaciones" className="card flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-stone-800">
+          <Package className="h-5 w-5 text-brand-600 dark:text-brand-300" />
           <div>
             <p className="text-sm font-medium">Mis publicaciones</p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-stone-400">
               {activeCount} activas · {soldCount} vendidas
             </p>
           </div>
         </Link>
-        <Link href="/favoritos" className="card flex items-center gap-3 p-4 hover:bg-gray-50">
+        <Link href="/favoritos" className="card flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-stone-800">
           <Heart className="h-5 w-5 text-red-500" />
           <div>
             <p className="text-sm font-medium">Favoritos</p>
-            <p className="text-xs text-gray-500">{favCount} guardados</p>
+            <p className="text-xs text-gray-500 dark:text-stone-400">{favCount} guardados</p>
           </div>
         </Link>
-        <Link href="/mensajes" className="card flex items-center gap-3 p-4 hover:bg-gray-50">
-          <MessageCircle className="h-5 w-5 text-brand-600" />
+        <Link href="/mensajes" className="card flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-stone-800">
+          <MessageCircle className="h-5 w-5 text-brand-600 dark:text-brand-300" />
           <span className="text-sm font-medium">Mensajes</span>
         </Link>
-        <Link href="/verificacion" className="card flex items-center gap-3 p-4 hover:bg-gray-50">
-          <ShieldCheck className="h-5 w-5 text-brand-600" />
+        <Link href="/verificacion" className="card flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-stone-800">
+          <ShieldCheck className="h-5 w-5 text-brand-600 dark:text-brand-300" />
           <span className="text-sm font-medium">Verificación de identidad</span>
         </Link>
-        <Link href="/suscripcion" className="card flex items-center gap-3 p-4 hover:bg-gray-50">
-          <Crown className="h-5 w-5 text-indigo-600" />
+        <Link href="/suscripcion" className="card flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-stone-800">
+          <Crown className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
           <div>
             <p className="text-sm font-medium">Suscripción de vendedor</p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-stone-400">
               {plan ? `Plan ${plan === "PRO_PLUS" ? "PRO+" : "PRO"} activo` : "Hacete PRO"}
             </p>
           </div>
@@ -99,7 +99,7 @@ export default async function AccountPage() {
       </div>
 
       {user.verification !== "VERIFIED" && (
-        <p className="mt-4 rounded-lg bg-yellow-50 p-3 text-sm text-yellow-800">
+        <p className="mt-4 rounded-lg bg-yellow-50 dark:bg-yellow-950/40 p-3 text-sm text-yellow-800 dark:text-yellow-300">
           Verificá tu identidad para publicar y contactar vendedores.{" "}
           <Link href="/verificacion" className="font-medium underline">
             Verificar ahora

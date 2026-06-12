@@ -46,7 +46,7 @@ export function AdminReportActions({
       <button
         onClick={() => setStatus("REVIEWED")}
         disabled={loading !== null}
-        className={`${btn} border-gray-300 bg-white text-gray-700 hover:bg-gray-50`}
+        className={`${btn} border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-gray-700 dark:text-stone-200 hover:bg-gray-50 dark:hover:bg-stone-800`}
       >
         {loading === "REVIEWED" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
         Revisado
@@ -54,7 +54,7 @@ export function AdminReportActions({
       <button
         onClick={() => setStatus("DISMISSED")}
         disabled={loading !== null}
-        className={`${btn} border-gray-300 bg-white text-gray-700 hover:bg-gray-50`}
+        className={`${btn} border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-gray-700 dark:text-stone-200 hover:bg-gray-50 dark:hover:bg-stone-800`}
       >
         {loading === "DISMISSED" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Ban className="h-3.5 w-3.5" />}
         Desestimar
@@ -62,7 +62,7 @@ export function AdminReportActions({
       <button
         onClick={removeListing}
         disabled={loading !== null}
-        className={`${btn} border-red-200 bg-red-50 text-red-700 hover:bg-red-100`}
+        className={`${btn} border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 hover:bg-red-100`}
       >
         {loading === "del" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
         Eliminar publicación

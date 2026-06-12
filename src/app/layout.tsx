@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Navbar } from "@/components/Navbar";
@@ -9,29 +9,40 @@ import { EmailVerifyBanner } from "@/components/EmailVerifyBanner";
 import { ServiceWorkerRegister } from "./sw-register";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.apptrato.com"),
   title: {
-    default: "trato — Comprá y vendé usado, entre personas verificadas",
+    default: "trato — Vintage y segunda mano, entre personas verificadas",
     template: "%s · trato",
   },
   description:
-    "trato es la plataforma de compraventa de artículos usados entre particulares verificados en Argentina. Sin comisiones. Publicá gratis.",
-  keywords: ["usados", "compraventa", "Argentina", "marketplace", "segunda mano"],
+    "trato es la comunidad de moda vintage y segunda mano de Argentina. Ropa con historia, personas verificadas, sin comisiones. Publicá gratis.",
+  keywords: [
+    "vintage",
+    "ropa usada",
+    "segunda mano",
+    "thrift",
+    "feria americana",
+    "moda circular",
+    "compraventa",
+    "Argentina",
+    "marketplace",
+  ],
   openGraph: {
     type: "website",
     siteName: "trato",
     locale: "es_AR",
     url: "/",
-    title: "trato — Comprá y vendé usado, entre personas reales",
+    title: "trato — Vintage y segunda mano, entre personas reales",
     description:
-      "Compraventa de usados entre particulares verificados en Argentina. Identidad verificada, sin comisiones.",
+      "Ropa con historia, precios justos y gente verificada. Sin comisiones, hecho en Argentina.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "trato — Comprá y vendé usado",
-    description: "Compraventa de usados entre particulares verificados en Argentina.",
+    title: "trato — Vintage y segunda mano",
+    description: "Ropa con historia, precios justos y gente verificada. Hecho en Argentina.",
   },
   appleWebApp: {
     capable: true,
@@ -41,7 +52,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#177853",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#66785B" },
+    { media: "(prefers-color-scheme: dark)", color: "#1C1917" },
+  ],
 };
 
 export default function RootLayout({
@@ -50,7 +64,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={inter.variable}>
+    <html lang="es" className={`${inter.variable} ${display.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
         <Providers>
           <ServiceWorkerRegister />

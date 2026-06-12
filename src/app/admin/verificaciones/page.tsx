@@ -28,8 +28,8 @@ export default async function AdminVerificationsPage() {
 
   if (users.length === 0) {
     return (
-      <div className="card flex flex-col items-center gap-2 p-12 text-center text-gray-500">
-        <ShieldCheck className="h-10 w-10 text-gray-300" />
+      <div className="card flex flex-col items-center gap-2 p-12 text-center text-gray-500 dark:text-stone-400">
+        <ShieldCheck className="h-10 w-10 text-gray-300 dark:text-stone-600" />
         <p>No hay verificaciones pendientes.</p>
       </div>
     );
@@ -45,11 +45,11 @@ export default async function AdminVerificationsPage() {
               <p className="truncate font-medium">
                 {u.firstName} {u.lastName}
               </p>
-              <p className="truncate text-xs text-gray-500">
+              <p className="truncate text-xs text-gray-500 dark:text-stone-400">
                 {u.email} · {u.city}, {u.province}
               </p>
               {u.verificationData && (
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
                   Liveness: {fmt(u.verificationData.livenessScore)} · Match:{" "}
                   {fmt(u.verificationData.matchScore)} · {u.verificationData.provider} ·{" "}
                   {formatRelative(u.verificationData.createdAt)}
@@ -61,7 +61,7 @@ export default async function AdminVerificationsPage() {
             <AdminVerificationViewer userId={u.id} />
             <Link
               href={`/admin/identidad/${u.id}`}
-              className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium hover:bg-gray-50"
+              className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-stone-800"
             >
               <FileText className="h-3.5 w-3.5" /> Dossier
             </Link>

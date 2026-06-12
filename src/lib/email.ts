@@ -63,7 +63,7 @@ export function escapeHtml(s: string): string {
 
 const wrap = (inner: string) =>
   `<div style="font-family:system-ui,sans-serif;max-width:480px;margin:auto">
-    <h2 style="color:#177853">trato</h2>${inner}
+    <h2 style="color:#66785B">trato</h2>${inner}
     <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
     <p style="color:#999;font-size:12px">trato · compraventa de usados entre personas verificadas.</p>
   </div>`;
@@ -74,7 +74,7 @@ export async function sendVerificationEmail(to: string, link: string): Promise<v
     subject: "Verificá tu email · trato",
     html: wrap(
       `<p>¡Bienvenido/a a trato! Confirmá tu email para activar tu cuenta:</p>
-       <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Verificar mi email</a></p>
+       <p><a href="${link}" style="display:inline-block;background:#66785B;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Verificar mi email</a></p>
        <p style="color:#666;font-size:13px">O pegá este link: ${link}</p>
        <p style="color:#666;font-size:13px">Si no creaste la cuenta, ignorá este mensaje.</p>`
     ),
@@ -87,7 +87,7 @@ export async function sendPasswordResetEmail(to: string, link: string): Promise<
     subject: "Recuperá tu contraseña · trato",
     html: wrap(
       `<p>Recibimos un pedido para restablecer tu contraseña.</p>
-       <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Crear nueva contraseña</a></p>
+       <p><a href="${link}" style="display:inline-block;background:#66785B;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Crear nueva contraseña</a></p>
        <p style="color:#666;font-size:13px">O pegá este link: ${link}</p>
        <p style="color:#666;font-size:13px">El link vence en 1 hora. Si no fuiste vos, ignorá este mensaje.</p>`
     ),
@@ -110,7 +110,7 @@ export async function sendSubscriptionActivatedEmail(
     html: wrap(
       `<p>¡Listo! Tu suscripción <strong>${escapeHtml(planLabel)}</strong> quedó activa. 🎉</p>
        <p>Tenés los beneficios PRO disponibles hasta el <strong>${fmtFecha(periodEnd)}</strong>. Se renueva automáticamente salvo que la canceles.</p>
-       <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Ver mi suscripción</a></p>`
+       <p><a href="${link}" style="display:inline-block;background:#66785B;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Ver mi suscripción</a></p>`
     ),
   });
 }
@@ -129,8 +129,8 @@ export async function sendNewMessageEmail(
     subject: `Nuevo mensaje de ${fromName} · trato`,
     html: wrap(
       `<p><strong>${escapeHtml(fromName)}</strong> te escribió por <strong>${escapeHtml(listingTitle)}</strong>:</p>
-       <p style="border-left:3px solid #177853;padding:8px 12px;color:#444;background:#f6f6f6;border-radius:4px">${escapeHtml(preview)}</p>
-       <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Responder</a></p>
+       <p style="border-left:3px solid #66785B;padding:8px 12px;color:#444;background:#f6f6f6;border-radius:4px">${escapeHtml(preview)}</p>
+       <p><a href="${link}" style="display:inline-block;background:#66785B;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Responder</a></p>
        <p style="color:#999;font-size:12px">Recibís este aviso porque tenés un mensaje sin leer en trato.</p>`
     ),
   });
@@ -150,7 +150,7 @@ export async function sendSubscriptionCancelledEmail(
       `<p>Cancelaste la renovación de tu plan <strong>${escapeHtml(planLabel)}</strong>.</p>
        <p>Mantenés los beneficios PRO hasta el <strong>${fmtFecha(activeUntil)}</strong>. Después tu cuenta vuelve al plan gratuito; no se hacen más cobros.</p>
        <p>Si cambiás de idea, podés reactivarla cuando quieras:</p>
-       <p><a href="${link}" style="display:inline-block;background:#177853;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Mi suscripción</a></p>`
+       <p><a href="${link}" style="display:inline-block;background:#66785B;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Mi suscripción</a></p>`
     ),
   });
 }

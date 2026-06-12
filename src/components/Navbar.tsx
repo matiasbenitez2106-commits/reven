@@ -18,6 +18,7 @@ import {
 import { Avatar } from "./ui/Avatar";
 import { VerificationBadge } from "./VerificationBadge";
 import { NotificationBell } from "./NotificationBell";
+import { Logo } from "./Logo";
 
 export function Navbar() {
   const { data: session, status } = useSession();
@@ -103,15 +104,14 @@ export function Navbar() {
   const lastName = user?.name?.split(" ").slice(1).join(" ");
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-gray-200 dark:border-stone-800 bg-white/95 dark:bg-stone-900/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
-        <Link href="/" className="flex items-center gap-1 text-xl font-bold text-brand-600">
-          <Package className="h-6 w-6" />
-          trato
+        <Link href="/" className="flex items-center" aria-label="trato — inicio">
+          <Logo size="md" />
         </Link>
 
         <form onSubmit={onSearch} className="relative ml-2 hidden flex-1 sm:block">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-stone-500" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -123,7 +123,7 @@ export function Navbar() {
 
         <div className="ml-auto flex items-center gap-2">
           {status === "loading" ? (
-            <div className="h-9 w-24 animate-pulse rounded-lg bg-gray-100" />
+            <div className="h-9 w-24 animate-pulse rounded-lg bg-gray-100 dark:bg-stone-800" />
           ) : user ? (
             <>
               <Link
@@ -134,7 +134,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/favoritos"
-                className="hidden rounded-lg p-2 text-gray-600 hover:bg-gray-100 sm:block"
+                className="hidden rounded-lg p-2 text-gray-600 dark:text-stone-300 hover:bg-gray-100 dark:hover:bg-stone-800 sm:block"
                 aria-label="Favoritos"
               >
                 <Heart className="h-5 w-5" />
@@ -142,7 +142,7 @@ export function Navbar() {
               <NotificationBell />
               <Link
                 href="/mensajes"
-                className="relative rounded-lg p-2 text-gray-600 hover:bg-gray-100"
+                className="relative rounded-lg p-2 text-gray-600 dark:text-stone-300 hover:bg-gray-100 dark:hover:bg-stone-800"
                 aria-label="Mensajes"
               >
                 <MessageCircle className="h-5 w-5" />
@@ -156,19 +156,19 @@ export function Navbar() {
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setMenuOpen((v) => !v)}
-                  className="relative flex items-center gap-2 rounded-full p-0.5 hover:ring-2 hover:ring-gray-200"
+                  className="relative flex items-center gap-2 rounded-full p-0.5 hover:ring-2 hover:ring-gray-200 dark:hover:ring-stone-700"
                 >
                   <Avatar firstName={firstName} lastName={lastName} src={user.image} />
                   {isAdmin && adminPending > 0 && (
-                    <span className="absolute right-0 top-0 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
+                    <span className="absolute right-0 top-0 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white dark:ring-stone-900" />
                   )}
                 </button>
 
                 {menuOpen && (
-                  <div className="absolute right-0 mt-2 w-60 rounded-xl border border-gray-200 bg-white py-1 shadow-lg">
-                    <div className="border-b border-gray-100 px-4 py-3">
+                  <div className="absolute right-0 mt-2 w-60 rounded-xl border border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900 py-1 shadow-lg">
+                    <div className="border-b border-gray-100 dark:border-stone-800 px-4 py-3">
                       <p className="truncate text-sm font-medium">{user.name}</p>
-                      <p className="truncate text-xs text-gray-500">{user.email}</p>
+                      <p className="truncate text-xs text-gray-500 dark:text-stone-400">{user.email}</p>
                       <div className="mt-1">
                         <VerificationBadge status={user.verification} />
                       </div>
@@ -205,7 +205,7 @@ export function Navbar() {
                     )}
                     <button
                       onClick={() => signOut({ callbackUrl: "/" })}
-                      className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-50"
+                      className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-stone-800"
                     >
                       <LogOut className="h-4 w-4" /> Cerrar sesión
                     </button>
@@ -217,7 +217,7 @@ export function Navbar() {
             <>
               <Link
                 href="/ingresar"
-                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-stone-200 hover:bg-gray-100 dark:hover:bg-stone-800"
               >
                 Ingresar
               </Link>
@@ -250,9 +250,9 @@ function MenuLink({
     <Link
       href={href}
       onClick={onClick}
-      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-stone-200 hover:bg-gray-50 dark:hover:bg-stone-800"
     >
-      <Icon className="h-4 w-4 text-gray-500" /> {children}
+      <Icon className="h-4 w-4 text-gray-500 dark:text-stone-400" /> {children}
     </Link>
   );
 }

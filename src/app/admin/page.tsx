@@ -38,9 +38,9 @@ export default async function AdminOverviewPage() {
               href={c.href}
               className={`card p-4 ${c.alert ? "ring-2 ring-red-200" : ""}`}
             >
-              <Icon className={`h-5 w-5 ${c.alert ? "text-red-600" : "text-gray-400"}`} />
+              <Icon className={`h-5 w-5 ${c.alert ? "text-red-600 dark:text-red-400" : "text-gray-400 dark:text-stone-500"}`} />
               <p className="mt-2 text-2xl font-bold">{c.value}</p>
-              <p className="text-xs text-gray-500">{c.label}</p>
+              <p className="text-xs text-gray-500 dark:text-stone-400">{c.label}</p>
             </Link>
           );
         })}
@@ -49,20 +49,20 @@ export default async function AdminOverviewPage() {
       <div className="card mt-6 p-5">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="font-semibold">Denuncias recientes</h2>
-          <Link href="/admin/reportes" className="text-sm text-brand-600 hover:underline">
+          <Link href="/admin/reportes" className="text-sm text-brand-600 dark:text-brand-300 hover:underline">
             Ver todas
           </Link>
         </div>
         {recent.length === 0 ? (
-          <p className="py-6 text-center text-sm text-gray-400">No hay denuncias pendientes 🎉</p>
+          <p className="py-6 text-center text-sm text-gray-400 dark:text-stone-500">No hay denuncias pendientes 🎉</p>
         ) : (
-          <ul className="divide-y divide-gray-100">
+          <ul className="divide-y divide-gray-100 dark:divide-stone-800">
             {recent.map((r) => (
               <li key={r.id} className="flex items-center justify-between gap-3 py-2 text-sm">
-                <Link href={`/articulos/${r.listing.id}`} className="min-w-0 truncate hover:text-brand-600">
+                <Link href={`/articulos/${r.listing.id}`} className="min-w-0 truncate hover:text-brand-600 dark:hover:text-brand-300">
                   {r.listing.title}
                 </Link>
-                <span className="shrink-0 text-xs text-gray-400">
+                <span className="shrink-0 text-xs text-gray-400 dark:text-stone-500">
                   {REPORT_REASON_LABELS[r.reason]} · {formatRelative(r.createdAt)}
                 </span>
               </li>

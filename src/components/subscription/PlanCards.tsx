@@ -36,7 +36,7 @@ export function PlanCards({ currentPlan }: { currentPlan: SubscriptionPlan | nul
   return (
     <div>
       {error && (
-        <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+        <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
           <AlertCircle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}
@@ -49,26 +49,26 @@ export function PlanCards({ currentPlan }: { currentPlan: SubscriptionPlan | nul
             <div
               key={plan}
               className={`relative flex flex-col rounded-xl border p-5 ${
-                highlight ? "border-indigo-300 bg-indigo-50" : "border-gray-200 bg-white"
+                highlight ? "border-indigo-300 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-950/40" : "border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900"
               }`}
             >
               <div className="flex items-center gap-2">
-                <Crown className={highlight ? "h-5 w-5 text-indigo-600" : "h-5 w-5 text-gray-500"} />
+                <Crown className={highlight ? "h-5 w-5 text-indigo-600 dark:text-indigo-400" : "h-5 w-5 text-gray-500 dark:text-stone-400"} />
                 <h3 className="text-lg font-bold">{cfg.label}</h3>
                 {isCurrent && (
-                  <span className="ml-auto rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+                  <span className="ml-auto rounded-full bg-green-100 dark:bg-green-900/40 px-2 py-0.5 text-xs font-medium text-green-700 dark:text-green-300">
                     Plan actual
                   </span>
                 )}
               </div>
               <p className="mt-2 text-2xl font-extrabold">
                 {formatPrice(cfg.price)}
-                <span className="text-sm font-normal text-gray-500">/mes</span>
+                <span className="text-sm font-normal text-gray-500 dark:text-stone-400">/mes</span>
               </p>
-              <ul className="mt-4 flex-1 space-y-2 text-sm text-gray-600">
+              <ul className="mt-4 flex-1 space-y-2 text-sm text-gray-600 dark:text-stone-300">
                 {cfg.perks.map((perk) => (
                   <li key={perk} className="flex items-start gap-2">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /> {perk}
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-green-600 dark:text-green-400" /> {perk}
                   </li>
                 ))}
               </ul>

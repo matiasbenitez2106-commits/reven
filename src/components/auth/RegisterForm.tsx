@@ -57,7 +57,7 @@ export function RegisterForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {error && (
-        <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+        <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
           <AlertCircle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}
@@ -106,7 +106,7 @@ export function RegisterForm() {
       </div>
 
       <div>
-        <label className="flex items-start gap-2 text-sm text-gray-600">
+        <label className="flex items-start gap-2 text-sm text-gray-600 dark:text-stone-300">
           <input
             type="checkbox"
             checked={accepted}
@@ -114,15 +114,15 @@ export function RegisterForm() {
               setAccepted(e.target.checked);
               if (e.target.checked) setAcceptError(false);
             }}
-            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+            className="mt-0.5 h-4 w-4 rounded border-gray-300 dark:border-stone-700 text-brand-600 dark:text-brand-300 focus:ring-brand-500"
           />
           <span>
             Soy mayor de 18 años y acepto los{" "}
-            <Link href="/terminos" target="_blank" className="text-brand-600 hover:underline">
+            <Link href="/terminos" target="_blank" className="text-brand-600 dark:text-brand-300 hover:underline">
               Términos y Condiciones
             </Link>{" "}
             y la{" "}
-            <Link href="/privacidad" target="_blank" className="text-brand-600 hover:underline">
+            <Link href="/privacidad" target="_blank" className="text-brand-600 dark:text-brand-300 hover:underline">
               Política de Privacidad
             </Link>
             .

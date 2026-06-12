@@ -24,7 +24,7 @@ export function ListingCard({ item }: { item: ListingCardItem }) {
       href={`/articulos/${item.id}`}
       className="group card overflow-hidden transition hover:shadow-md"
     >
-      <div className="relative aspect-square w-full overflow-hidden bg-gray-100">
+      <div className="relative aspect-square w-full overflow-hidden bg-gray-100 dark:bg-stone-800">
         {item.image ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -34,7 +34,7 @@ export function ListingCard({ item }: { item: ListingCardItem }) {
             className="h-full w-full object-cover transition group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-gray-300">
+          <div className="flex h-full w-full items-center justify-center text-gray-300 dark:text-stone-600">
             <ImageOff className="h-10 w-10" />
           </div>
         )}
@@ -45,17 +45,17 @@ export function ListingCard({ item }: { item: ListingCardItem }) {
         )}
       </div>
       <div className="p-3">
-        <p className="text-lg font-bold text-gray-900">{formatPrice(item.price)}</p>
-        <h3 className="mt-0.5 line-clamp-2 text-sm text-gray-700">{item.title}</h3>
-        <div className="mt-2 flex items-center gap-1 text-xs text-gray-500">
+        <p className="text-lg font-bold text-gray-900 dark:text-stone-100">{formatPrice(item.price)}</p>
+        <h3 className="mt-0.5 line-clamp-2 text-sm text-gray-700 dark:text-stone-200">{item.title}</h3>
+        <div className="mt-2 flex items-center gap-1 text-xs text-gray-500 dark:text-stone-400">
           <MapPin className="h-3.5 w-3.5 shrink-0" />
           <span className="truncate">
             {item.neighborhood ? `${item.neighborhood}, ` : ""}
             {item.city}
           </span>
         </div>
-        <div className="mt-1.5 flex items-center justify-between text-[11px] text-gray-400">
-          <span className="rounded bg-gray-100 px-1.5 py-0.5">{CONDITION_LABELS[item.condition]}</span>
+        <div className="mt-1.5 flex items-center justify-between text-[11px] text-gray-400 dark:text-stone-500">
+          <span className="rounded bg-gray-100 dark:bg-stone-800 px-1.5 py-0.5">{CONDITION_LABELS[item.condition]}</span>
           {item.distanceKm != null && <span>{formatDistance(item.distanceKm)}</span>}
         </div>
       </div>

@@ -19,12 +19,12 @@ function pct(n: number | null): string {
 function Img({ label, src }: { label: string; src: string | null }) {
   return (
     <div>
-      <p className="mb-1 text-xs font-medium text-gray-500">{label}</p>
+      <p className="mb-1 text-xs font-medium text-gray-500 dark:text-stone-400">{label}</p>
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={label} className="w-full rounded-lg border border-gray-200" />
+        <img src={src} alt={label} className="w-full rounded-lg border border-gray-200 dark:border-stone-800" />
       ) : (
-        <div className="flex h-24 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
+        <div className="flex h-24 items-center justify-center rounded-lg bg-gray-100 dark:bg-stone-800 text-xs text-gray-400 dark:text-stone-500">
           Sin imagen
         </div>
       )}
@@ -58,7 +58,7 @@ export function AdminVerificationViewer({ userId }: { userId: string }) {
     <>
       <button
         onClick={openViewer}
-        className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium hover:bg-gray-50"
+        className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-stone-800"
       >
         <Eye className="h-3.5 w-3.5" /> Ver documentos
       </button>
@@ -69,25 +69,25 @@ export function AdminVerificationViewer({ userId }: { userId: string }) {
           onClick={() => setOpen(false)}
         >
           <div
-            className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-xl"
+            className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white dark:bg-stone-900 p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold">Documentación de verificación</h3>
-              <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setOpen(false)} className="text-gray-400 dark:text-stone-500 hover:text-gray-600 dark:hover:text-stone-300">
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {loading ? (
               <div className="py-10 text-center">
-                <Loader2 className="mx-auto h-6 w-6 animate-spin text-gray-400" />
+                <Loader2 className="mx-auto h-6 w-6 animate-spin text-gray-400 dark:text-stone-500" />
               </div>
             ) : error ? (
-              <p className="text-sm text-red-600">{error}</p>
+              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
             ) : data ? (
               <div className="space-y-4">
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-gray-700 dark:text-stone-200">
                   <b>DNI:</b> {data.dniNumber || "—"} &nbsp;·&nbsp; <b>Liveness:</b>{" "}
                   {pct(data.livenessScore)} &nbsp;·&nbsp; <b>Match:</b> {pct(data.matchScore)}
                 </p>
@@ -96,7 +96,7 @@ export function AdminVerificationViewer({ userId }: { userId: string }) {
                   <Img label="Dorso del DNI" src={data.dniBack} />
                   <Img label="Selfie" src={data.selfie} />
                 </div>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-400 dark:text-stone-500">
                   Datos sensibles · acceso restringido a administradores.
                 </p>
               </div>

@@ -41,14 +41,14 @@ export function ListingOwnerActions({
     <div className="flex flex-wrap gap-2">
       <Link
         href={`/articulos/${listingId}/editar`}
-        className="inline-flex h-10 items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-medium hover:bg-gray-50"
+        className="inline-flex h-10 items-center gap-2 rounded-lg border border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-4 text-sm font-medium hover:bg-gray-50 dark:hover:bg-stone-800"
       >
         <Pencil className="h-4 w-4" /> Editar
       </Link>
       {status !== "SOLD" && (
         <Link
           href={`/articulos/${listingId}/destacar`}
-          className="inline-flex h-10 items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-4 text-sm font-medium text-amber-800 hover:bg-amber-100"
+          className="inline-flex h-10 items-center gap-2 rounded-lg border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 px-4 text-sm font-medium text-amber-800 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/40"
         >
           <Sparkles className="h-4 w-4" /> Destacar
         </Link>

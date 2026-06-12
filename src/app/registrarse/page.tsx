@@ -12,9 +12,9 @@ export default async function RegisterPage() {
   return (
     <div className="mx-auto flex max-w-md flex-col px-4 py-12">
       <h1 className="text-2xl font-bold">Crear cuenta</h1>
-      <p className="mt-1 text-sm text-gray-500">
+      <p className="mt-1 text-sm text-gray-500 dark:text-stone-400">
         ¿Ya tenés cuenta?{" "}
-        <Link href="/ingresar" className="font-medium text-brand-600 hover:underline">
+        <Link href="/ingresar" className="font-medium text-brand-600 dark:text-brand-300 hover:underline">
           Ingresá
         </Link>
       </p>
@@ -23,7 +23,7 @@ export default async function RegisterPage() {
         <RegisterForm />
       </div>
 
-      <p className="mt-4 text-center text-xs text-gray-400">
+      <p className="mt-4 text-center text-xs text-gray-400 dark:text-stone-500">
         Al registrarte aceptás nuestros términos. Para publicar o contactar vendedores
         vas a necesitar verificar tu identidad.
       </p>

@@ -89,7 +89,7 @@ export function ListingForm({ categories, listingId, initial }: Props) {
   return (
     <form onSubmit={handleSubmit(onValid)} className="space-y-6">
       {serverError && (
-        <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+        <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
           <AlertCircle className="h-4 w-4 shrink-0" /> {serverError}
         </div>
       )}
@@ -179,9 +179,9 @@ export function ListingForm({ categories, listingId, initial }: Props) {
         <button
           type="button"
           onClick={useMyLocation}
-          className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50"
+          className="inline-flex items-center gap-2 rounded-lg border border-gray-300 dark:border-stone-700 px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
         >
-          {coords ? <Check className="h-4 w-4 text-green-600" /> : <MapPin className="h-4 w-4" />}
+          {coords ? <Check className="h-4 w-4 text-green-600 dark:text-green-400" /> : <MapPin className="h-4 w-4" />}
           {coords ? "Ubicación capturada" : "Usar mi ubicación actual (mejora la búsqueda por cercanía)"}
         </button>
       </section>

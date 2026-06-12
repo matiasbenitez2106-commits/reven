@@ -56,11 +56,11 @@ export default async function BuscarPage({ searchParams }: { searchParams: SP })
 
         <section>
           <div className="mb-4 flex items-center justify-between gap-4">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-stone-400">
               {result.total} resultado{result.total === 1 ? "" : "s"}
               {params.q ? (
                 <>
-                  {" "}para <span className="font-medium text-gray-700">“{params.q}”</span>
+                  {" "}para <span className="font-medium text-gray-700 dark:text-stone-200">“{params.q}”</span>
                 </>
               ) : null}
             </p>
@@ -69,9 +69,9 @@ export default async function BuscarPage({ searchParams }: { searchParams: SP })
 
           {result.items.length === 0 ? (
             <div className="card flex flex-col items-center gap-3 p-12 text-center">
-              <SearchX className="h-12 w-12 text-gray-300" />
+              <SearchX className="h-12 w-12 text-gray-300 dark:text-stone-600" />
               <p className="font-medium">No encontramos resultados</p>
-              <p className="text-sm text-gray-500">Probá con otras palabras o sacá algunos filtros.</p>
+              <p className="text-sm text-gray-500 dark:text-stone-400">Probá con otras palabras o sacá algunos filtros.</p>
             </div>
           ) : (
             <>
@@ -86,18 +86,18 @@ export default async function BuscarPage({ searchParams }: { searchParams: SP })
                   {result.page > 1 && (
                     <Link
                       href={hrefWithPage(raw, result.page - 1)}
-                      className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50"
+                      className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
                     >
                       <ChevronLeft className="h-4 w-4" /> Anterior
                     </Link>
                   )}
-                  <span className="px-2 text-sm text-gray-500">
+                  <span className="px-2 text-sm text-gray-500 dark:text-stone-400">
                     Página {result.page} de {totalPages}
                   </span>
                   {result.hasMore && (
                     <Link
                       href={hrefWithPage(raw, result.page + 1)}
-                      className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50"
+                      className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
                     >
                       Siguiente <ChevronRight className="h-4 w-4" />
                     </Link>

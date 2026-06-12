@@ -19,22 +19,22 @@ export default async function VerificationPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
       <div className="mb-6 flex items-center gap-2">
-        <ShieldCheck className="h-6 w-6 text-brand-600" />
+        <ShieldCheck className="h-6 w-6 text-brand-600 dark:text-brand-300" />
         <h1 className="text-2xl font-bold">Verificación de identidad</h1>
       </div>
 
       {user.verification === "VERIFIED" && (
         <div className="card flex flex-col items-center gap-3 p-8 text-center">
-          <BadgeCheck className="h-12 w-12 text-green-600" />
+          <BadgeCheck className="h-12 w-12 text-green-600 dark:text-green-400" />
           <h2 className="text-lg font-semibold">¡Tu identidad está verificada!</h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-stone-400">
             Ya podés publicar artículos y contactar vendedores.
           </p>
           <div className="mt-2 flex gap-3">
             <Link href="/publicar" className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700">
               Publicar un artículo
             </Link>
-            <Link href="/" className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50">
+            <Link href="/" className="rounded-lg border border-gray-300 dark:border-stone-700 px-4 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-stone-800">
               Explorar
             </Link>
           </div>
@@ -45,7 +45,7 @@ export default async function VerificationPage() {
         <div className="card flex flex-col items-center gap-3 p-8 text-center">
           <Clock className="h-12 w-12 text-yellow-500" />
           <h2 className="text-lg font-semibold">Estamos revisando tu identidad</h2>
-          <p className="max-w-sm text-sm text-gray-500">
+          <p className="max-w-sm text-sm text-gray-500 dark:text-stone-400">
             Recibimos tu documentación. La verificación puede demorar un poco. Te
             avisaremos cuando esté lista.
           </p>
@@ -55,7 +55,7 @@ export default async function VerificationPage() {
       {(user.verification === "UNVERIFIED" || user.verification === "REJECTED") && (
         <>
           {user.verification === "REJECTED" && (
-            <div className="mb-6 flex items-start gap-2 rounded-lg bg-red-50 p-4 text-sm text-red-700">
+            <div className="mb-6 flex items-start gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-4 text-sm text-red-700 dark:text-red-300">
               <ShieldX className="mt-0.5 h-5 w-5 shrink-0" />
               <div>
                 <p className="font-medium">Tu verificación fue rechazada.</p>
@@ -65,7 +65,7 @@ export default async function VerificationPage() {
             </div>
           )}
 
-          <div className="mb-6 rounded-lg bg-brand-50 p-4 text-sm text-brand-900">
+          <div className="mb-6 rounded-lg bg-brand-50 dark:bg-brand-900/30 p-4 text-sm text-brand-900 dark:text-brand-100">
             <p className="font-medium">¿Por qué verificamos identidad?</p>
             <p className="mt-1">
               trato es una comunidad de personas reales. Verificar tu identidad genera

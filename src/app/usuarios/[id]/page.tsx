@@ -66,12 +66,12 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
           <h1 className="text-xl font-bold">
             {u.firstName} {u.lastName}
           </h1>
-          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-500">
+          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-500 dark:text-stone-400">
             <VerificationBadge status={u.verification} />
             {plan && <ProBadge plan={plan} />}
             <span>· {u.city}, {u.province}</span>
           </div>
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
             Miembro desde {new Date(u.createdAt).getFullYear()}
           </p>
         </div>
@@ -82,8 +82,8 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
       </h2>
 
       {items.length === 0 ? (
-        <div className="card flex flex-col items-center gap-2 p-12 text-center text-gray-500">
-          <Package className="h-10 w-10 text-gray-300" />
+        <div className="card flex flex-col items-center gap-2 p-12 text-center text-gray-500 dark:text-stone-400">
+          <Package className="h-10 w-10 text-gray-300 dark:text-stone-600" />
           <p>Este usuario no tiene publicaciones activas.</p>
         </div>
       ) : (

@@ -37,8 +37,8 @@ export function IncludedBoostButton({
   }
 
   return (
-    <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4">
-      <div className="flex items-center gap-2 text-indigo-800">
+    <div className="rounded-xl border border-indigo-200 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/40 p-4">
+      <div className="flex items-center gap-2 text-indigo-800 dark:text-indigo-300">
         <Crown className="h-5 w-5" />
         <p className="text-sm font-medium">
           Tu plan incluye destacados gratis — te quedan {remaining} este mes.
@@ -53,7 +53,7 @@ export function IncludedBoostButton({
         Usar destacado incluido (7 días)
       </button>
       {error && (
-        <p className="mt-2 flex items-center gap-1 text-xs text-red-600">
+        <p className="mt-2 flex items-center gap-1 text-xs text-red-600 dark:text-red-400">
           <AlertCircle className="h-3.5 w-3.5" /> {error}
         </p>
       )}

@@ -36,7 +36,7 @@ export default async function MyListingsPage() {
       </div>
 
       {user.verification !== "VERIFIED" && (
-        <div className="mb-6 flex items-center gap-2 rounded-lg bg-yellow-50 p-3 text-sm text-yellow-800">
+        <div className="mb-6 flex items-center gap-2 rounded-lg bg-yellow-50 dark:bg-yellow-950/40 p-3 text-sm text-yellow-800 dark:text-yellow-300">
           <ShieldAlert className="h-4 w-4 shrink-0" />
           <span>
             Verificá tu identidad para poder publicar.{" "}
@@ -47,21 +47,21 @@ export default async function MyListingsPage() {
 
       {listings.length === 0 ? (
         <div className="card flex flex-col items-center gap-3 p-12 text-center">
-          <Package className="h-12 w-12 text-gray-300" />
+          <Package className="h-12 w-12 text-gray-300 dark:text-stone-600" />
           <p className="font-medium">Todavía no publicaste nada</p>
-          <p className="text-sm text-gray-500">Cuando publiques, vas a verlo acá.</p>
+          <p className="text-sm text-gray-500 dark:text-stone-400">Cuando publiques, vas a verlo acá.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {listings.map((l) => (
             <div key={l.id} className="card flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
               <Link href={`/articulos/${l.id}`} className="flex min-w-0 flex-1 items-center gap-4">
-                <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-stone-800">
                   {l.images[0] ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={l.images[0].url} alt={l.title} className="h-full w-full object-cover" />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center text-gray-300">
+                    <div className="flex h-full w-full items-center justify-center text-gray-300 dark:text-stone-600">
                       <ImageOff className="h-6 w-6" />
                     </div>
                   )}
@@ -69,7 +69,7 @@ export default async function MyListingsPage() {
                 <div className="min-w-0">
                   <p className="truncate font-medium">{l.title}</p>
                   <p className="text-lg font-bold">{formatPrice(Number(l.price))}</p>
-                  <div className="mt-1 flex items-center gap-2 text-xs text-gray-400">
+                  <div className="mt-1 flex items-center gap-2 text-xs text-gray-400 dark:text-stone-500">
                     <Badge color={l.status === "ACTIVE" ? "green" : l.status === "SOLD" ? "gray" : "yellow"}>
                       {STATUS_LABELS[l.status]}
                     </Badge>

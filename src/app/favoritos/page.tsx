@@ -48,9 +48,9 @@ export default async function FavoritesPage() {
 
       {items.length === 0 ? (
         <div className="card flex flex-col items-center gap-3 p-12 text-center">
-          <Heart className="h-12 w-12 text-gray-300" />
+          <Heart className="h-12 w-12 text-gray-300 dark:text-stone-600" />
           <p className="font-medium">Todavía no guardaste nada</p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-stone-400">
             Tocá el corazón en una publicación para guardarla acá.
           </p>
           <Link

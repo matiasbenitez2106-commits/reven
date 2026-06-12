@@ -19,7 +19,7 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white/95 backdrop-blur sm:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 dark:border-stone-800 bg-white/95 dark:bg-stone-900/95 backdrop-blur sm:hidden">
       <div className="flex items-stretch justify-around">
         {items.map((it) => {
           const active = pathname === it.href;
@@ -30,7 +30,7 @@ export function BottomNav() {
               href={it.href}
               className={cn(
                 "flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px]",
-                it.cta ? "text-brand-600" : active ? "text-brand-600" : "text-gray-500"
+                it.cta ? "text-brand-600 dark:text-brand-300" : active ? "text-brand-600 dark:text-brand-300" : "text-gray-500 dark:text-stone-400"
               )}
             >
               <Icon className={it.cta ? "h-7 w-7" : "h-5 w-5"} />
