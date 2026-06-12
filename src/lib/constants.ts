@@ -72,19 +72,19 @@ export const BOOST_PLANS: Record<
 > = {
   BOOST_3: {
     days: 3,
-    price: 1000,
+    price: 990,
     label: "Boost 3 días",
     description: "Tu artículo aparece primero por 3 días.",
   },
   FEATURED_7: {
     days: 7,
-    price: 2000,
+    price: 1990,
     label: "Destacado 7 días",
     description: "Mayor visibilidad en búsquedas y home por 7 días.",
   },
   FEATURED_14: {
     days: 14,
-    price: 5000,
+    price: 4990,
     label: "Destacado 14 días",
     description: "Máxima exposición durante 14 días.",
   },
@@ -101,7 +101,7 @@ export const SUBSCRIPTION_PLANS: Record<
 > = {
   PRO: {
     label: "PRO",
-    price: 4000,
+    price: 3990,
     boosts: 2,
     priority: 1,
     perks: [
@@ -112,7 +112,7 @@ export const SUBSCRIPTION_PLANS: Record<
   },
   PRO_PLUS: {
     label: "PRO+",
-    price: 9000,
+    price: 8990,
     boosts: 6,
     priority: 2,
     perks: [

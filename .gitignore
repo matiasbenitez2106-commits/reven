@@ -43,3 +43,7 @@ next-env.d.ts
 
 # carpetas ajenas a Trato que viven en este directorio
 /Projects
+# assets personales / material de verificación, diseño y marketing (no van al repo)
+/_verif
+/Campaña Marketing Trato/
+/Campaña Marketing Trato
