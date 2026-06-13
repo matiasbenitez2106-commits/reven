@@ -18,7 +18,16 @@ export interface ListingCardItem {
   sellerPro?: SubscriptionPlan | null;
 }
 
-export function ListingCard({ item }: { item: ListingCardItem }) {
+// `showFeatured` solo lo activan las vistas del DUEÑO (p.ej. "Mis publicaciones").
+// Para el resto de los usuarios, una publicación destacada se ordena con prioridad
+// pero NO muestra el cartel "Destacado" (no se revela que se pagó por destacarla).
+export function ListingCard({
+  item,
+  showFeatured = false,
+}: {
+  item: ListingCardItem;
+  showFeatured?: boolean;
+}) {
   return (
     <Link
       href={`/articulos/${item.id}`}
@@ -38,7 +47,7 @@ export function ListingCard({ item }: { item: ListingCardItem }) {
             <ImageOff className="h-10 w-10" />
           </div>
         )}
-        {item.featured && (
+        {showFeatured && item.featured && (
           <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-amber-400 px-2 py-0.5 text-[11px] font-semibold text-amber-950 shadow">
             <Sparkles className="h-3.5 w-3.5" /> Destacado
           </span>

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentDbUser } from "@/lib/auth";
 import { activePlan } from "@/lib/subscriptions";
 import { isMpConfigured } from "@/lib/mercadopago";
+import { SUBSCRIPTION_PLANS } from "@/lib/constants";
 import { PlanCards } from "@/components/subscription/PlanCards";
 import { CancelButton } from "@/components/subscription/CancelButton";
 import { ProBadge } from "@/components/ProBadge";
@@ -91,6 +92,12 @@ export default async function SubscriptionPage({
               Destacados incluidos: <strong>{sub.boostsUsed}</strong> de{" "}
               <strong>{sub.boostsIncluded}</strong> usados este mes.
             </div>
+            {sub.pendingPlan && sub.status !== "CANCELLED" && (
+              <div className="text-brand-700 dark:text-brand-300">
+                Cambio programado a <strong>{SUBSCRIPTION_PLANS[sub.pendingPlan].label}</strong> a
+                partir del <strong>{formatDate(sub.currentPeriodEnd)}</strong> (no se te cobra ahora).
+              </div>
+            )}
           </dl>
           {sub.status !== "CANCELLED" && (
             <div className="mt-4">

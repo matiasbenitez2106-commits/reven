@@ -71,3 +71,14 @@ export function encryptNullable(value: string | null | undefined): string | null
 export function decryptNullable(value: string | null | undefined): string | null {
   return value ? decrypt(value) : null;
 }
+
+/**
+ * Hash determinístico (HMAC-SHA256 con la clave secreta) para comparar valores
+ * sensibles sin guardarlos en claro. A diferencia de `encrypt`, el mismo input
+ * siempre da el mismo output → sirve para detectar duplicados (p.ej. "este DNI
+ * ya tiene cuenta"). El HMAC con clave evita que un Nº de DNI (baja entropía)
+ * se pueda fuerza-brutear desde el hash sin conocer la clave.
+ */
+export function hashSensitive(value: string): string {
+  return crypto.createHmac("sha256", getKey()).update(value.trim()).digest("hex");
+}

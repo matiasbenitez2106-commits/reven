@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { verificationSubmitSchema } from "@/lib/validations";
 import { uploadPrivateImage } from "@/lib/storage";
-import { encrypt } from "@/lib/crypto";
+import { encrypt, hashSensitive } from "@/lib/crypto";
 import { purgeVerificationImages } from "@/lib/account";
 import { runIdentityCheck } from "@/lib/identity";
 import { notifyAdmin } from "@/lib/email";
@@ -58,6 +58,31 @@ export async function POST(req: Request) {
 
   const { dniNumber, dniFront, dniBack, selfie, matchScore, livenessScore } = parsed.data;
 
+  // Número leído del PDF417 del dorso (si el navegador pudo decodificarlo): es la
+  // fuente más confiable. Lo usamos como AUTORITATIVO para el hash/almacenamiento,
+  // así nadie evade la unicidad escribiendo un número falso.
+  const rawScanned = (json as { scannedDni?: unknown })?.scannedDni;
+  const scannedDni =
+    typeof rawScanned === "string" && /^\d{7,8}$/.test(rawScanned) ? rawScanned : null;
+  const authoritativeDni = scannedDni ?? dniNumber;
+
+  // 1 cuenta por persona física: si este Nº de DNI ya está asociado a OTRA cuenta
+  // (verificada o en revisión), bloqueamos. Comparamos por hash (nunca en claro).
+  const dniHash = hashSensitive(authoritativeDni);
+  const dup = await prisma.verification.findFirst({
+    where: { dniHash, userId: { not: user.id }, status: { in: ["VERIFIED", "PENDING"] } },
+    select: { id: true },
+  });
+  if (dup) {
+    return NextResponse.json(
+      {
+        error:
+          "Ese DNI ya está asociado a otra cuenta. Cada persona puede tener una sola cuenta en trato.",
+      },
+      { status: 409 }
+    );
+  }
+
   // Imágenes de un intento anterior (las purgamos: conservamos solo la última versión)
   const previous = await prisma.verification.findUnique({
     where: { userId: user.id },
@@ -106,6 +131,12 @@ export async function POST(req: Request) {
     if (status === "REJECTED") rejectionReason = "No se pudo confirmar tu identidad.";
   }
 
+  // Si el número escrito NO coincide con el leído del documento, no auto-aprobamos:
+  // mandamos a revisión manual (posible intento de declarar un DNI ajeno).
+  if (scannedDni && scannedDni !== dniNumber && status === "VERIFIED") {
+    status = "PENDING";
+  }
+
   // Purga de las imágenes del INTENTO ANTERIOR (evita duplicados/huérfanos en Cloudinary)
   if (previous) await purgeVerificationImages(previous);
 
@@ -118,7 +149,8 @@ export async function POST(req: Request) {
     dniFrontUrlEnc: encrypt(front.publicId ?? front.url),
     dniBackUrlEnc: encrypt(back.publicId ?? back.url),
     selfieUrlEnc: encrypt(self.publicId ?? self.url),
-    dniNumberEnc: encrypt(dniNumber),
+    dniNumberEnc: encrypt(authoritativeDni),
+    dniHash,
     livenessScore: lScore,
     matchScore: mScore,
     rejectionReason,

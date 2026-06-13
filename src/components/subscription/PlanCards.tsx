@@ -1,20 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { SubscriptionPlan } from "@prisma/client";
-import { Crown, Check, Loader2, AlertCircle } from "lucide-react";
+import { Crown, Check, Loader2, AlertCircle, CalendarClock } from "lucide-react";
 import { SUBSCRIPTION_PLANS } from "@/lib/constants";
 import { formatPrice } from "@/lib/utils";
 
 const ORDER: SubscriptionPlan[] = ["PRO", "PRO_PLUS"];
 
 export function PlanCards({ currentPlan }: { currentPlan: SubscriptionPlan | null }) {
+  const router = useRouter();
   const [loading, setLoading] = useState<SubscriptionPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   async function subscribe(plan: SubscriptionPlan) {
     setLoading(plan);
     setError(null);
+    setNotice(null);
     try {
       const res = await fetch("/api/subscriptions/checkout", {
         method: "POST",
@@ -26,7 +30,15 @@ export function PlanCards({ currentPlan }: { currentPlan: SubscriptionPlan | nul
         throw new Error(j.error || "No se pudo iniciar la suscripción.");
       }
       const j = await res.json();
-      window.location.href = j.redirectUrl;
+      // Flujo de cobro nuevo → redirige a MercadoPago.
+      if (j.redirectUrl) {
+        window.location.href = j.redirectUrl;
+        return;
+      }
+      // Cambio de plan programado / ya activo: no hay cobro, mostramos aviso.
+      setLoading(null);
+      setNotice(j.message || "Listo.");
+      router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error inesperado.");
       setLoading(null);
@@ -38,6 +50,11 @@ export function PlanCards({ currentPlan }: { currentPlan: SubscriptionPlan | nul
       {error && (
         <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300">
           <AlertCircle className="h-4 w-4 shrink-0" /> {error}
+        </div>
+      )}
+      {notice && (
+        <div className="mb-4 flex items-center gap-2 rounded-lg bg-brand-50 dark:bg-brand-900/30 p-3 text-sm text-brand-800 dark:text-brand-200">
+          <CalendarClock className="h-4 w-4 shrink-0" /> {notice}
         </div>
       )}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

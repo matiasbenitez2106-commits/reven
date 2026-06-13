@@ -36,7 +36,7 @@ export default async function Home() {
                   href="/publicar"
                   className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
                 >
-                  <Plus className="h-4 w-4" /> Publicar — es gratis
+                  <Plus className="h-4 w-4" /> Publicar
                 </Link>
                 <Link
                   href="/buscar"

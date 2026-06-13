@@ -17,6 +17,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { resizeImage, resizeDataUrl } from "@/lib/image-client";
 import { describeFace, faceSimilarity, preloadFaceModels } from "@/lib/face-client";
+import { readDniBarcode, type DniData } from "@/lib/dni-client";
 
 type StepKey = "front" | "back" | "selfie" | "review";
 const STEPS: { key: StepKey; label: string }[] = [
@@ -38,11 +39,34 @@ export function VerificationFlow() {
   const [error, setError] = useState<string | null>(null);
   const [faceStatus, setFaceStatus] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
+  const [dniScan, setDniScan] = useState<DniData | null>(null);
+  const [scanning, setScanning] = useState(false);
 
   // Pre-carga los modelos de IA al entrar (para que el envío sea más rápido)
   useEffect(() => {
     preloadFaceModels();
   }, []);
+
+  // Al tener el dorso, intentamos leer el PDF417 para corroborar el Nº de DNI.
+  useEffect(() => {
+    if (!back) {
+      setDniScan(null);
+      return;
+    }
+    let active = true;
+    setScanning(true);
+    readDniBarcode(back).then((d) => {
+      if (!active) return;
+      setScanning(false);
+      if (d) {
+        setDniScan(d);
+        setDniNumber((cur) => cur || d.dniNumber); // autocompleta si está vacío
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, [back]);
 
   const step = STEPS[stepIndex];
 
@@ -92,6 +116,8 @@ export function VerificationFlow() {
           selfie,
           matchScore,
           livenessScore,
+          scannedDni: dniScan?.dniNumber,
+          scannedName: dniScan ? `${dniScan.lastName} ${dniScan.firstName}`.trim() : undefined,
         }),
       });
       if (!res.ok) {
@@ -181,6 +207,20 @@ export function VerificationFlow() {
               onChange={(e) => setDniNumber(e.target.value.replace(/\D/g, ""))}
             />
             <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">Solo números, sin puntos.</p>
+            {scanning && (
+              <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">Leyendo el código del dorso…</p>
+            )}
+            {dniScan && (
+              <p className="mt-1 flex items-center gap-1 text-xs text-brand-700 dark:text-brand-300">
+                <Check className="h-3.5 w-3.5" /> Leímos tu DNI del código de barras (Nº {dniScan.dniNumber}).
+              </p>
+            )}
+            {dniScan && dniNumber && dniScan.dniNumber !== dniNumber && (
+              <p className="mt-1 flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+                <AlertCircle className="h-3.5 w-3.5" /> El número que escribiste no coincide con el del
+                documento. Si lo enviás así, quedará en revisión manual.
+              </p>
+            )}
           </div>
           <p className="text-xs text-gray-400 dark:text-stone-500">
             Al enviar, comparamos la cara de tu DNI con la selfie (en tu dispositivo) y

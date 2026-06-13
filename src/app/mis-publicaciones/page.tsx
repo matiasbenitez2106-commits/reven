@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Plus, Package, ImageOff, ShieldAlert, Eye } from "lucide-react";
+import { Plus, Package, ImageOff, ShieldAlert, Eye, Sparkles } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getCurrentDbUser } from "@/lib/auth";
 import { activePlan } from "@/lib/subscriptions";
@@ -22,6 +22,7 @@ export default async function MyListingsPage() {
   });
 
   const plan = activePlan(user.proPlan, user.proUntil);
+  const now = new Date();
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
@@ -73,6 +74,11 @@ export default async function MyListingsPage() {
                     <Badge color={l.status === "ACTIVE" ? "green" : l.status === "SOLD" ? "gray" : "yellow"}>
                       {STATUS_LABELS[l.status]}
                     </Badge>
+                    {l.featuredUntil && l.featuredUntil > now && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-semibold text-amber-950">
+                        <Sparkles className="h-3 w-3" /> Destacado
+                      </span>
+                    )}
                     <span>· {formatRelative(l.createdAt)}</span>
                     {plan === "PRO_PLUS" && (
                       <span className="inline-flex items-center gap-1">

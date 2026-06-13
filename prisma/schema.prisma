@@ -125,6 +125,8 @@ model Verification {
   selfieUrlEnc    String?
   // Nº de documento encriptado
   dniNumberEnc    String?
+  // Hash (HMAC) del Nº de DNI para garantizar 1 cuenta por persona física.
+  dniHash         String?
   livenessScore   Float? // resultado del liveness check (0..1)
   matchScore      Float? // similitud selfie vs DNI (0..1)
   rejectionReason String?
@@ -268,6 +270,9 @@ model Subscription {
   userId           String             @unique
   user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   plan             SubscriptionPlan
+  // Cambio de plan programado para aplicarse en la próxima renovación (sin recobro
+  // inmediato): si el usuario pasa de PRO+ a PRO mientras tiene plan activo.
+  pendingPlan      SubscriptionPlan?
   status           SubscriptionStatus @default(PENDING)
   currentPeriodEnd DateTime
   boostsIncluded   Int                @default(0)

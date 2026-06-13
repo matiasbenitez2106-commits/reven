@@ -257,12 +257,27 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
         </div>
       </div>
 
-      {/* Descripción */}
+      {/* Descripción — visible solo para usuarios registrados (puede incluir datos
+          de contacto; protegemos de scrapers y de invitados anónimos). */}
       <div className="mt-8 card p-6">
         <h2 className="mb-2 font-semibold">Descripción</h2>
-        <p className="whitespace-pre-line text-sm leading-relaxed text-gray-700 dark:text-stone-200">
-          {listing.description}
-        </p>
+        {user ? (
+          <p className="whitespace-pre-line text-sm leading-relaxed text-gray-700 dark:text-stone-200">
+            {listing.description}
+          </p>
+        ) : (
+          <div className="rounded-lg border border-dashed border-gray-300 dark:border-stone-700 bg-gray-50 dark:bg-stone-900 p-5 text-center">
+            <p className="text-sm text-gray-600 dark:text-stone-300">
+              Iniciá sesión para ver la descripción completa y contactar al vendedor.
+            </p>
+            <Link
+              href={`/ingresar?callbackUrl=/articulos/${listing.id}`}
+              className="mt-3 inline-block rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
+            >
+              Ingresar o crear cuenta
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Ubicación aproximada */}

@@ -24,6 +24,7 @@
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
     "@vladmandic/face-api": "^1.7.15",
+    "@zxing/library": "^0.21.3",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.4.0",
     "clsx": "^2.1.1",

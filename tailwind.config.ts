@@ -37,8 +37,8 @@ const config: Config = {
           800: "#5e3520",
           900: "#412517",
         },
-        // Fondo crema vintage y tinta carbón.
-        cream: "#f3eee1",
+        // Fondo "papel" cálido (limpio y luminoso) y tinta carbón.
+        cream: "#faf8f3",
         ink: "#2e312a",
       },
       fontFamily: {

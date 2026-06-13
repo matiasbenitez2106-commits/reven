@@ -26,6 +26,8 @@ export function ListingForm({ categories, listingId, initial }: Props) {
       : null
   );
   const [serverError, setServerError] = useState<string | null>(null);
+  // En publicaciones nuevas exigimos confirmar que las fotos son propias y reales.
+  const [photoConsent, setPhotoConsent] = useState(isEdit);
 
   const {
     register,
@@ -70,6 +72,12 @@ export function ListingForm({ categories, listingId, initial }: Props) {
 
   async function onValid(data: ListingInput) {
     setServerError(null);
+    if (!photoConsent) {
+      setServerError(
+        "Confirmá que las fotos son tuyas y reales (tomadas por vos del producto)."
+      );
+      return;
+    }
     const payload = { ...data, images, latitude: coords?.lat ?? null, longitude: coords?.lng ?? null };
     const res = await fetch(isEdit ? `/api/listings/${listingId}` : "/api/listings", {
       method: isEdit ? "PATCH" : "POST",
@@ -96,9 +104,30 @@ export function ListingForm({ categories, listingId, initial }: Props) {
 
       {/* Fotos */}
       <section className="card p-5">
-        <h2 className="mb-3 font-semibold">Fotos</h2>
+        <h2 className="mb-1 font-semibold">Fotos</h2>
+        <p className="mb-3 text-xs text-gray-500 dark:text-stone-400">
+          Subí <strong>fotos reales del producto, tomadas por vos</strong>. No se admiten imágenes
+          de internet, catálogos ni de terceros. Las publicaciones con fotos no genuinas se eliminan.
+        </p>
         <ImageUploader value={images} onChange={setImages} />
         {errors.images && <p className="field-error">{errors.images.message as string}</p>}
+        {!isEdit && (
+          <label className="mt-3 flex items-start gap-2 rounded-lg bg-brand-50/60 dark:bg-brand-900/30 p-3 text-xs text-gray-600 dark:text-stone-300">
+            <input
+              type="checkbox"
+              checked={photoConsent}
+              onChange={(e) => {
+                setPhotoConsent(e.target.checked);
+                if (e.target.checked) setServerError(null);
+              }}
+              className="mt-0.5 h-4 w-4 rounded border-gray-300 dark:border-stone-700 text-brand-600 focus:ring-brand-500"
+            />
+            <span>
+              Confirmo que las fotos son <strong>mías y reales</strong>, tomadas por mí del producto
+              que estoy vendiendo, y que la publicación es auténtica.
+            </span>
+          </label>
+        )}
       </section>
 
       {/* Datos del artículo */}

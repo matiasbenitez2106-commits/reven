@@ -6,6 +6,16 @@ import { sendSubscriptionActivatedEmail, sendSubscriptionCancelledEmail } from "
 
 export const SUBSCRIPTION_PERIOD_DAYS = 30;
 
+/** Suma un mes calendario: el período vence el MISMO día del mes siguiente
+ *  (ajustando fin de mes: 31 ene → 28/29 feb). */
+export function addOneMonth(d: Date): Date {
+  const r = new Date(d);
+  const day = r.getDate();
+  r.setMonth(r.getMonth() + 1);
+  if (r.getDate() < day) r.setDate(0); // se pasó de mes → último día del mes correcto
+  return r;
+}
+
 /** Plan PRO vigente del usuario (o null si no tiene/venció). */
 export function activePlan(
   proPlan: SubscriptionPlan | null | undefined,
@@ -21,7 +31,6 @@ export async function activateSubscription(
   plan: SubscriptionPlan,
   mpPreapprovalId?: string
 ) {
-  const cfg = SUBSCRIPTION_PLANS[plan];
   const now = new Date();
   const existing = await prisma.subscription.findUnique({ where: { userId } });
 
@@ -41,14 +50,17 @@ export async function activateSubscription(
     return; // ya estaba activa este período; nada que volver a otorgar
   }
 
-  const periodEnd = new Date(now.getTime() + SUBSCRIPTION_PERIOD_DAYS * 86400000);
+  // En una RENOVACIÓN, si había un cambio de plan programado, lo aplicamos ahora.
+  const effectivePlan = existing?.pendingPlan ?? plan;
+  const cfg = SUBSCRIPTION_PLANS[effectivePlan];
+  const periodEnd = addOneMonth(now);
 
   await prisma.$transaction([
     prisma.subscription.upsert({
       where: { userId },
       create: {
         userId,
-        plan,
+        plan: effectivePlan,
         status: "ACTIVE",
         currentPeriodEnd: periodEnd,
         boostsIncluded: cfg.boosts,
@@ -56,7 +68,8 @@ export async function activateSubscription(
         mpPreapprovalId: mpPreapprovalId ?? null,
       },
       update: {
-        plan,
+        plan: effectivePlan,
+        pendingPlan: null, // ya aplicado
         status: "ACTIVE",
         currentPeriodEnd: periodEnd,
         boostsIncluded: cfg.boosts,
@@ -66,7 +79,7 @@ export async function activateSubscription(
     }),
     prisma.user.update({
       where: { id: userId },
-      data: { proPlan: plan, proUntil: periodEnd },
+      data: { proPlan: effectivePlan, proUntil: periodEnd },
     }),
   ]);
 
