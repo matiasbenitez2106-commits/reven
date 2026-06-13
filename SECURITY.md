@@ -37,6 +37,30 @@ También: **suspensión de cuentas** por admin (bloquea login en `authorize` + p
 - **Validación del monto en el webhook** (defensa en profundidad): comparar
   `transaction_amount` contra el precio del plan.
 
+## Ronda 2 (panel admin, soporte, DNI, suscripción)
+
+Arreglado:
+- **Admin por defecto del seed eliminado** (`admin@reven.ar` / `admin1234`): era un
+  acceso de administrador con credenciales públicas en producción. **Crítico.**
+  El seed ya no crea admins con credenciales fijas.
+- **DoS de verificación**: la unicidad por DNI ahora solo bloquea contra cuentas
+  **VERIFICADAS** (antes también PENDING, lo que permitía "trabar" el DNI de otra
+  persona con intentos pendientes). Los duplicados pendientes los resuelve un admin.
+- **Fuga de ingresos en suscripción**: el cambio de plan "programado sin cobro"
+  ahora solo aplica a **bajas** (PRO+→PRO). Las **subas** (PRO→PRO+) requieren pago.
+- Endpoints admin nuevos (borrar usuario, soporte, sistema) validan rol ADMIN en
+  el servidor; borrar usuario está protegido (no a otros admins ni a uno mismo).
+- `/api/support` valida con zod, tiene rate limit y escapa el contenido del usuario
+  en el email; en el panel se renderiza con React (escapado). Sin XSS.
+
+Residual / aceptado:
+- **Autenticidad del Nº de DNI**: la lectura del PDF417 es del lado del cliente, así
+  que un cliente malicioso podría declarar un número que no es el de su documento
+  (el control facial sí garantiza que la cara coincide con el documento subido).
+  La unicidad evita duplicados entre cuentas VERIFICADAS y los desajustes van a
+  revisión manual. KYC a prueba de todo requiere un proveedor server-side
+  (Onfido/Didit) — stub `runOnfido` ya previsto en `src/lib/identity.ts`.
+
 ## Cómo se hizo
 
 Auditoría multi-agente (7 frentes: auth, IDOR, inyección, secretos, pagos,

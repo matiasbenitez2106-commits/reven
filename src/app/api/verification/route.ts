@@ -66,11 +66,13 @@ export async function POST(req: Request) {
     typeof rawScanned === "string" && /^\d{7,8}$/.test(rawScanned) ? rawScanned : null;
   const authoritativeDni = scannedDni ?? dniNumber;
 
-  // 1 cuenta por persona física: si este Nº de DNI ya está asociado a OTRA cuenta
-  // (verificada o en revisión), bloqueamos. Comparamos por hash (nunca en claro).
+  // 1 cuenta por persona física: si este Nº de DNI ya está VERIFICADO en OTRA cuenta,
+  // bloqueamos. Comparamos por hash (nunca en claro). Solo contra VERIFIED para no
+  // permitir que intentos PENDING ajenos "traben" (DoS) el DNI de una persona real;
+  // los duplicados que queden en revisión los resuelve un admin.
   const dniHash = hashSensitive(authoritativeDni);
   const dup = await prisma.verification.findFirst({
-    where: { dniHash, userId: { not: user.id }, status: { in: ["VERIFIED", "PENDING"] } },
+    where: { dniHash, userId: { not: user.id }, status: "VERIFIED" },
     select: { id: true },
   });
   if (dup) {

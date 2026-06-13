@@ -8,6 +8,8 @@ import { SUBSCRIPTION_PLANS } from "@/lib/constants";
 import { appBaseUrl } from "@/lib/urls";
 
 const VALID: SubscriptionPlan[] = ["PRO", "PRO_PLUS"];
+// Jerarquía de planes (para distinguir suba de baja).
+const RANK: Record<SubscriptionPlan, number> = { PRO: 1, PRO_PLUS: 2 };
 
 export async function POST(req: Request) {
   const user = await getCurrentDbUser();
@@ -19,8 +21,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Plan inválido" }, { status: 400 });
   }
 
-  // Si ya tiene un plan ACTIVO, NO cobramos de nuevo: el cambio de plan se
-  // programa para la próxima renovación (no se pierde lo ya pagado este período).
+  // Si ya tiene un plan ACTIVO:
   const current = activePlan(user.proPlan, user.proUntil);
   if (current) {
     const sub = await prisma.subscription.findUnique({ where: { userId: user.id } });
@@ -28,23 +29,36 @@ export async function POST(req: Request) {
       ? new Date(user.proUntil).toLocaleDateString("es-AR")
       : "el fin del período";
 
-    if (plan === current && !sub?.pendingPlan) {
+    // Mismo plan: nada que cobrar (o cancelar un cambio programado).
+    if (plan === current) {
+      if (!sub?.pendingPlan) {
+        return NextResponse.json({
+          alreadyActive: true,
+          message: `Ya tenés el plan ${SUBSCRIPTION_PLANS[current].label} activo hasta el ${until}.`,
+        });
+      }
+      await prisma.subscription.update({ where: { userId: user.id }, data: { pendingPlan: null } });
       return NextResponse.json({
-        alreadyActive: true,
-        message: `Ya tenés el plan ${SUBSCRIPTION_PLANS[current].label} activo hasta el ${until}.`,
+        scheduled: true,
+        message: `Listo: seguís con tu plan ${SUBSCRIPTION_PLANS[current].label}. Cancelamos el cambio que tenías programado.`,
       });
     }
 
-    const newPending = plan === current ? null : plan;
-    await prisma.subscription.update({
-      where: { userId: user.id },
-      data: { pendingPlan: newPending },
-    });
+    // BAJA de plan (p.ej. PRO+ → PRO): se programa para la próxima renovación SIN
+    // cobro (no se pierde lo ya pagado; los beneficios siguen hasta esa fecha).
+    if (RANK[plan] < RANK[current]) {
+      await prisma.subscription.update({ where: { userId: user.id }, data: { pendingPlan: plan } });
+      return NextResponse.json({
+        scheduled: true,
+        message: `Tu cambio a ${SUBSCRIPTION_PLANS[plan].label} se aplicará el ${until}, cuando se renueve tu plan. No se te cobra ahora y seguís con todos tus beneficios hasta esa fecha.`,
+      });
+    }
+
+    // SUBA de plan (PRO → PRO+): requiere pago. Para no cobrar dos veces ni dejar
+    // suscripciones cruzadas, pedimos cancelar la actual y suscribirse a la nueva.
     return NextResponse.json({
-      scheduled: true,
-      message: newPending
-        ? `Tu cambio a ${SUBSCRIPTION_PLANS[plan].label} se aplicará el ${until}, cuando se renueve tu plan actual. No se te cobra ahora y seguís con todos tus beneficios hasta esa fecha.`
-        : `Listo: seguís con tu plan ${SUBSCRIPTION_PLANS[current].label}. Cancelamos el cambio que tenías programado.`,
+      upgrade: true,
+      message: `Para pasar a ${SUBSCRIPTION_PLANS[plan].label}, cancelá tu plan actual desde acá: mantenés los beneficios hasta el ${until} y, al terminar, te suscribís a ${SUBSCRIPTION_PLANS[plan].label}.`,
     });
   }
 
