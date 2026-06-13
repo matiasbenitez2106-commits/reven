@@ -23,6 +23,24 @@ export async function activateSubscription(
 ) {
   const cfg = SUBSCRIPTION_PLANS[plan];
   const now = new Date();
+  const existing = await prisma.subscription.findUnique({ where: { userId } });
+
+  // Idempotencia anti-replay: si ya está ACTIVA, mismo plan y el período NO venció,
+  // este aviso es un re-envío del MISMO período → no reseteamos boostsUsed ni
+  // extendemos el período (si no, un replay del webhook regalaría destacados).
+  const isReplay =
+    !!existing &&
+    existing.status === "ACTIVE" &&
+    existing.plan === plan &&
+    existing.currentPeriodEnd > now;
+
+  if (isReplay) {
+    if (mpPreapprovalId && existing!.mpPreapprovalId !== mpPreapprovalId) {
+      await prisma.subscription.update({ where: { userId }, data: { mpPreapprovalId } });
+    }
+    return; // ya estaba activa este período; nada que volver a otorgar
+  }
+
   const periodEnd = new Date(now.getTime() + SUBSCRIPTION_PERIOD_DAYS * 86400000);
 
   await prisma.$transaction([

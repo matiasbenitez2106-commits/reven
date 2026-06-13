@@ -5,6 +5,7 @@ import { reportSchema } from "@/lib/validations";
 import { REPORT_REASON_LABELS } from "@/lib/constants";
 import { notifyAdmin, escapeHtml } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
+import { appBaseUrl } from "@/lib/urls";
 
 // Crear una denuncia sobre una publicación
 export async function POST(req: Request) {
@@ -51,7 +52,7 @@ export async function POST(req: Request) {
   });
 
   // Notificación al admin (no bloquea la respuesta si falla)
-  const baseUrl = new URL(req.url).origin;
+  const baseUrl = appBaseUrl(req);
   const detailsHtml = parsed.data.details
     ? `<p><b>Detalle:</b> ${escapeHtml(parsed.data.details)}</p>`
     : "";

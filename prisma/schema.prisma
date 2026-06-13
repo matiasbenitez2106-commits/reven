@@ -87,6 +87,8 @@ model User {
   role         Role               @default(USER)
   verification VerificationStatus @default(UNVERIFIED)
   avatarUrl    String?
+  // Suspensión por un admin: bloquea el login y pausa sus publicaciones
+  suspendedAt  DateTime?
   // Suscripción de vendedor (desnormalizado para ranking/badge)
   proPlan      SubscriptionPlan?
   proUntil     DateTime?

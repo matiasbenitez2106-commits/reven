@@ -1,7 +1,11 @@
 # Manual de marca — trato
 
-Identidad **"Curado salvia"**: vintage soft, slow-fashion, prolijo. Pensada para
-jóvenes que compran y venden ropa vintage / de segunda mano en Argentina.
+Identidad **"Curado salvia"**: cálida, prolija, de confianza.
+
+**Regla de oro:** el ángulo "vintage / ropa / moda circular" es EXCLUSIVO de las
+campañas de marketing externas (para atraer al público inicial: jóvenes que
+venden ropa usada). DENTRO de la app el lenguaje es **genérico**: en trato se
+puede comprar y vender cualquier cosa.
 
 ---
 
@@ -11,10 +15,10 @@ jóvenes que compran y venden ropa vintage / de segunda mano en Argentina.
   en piezas de marca; en prosa legal/larga se admite según gramática).
 - El wordmark es `trat` + **la "o" como sello de verificado**: un círculo salvia
   con un check crema. Ese sello es el símbolo de la marca y funciona solo como
-  ícono de app / avatar / favicon.
-- Tipografía del wordmark y titulares: **Bricolage Grotesque** (bold, tracking
-  apretado). En el código: clase `font-display` (se carga vía `next/font`).
-- Tipografía de texto/UI: **Inter** (`font-sans`).
+  ícono de app / avatar / favicon. **Es el logo DEFINITIVO: no se rediseña.**
+- Tipografía del wordmark: **Bricolage Grotesque** — **EXCLUSIVA del logo**.
+  No usarla en titulares ni en la UI (decisión del fundador).
+- Tipografía de todo lo demás (titulares, texto, UI): **Inter** (`font-sans`).
 - Componente: [src/components/Logo.tsx](src/components/Logo.tsx) (`<Logo size="sm|md|lg" />`).
 - Generadores: ícono PWA/favicon en [src/lib/brand-icon.tsx](src/lib/brand-icon.tsx),
   imagen para compartir en [src/app/opengraph-image.tsx](src/app/opengraph-image.tsx).
@@ -39,13 +43,22 @@ Reglas:
 ## 3. Tono de voz
 
 - **Voseo argentino**, cercano y directo: "publicá", "encontrá", "vendé".
-- Cálido y con personalidad, nunca corporativo. Habla de **ropa con historia**,
-  **tesoros**, **placard**, **moda circular** — no de "artículos usados".
+- Cálido y con personalidad, nunca corporativo.
 - La confianza es el diferencial: siempre que se pueda, recordar que las
   personas están **verificadas** (de ahí el check del logo).
-- Claim principal: **"Vintage y segunda mano, entre personas reales."**
-- Apoyos: "Ropa con historia, precios justos y gente verificada." ·
-  "Moda circular, hecha en Argentina." · "Publicá gratis, sin comisiones."
+- **Comprar Y vender son gratis**: decirlo completo — "Publicá y vendé gratis,
+  sin comisiones" (nunca solo "publicá gratis").
+
+### En la app (lenguaje genérico)
+- Claim principal: **"Comprá y vendé lo que quieras, entre personas reales."**
+- Apoyos: "Personas verificadas, precios justos y cero comisiones." ·
+  "Hecho en Argentina." · "Publicá y vendé gratis, sin comisiones."
+
+### En campañas de marketing (captación del público inicial)
+- Acá SÍ va el ángulo vintage/ropa: "ropa con historia", "tesoros", "placard",
+  "moda circular", estética thrift/feria americana.
+- Las keywords SEO del sitio también pueden mantener "vintage", "ropa usada",
+  "thrift" (son invisibles para el usuario, sirven para captar).
 
 ## 4. Aplicaciones ya implementadas
 

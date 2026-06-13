@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { SubscriptionPlan } from "@prisma/client";
 import { getCurrentDbUser } from "@/lib/auth";
 import { createSubscriptionCheckout } from "@/lib/mercadopago";
+import { appBaseUrl } from "@/lib/urls";
 
 const VALID: SubscriptionPlan[] = ["PRO", "PRO_PLUS"];
 
@@ -15,7 +16,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Plan inválido" }, { status: 400 });
   }
 
-  const baseUrl = new URL(req.url).origin || process.env.NEXTAUTH_URL || "";
+  const baseUrl = appBaseUrl(req);
   try {
     const checkout = await createSubscriptionCheckout({
       plan,

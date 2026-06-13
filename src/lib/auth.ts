@@ -35,6 +35,9 @@ export const authOptions: NextAuthOptions = {
         const valid = await bcrypt.compare(credentials.password, user.passwordHash);
         if (!valid) return null;
 
+        // Cuenta suspendida por un administrador: no puede ingresar.
+        if (user.suspendedAt) return null;
+
         return {
           id: user.id,
           email: user.email,

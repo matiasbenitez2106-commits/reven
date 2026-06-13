@@ -9,6 +9,7 @@ import { runIdentityCheck } from "@/lib/identity";
 import { notifyAdmin } from "@/lib/email";
 import { notify } from "@/lib/notifications";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
+import { appBaseUrl } from "@/lib/urls";
 
 // Estado de verificación del usuario actual
 export async function GET() {
@@ -136,7 +137,7 @@ export async function POST(req: Request) {
 
   // Si queda en revisión manual, avisamos al admin
   if (status === "PENDING") {
-    const baseUrl = new URL(req.url).origin;
+    const baseUrl = appBaseUrl(req);
     await notifyAdmin(
       "🪪 Nueva verificación pendiente en trato",
       `<p>Un usuario envió documentación para verificar su identidad.</p>

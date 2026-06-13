@@ -84,12 +84,15 @@ export async function uploadPrivateImage(
  * La firma se deriva del publicId + API secret, así que la URL no es adivinable.
  * Pensada para usarse solo desde endpoints restringidos a admin.
  */
-export function signedImageUrl(publicId: string): string {
+export function signedImageUrl(publicId: string, ttlSeconds = 300): string {
   return cloudinary.url(publicId, {
     type: "authenticated",
     resource_type: "image",
     secure: true,
     sign_url: true,
+    // La URL firmada EXPIRA (por defecto 5 min): aunque se filtre el link del
+    // dossier de identidad, deja de servir el DNI poco después.
+    expires_at: Math.floor(Date.now() / 1000) + ttlSeconds,
   });
 }
 

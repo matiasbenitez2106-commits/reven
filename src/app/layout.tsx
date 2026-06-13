@@ -14,11 +14,11 @@ const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-disp
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.apptrato.com"),
   title: {
-    default: "trato — Vintage y segunda mano, entre personas verificadas",
+    default: "trato — Comprá y vendé lo que quieras, entre personas verificadas",
     template: "%s · trato",
   },
   description:
-    "trato es la comunidad de moda vintage y segunda mano de Argentina. Ropa con historia, personas verificadas, sin comisiones. Publicá gratis.",
+    "trato es el marketplace argentino para comprar y vender entre personas verificadas. Publicá y vendé gratis, sin comisiones.",
   keywords: [
     "vintage",
     "ropa usada",
@@ -35,14 +35,14 @@ export const metadata: Metadata = {
     siteName: "trato",
     locale: "es_AR",
     url: "/",
-    title: "trato — Vintage y segunda mano, entre personas reales",
+    title: "trato — Comprá y vendé lo que quieras, entre personas reales",
     description:
-      "Ropa con historia, precios justos y gente verificada. Sin comisiones, hecho en Argentina.",
+      "Personas verificadas, precios justos y cero comisiones. Hecho en Argentina.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "trato — Vintage y segunda mano",
-    description: "Ropa con historia, precios justos y gente verificada. Hecho en Argentina.",
+    title: "trato — Comprá y vendé lo que quieras",
+    description: "Personas verificadas, precios justos y cero comisiones. Hecho en Argentina.",
   },
   appleWebApp: {
     capable: true,

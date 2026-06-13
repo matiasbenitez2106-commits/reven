@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { createAuthToken } from "@/lib/tokens";
 import { sendPasswordResetEmail } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
+import { appBaseUrl } from "@/lib/urls";
 
 // Pide el reset de contraseña. Siempre responde OK (no revela si el email existe).
 export async function POST(req: Request) {
@@ -17,7 +18,7 @@ export async function POST(req: Request) {
     if (user) {
       try {
         const token = await createAuthToken(user.id, "PASSWORD_RESET");
-        const baseUrl = new URL(req.url).origin;
+        const baseUrl = appBaseUrl(req);
         await sendPasswordResetEmail(email, `${baseUrl}/restablecer?token=${token}`);
       } catch (e) {
         console.error("No se pudo enviar el email de reset:", e);

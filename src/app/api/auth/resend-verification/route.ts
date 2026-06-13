@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { createAuthToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
+import { appBaseUrl } from "@/lib/urls";
 
 // Reenvía el email de verificación al usuario logueado
 export async function POST(req: Request) {
@@ -21,7 +22,7 @@ export async function POST(req: Request) {
   if (db.emailVerified) return NextResponse.json({ ok: true, already: true });
 
   const token = await createAuthToken(user.id, "EMAIL_VERIFY");
-  const baseUrl = new URL(req.url).origin;
+  const baseUrl = appBaseUrl(req);
   await sendVerificationEmail(db.email, `${baseUrl}/verificar-email?token=${token}`);
 
   return NextResponse.json({ ok: true });

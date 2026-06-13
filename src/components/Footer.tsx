@@ -1,7 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { Logo } from "./Logo";
 
 export function Footer() {
+  const { data: session } = useSession();
+  const loggedIn = !!session?.user;
+
   return (
     <footer className="mt-16 border-t border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900">
       <div className="mx-auto max-w-6xl px-4 py-10">
@@ -11,7 +17,7 @@ export function Footer() {
               <Logo size="sm" />
             </Link>
             <p className="mt-2 max-w-xs text-sm text-gray-500 dark:text-stone-400">
-              Vintage y segunda mano entre personas verificadas. Sin comisiones.
+              Comprá y vendé lo que quieras, entre personas verificadas. Sin comisiones.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-8 text-sm sm:grid-cols-3">
@@ -25,8 +31,17 @@ export function Footer() {
             <div>
               <p className="font-medium text-gray-900 dark:text-stone-100">Cuenta</p>
               <ul className="mt-2 space-y-1 text-gray-500 dark:text-stone-400">
-                <li><Link href="/ingresar" className="hover:text-brand-600 dark:hover:text-brand-300">Ingresar</Link></li>
-                <li><Link href="/registrarse" className="hover:text-brand-600 dark:hover:text-brand-300">Crear cuenta</Link></li>
+                {loggedIn ? (
+                  <>
+                    <li><Link href="/cuenta" className="hover:text-brand-600 dark:hover:text-brand-300">Mi cuenta</Link></li>
+                    <li><Link href="/mis-publicaciones" className="hover:text-brand-600 dark:hover:text-brand-300">Mis publicaciones</Link></li>
+                  </>
+                ) : (
+                  <>
+                    <li><Link href="/ingresar" className="hover:text-brand-600 dark:hover:text-brand-300">Ingresar</Link></li>
+                    <li><Link href="/registrarse" className="hover:text-brand-600 dark:hover:text-brand-300">Crear cuenta</Link></li>
+                  </>
+                )}
                 <li><Link href="/verificacion" className="hover:text-brand-600 dark:hover:text-brand-300">Verificación</Link></li>
               </ul>
             </div>
@@ -41,7 +56,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 flex flex-col gap-2 border-t border-gray-100 dark:border-stone-800 pt-6 text-xs text-gray-400 dark:text-stone-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} trato · MVP · Hecho en Argentina 🇦🇷</p>
+          <p>© {new Date().getFullYear()} trato · Hecho en Argentina 🇦🇷</p>
           <p className="flex gap-3">
             <Link href="/terminos" className="hover:text-brand-600 dark:hover:text-brand-300">Términos</Link>
             <Link href="/privacidad" className="hover:text-brand-600 dark:hover:text-brand-300">Privacidad</Link>

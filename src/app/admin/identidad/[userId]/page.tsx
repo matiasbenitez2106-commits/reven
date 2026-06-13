@@ -27,7 +27,10 @@ export default async function IdentityDossierPage({
 }: {
   params: { userId: string };
 }) {
-  const admin = await getCurrentUser(); // el layout /admin ya exige rol ADMIN
+  // Defensa en profundidad: además del layout /admin, exigimos rol ADMIN acá
+  // mismo (esta página expone datos de identidad sensibles → DNI).
+  const admin = await getCurrentUser();
+  if (!admin || admin.role !== "ADMIN") notFound();
   const u = await prisma.user.findUnique({
     where: { id: params.userId },
     select: {

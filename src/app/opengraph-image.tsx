@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 // Imagen para previews al compartir el link del sitio (WhatsApp, redes, etc.).
 // Identidad "Curado salvia": crema + salvia + óxido, wordmark con la o-check.
 export const runtime = "edge";
-export const alt = "trato — Vintage y segunda mano, entre personas reales";
+export const alt = "trato — Comprá y vendé lo que quieras, entre personas reales";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -66,7 +66,7 @@ export default function OpengraphImage() {
           </div>
         </div>
         <div style={{ fontSize: 44, marginTop: 28, maxWidth: 960, lineHeight: 1.2 }}>
-          Vintage y segunda mano, entre personas reales
+          Comprá y vendé lo que quieras, entre personas reales
         </div>
         <div style={{ fontSize: 28, marginTop: 30, color: OXIDO, fontWeight: 600 }}>
           Identidad verificada · Sin comisiones · Hecho en Argentina

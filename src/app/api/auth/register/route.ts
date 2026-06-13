@@ -6,6 +6,7 @@ import { geocode } from "@/lib/geo";
 import { createAuthToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
+import { appBaseUrl } from "@/lib/urls";
 
 export async function POST(req: Request) {
   const limited = await enforceRateLimit(req, "register", RATE_LIMITS.register);
@@ -54,7 +55,7 @@ export async function POST(req: Request) {
   // Envío de email de verificación (no bloqueante)
   try {
     const token = await createAuthToken(user.id, "EMAIL_VERIFY");
-    const baseUrl = new URL(req.url).origin;
+    const baseUrl = appBaseUrl(req);
     await sendVerificationEmail(email, `${baseUrl}/verificar-email?token=${token}`);
   } catch (e) {
     console.error("No se pudo enviar el email de verificación:", e);

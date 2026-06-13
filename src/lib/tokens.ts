@@ -44,6 +44,13 @@ export async function consumeAuthToken(
     return null;
   }
 
-  await prisma.authToken.update({ where: { id: record.id }, data: { usedAt: new Date() } });
+  // Consumo ATÓMICO: la condición `usedAt: null` en el WHERE garantiza que solo
+  // una de varias requests concurrentes pueda marcarlo usado (evita la carrera
+  // que permitiría usar un token de un solo uso más de una vez).
+  const res = await prisma.authToken.updateMany({
+    where: { id: record.id, usedAt: null },
+    data: { usedAt: new Date() },
+  });
+  if (res.count === 0) return null; // otra request ya lo consumió
   return record.userId;
 }

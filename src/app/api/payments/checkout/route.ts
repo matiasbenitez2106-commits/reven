@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentDbUser } from "@/lib/auth";
 import { BOOST_PLANS } from "@/lib/constants";
 import { createCheckout } from "@/lib/mercadopago";
+import { appBaseUrl } from "@/lib/urls";
 
 const VALID: PaymentType[] = ["BOOST_3", "FEATURED_7", "FEATURED_14"];
 
@@ -35,7 +36,7 @@ export async function POST(req: Request) {
     data: { userId: user.id, listingId, type, amount: plan.price, status: "PENDING" },
   });
 
-  const baseUrl = new URL(req.url).origin || process.env.NEXTAUTH_URL || "";
+  const baseUrl = appBaseUrl(req);
   try {
     const checkout = await createCheckout({
       paymentId: payment.id,

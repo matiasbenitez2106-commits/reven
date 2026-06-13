@@ -15,12 +15,18 @@ export async function POST(req: Request) {
 
   const body = await req.json().catch(() => null);
   const image: unknown = body?.image;
-  const folder = ["verification", "avatars"].includes(body?.folder)
-    ? body.folder
-    : "listings";
+  // Solo carpetas PÚBLICAS válidas. "verification" (DNI/selfie) NO se acepta acá:
+  // los datos sensibles van por su propio flujo PRIVADO (uploadPrivateImage), no
+  // por este endpoint de subida pública.
+  const folder = body?.folder === "avatars" ? "avatars" : "listings";
 
   if (typeof image !== "string" || !image.startsWith("data:image/")) {
     return NextResponse.json({ error: "Imagen inválida" }, { status: 400 });
+  }
+
+  // Límite de tamaño del data URI (~8MB de imagen ≈ 11MB en base64).
+  if (image.length > 11_000_000) {
+    return NextResponse.json({ error: "La imagen es demasiado grande (máx. 8MB)." }, { status: 413 });
   }
 
   // Las fotos de publicaciones requieren identidad verificada (avatars/verification no)
