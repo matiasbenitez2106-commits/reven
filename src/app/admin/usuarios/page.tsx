@@ -129,7 +129,7 @@ export default async function AdminUsersPage({
                       href={`/admin/identidad/${u.id}`}
                       className="inline-flex items-center gap-1 rounded-lg border border-gray-200 dark:border-stone-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-stone-300 hover:bg-gray-50 dark:hover:bg-stone-800"
                     >
-                      <FileSearch className="h-3.5 w-3.5" /> Identidad
+                      <FileSearch className="h-3.5 w-3.5" /> Ver DNI
                     </Link>
                     {u.role !== "ADMIN" && (
                       <AdminUserActions userId={u.id} suspended={!!u.suspendedAt} />

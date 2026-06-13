@@ -317,7 +317,7 @@ function PhotoInput({
           <img src={value} alt={title} className="w-full rounded-lg border border-gray-200 dark:border-stone-800" />
           <button
             onClick={() => onChange(null)}
-            className="absolute right-2 top-2 flex items-center gap-1 rounded-lg bg-white/90 dark:bg-stone-900/90 px-2 py-1 text-xs font-medium shadow"
+            className="absolute right-2 top-2 flex items-center gap-1 rounded-lg bg-surface/90 dark:bg-stone-900/90 px-2 py-1 text-xs font-medium shadow"
           >
             <RotateCcw className="h-3.5 w-3.5" /> Cambiar
           </button>

@@ -48,7 +48,7 @@ export function BoostPlans({ listingId }: { listingId: string }) {
             <div
               key={type}
               className={`relative flex flex-col rounded-xl border p-5 ${
-                highlight ? "border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40" : "border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900"
+                highlight ? "border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40" : "border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900"
               }`}
             >
               {highlight && (

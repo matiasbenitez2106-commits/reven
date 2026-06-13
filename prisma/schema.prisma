@@ -362,3 +362,31 @@ model Notification {
   @@index([userId, readAt])
   @@index([userId, createdAt])
 }
+
+// Mensajes de contacto/soporte/privacidad. Se reciben por el formulario de la app
+// y aparecen en el panel de administración (además de avisarse por email al admin).
+enum SupportTopic {
+  SOPORTE
+  PRIVACIDAD
+  DENUNCIA
+  OTRO
+}
+
+enum SupportStatus {
+  OPEN
+  CLOSED
+}
+
+model SupportMessage {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  topic     SupportTopic  @default(SOPORTE)
+  message   String
+  status    SupportStatus @default(OPEN)
+  // Usuario logueado que lo envió (si corresponde)
+  userId    String?
+  createdAt DateTime      @default(now())
+
+  @@index([status, createdAt])
+}

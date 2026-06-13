@@ -11,7 +11,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { REPORT_REASON_LABELS } from "@/lib/constants";
+import { REPORT_REASON_LABELS, SUBSCRIPTION_PLANS } from "@/lib/constants";
 import { formatPrice, formatRelative } from "@/lib/utils";
 
 export const metadata = { title: "Admin" };
@@ -35,6 +35,8 @@ export default async function AdminOverviewPage() {
     proActive,
     revenueAgg,
     revenue30Agg,
+    proCount,
+    proPlusCount,
     recentReports,
     recentUsers,
   ] = await Promise.all([
@@ -48,11 +50,21 @@ export default async function AdminOverviewPage() {
     prisma.listing.count({ where: { status: "SOLD" } }),
     prisma.listing.count({ where: { status: { not: "DELETED" }, createdAt: { gte: last7 } } }),
     prisma.user.count({ where: { proUntil: { gt: now } } }),
-    prisma.payment.aggregate({ _sum: { amount: true }, where: { status: "APPROVED" } }),
+    // Ingresos REALES por destacados: pagos aprobados, excluyendo los simulados (mock).
     prisma.payment.aggregate({
       _sum: { amount: true },
-      where: { status: "APPROVED", updatedAt: { gte: last30 } },
+      where: { status: "APPROVED", NOT: { mpPaymentId: { startsWith: "mock" } } },
     }),
+    prisma.payment.aggregate({
+      _sum: { amount: true },
+      where: {
+        status: "APPROVED",
+        updatedAt: { gte: last30 },
+        NOT: { mpPaymentId: { startsWith: "mock" } },
+      },
+    }),
+    prisma.user.count({ where: { proPlan: "PRO", proUntil: { gt: now } } }),
+    prisma.user.count({ where: { proPlan: "PRO_PLUS", proUntil: { gt: now } } }),
     prisma.report.findMany({
       where: { status: "PENDING" },
       include: { listing: { select: { id: true, title: true } } },
@@ -68,6 +80,10 @@ export default async function AdminOverviewPage() {
 
   const revenueTotal = revenueAgg._sum.amount ?? 0;
   const revenue30 = revenue30Agg._sum.amount ?? 0;
+  // Ingreso recurrente mensual estimado por suscripciones activas (PRO/PRO+).
+  const mrr =
+    proCount * SUBSCRIPTION_PLANS.PRO.price + proPlusCount * SUBSCRIPTION_PLANS.PRO_PLUS.price;
+  const activeUsers = totalUsers - suspendedUsers;
 
   // Tarjetas de acción (las que requieren atención van primero y se resaltan)
   const actionCards = [
@@ -77,6 +93,7 @@ export default async function AdminOverviewPage() {
 
   const stats = [
     { label: "Usuarios", value: totalUsers, sub: `+${newUsers7} esta semana`, icon: Users, href: "/admin/usuarios" },
+    { label: "Usuarios activos", value: activeUsers, sub: `${suspendedUsers} suspendidos`, icon: CheckCircle2, href: "/admin/usuarios" },
     { label: "Verificados", value: verifiedUsers, sub: `${totalUsers ? Math.round((verifiedUsers / totalUsers) * 100) : 0}% del total`, icon: CheckCircle2, href: "/admin/usuarios" },
     { label: "Publicaciones activas", value: activeListings, sub: `+${newListings7} esta semana`, icon: Package, href: "/admin/publicaciones?estado=ACTIVE" },
     { label: "Vendidas", value: soldListings, sub: "marcadas como vendidas", icon: TrendingUp, href: "/admin/publicaciones?estado=SOLD" },
@@ -99,14 +116,25 @@ export default async function AdminOverviewPage() {
           );
         })}
 
-        {/* Ingresos (destacados aprobados) */}
-        <div className="card bg-brand-50 dark:bg-brand-900/30 p-4 sm:col-span-2">
+        {/* Ingresos por destacados (pagos únicos reales, sin simulados) */}
+        <div className="card bg-brand-50 dark:bg-brand-900/30 p-4">
           <DollarSign className="h-5 w-5 text-brand-600 dark:text-brand-300" />
           <p className="mt-2 text-2xl font-bold text-brand-800 dark:text-brand-200">
             {formatPrice(revenueTotal)}
           </p>
           <p className="text-xs text-gray-600 dark:text-stone-300">
-            Ingresos por destacados (total) · {formatPrice(revenue30)} últimos 30 días
+            Destacados (total) · {formatPrice(revenue30)} últimos 30 días
+          </p>
+        </div>
+
+        {/* Ingreso recurrente por suscripciones (MRR estimado) */}
+        <div className="card bg-indigo-50 dark:bg-indigo-950/40 p-4">
+          <Crown className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+          <p className="mt-2 text-2xl font-bold text-indigo-800 dark:text-indigo-200">
+            {formatPrice(mrr)}<span className="text-sm font-normal">/mes</span>
+          </p>
+          <p className="text-xs text-gray-600 dark:text-stone-300">
+            Suscripciones activas · {proCount} PRO · {proPlusCount} PRO+
           </p>
         </div>
       </div>

@@ -104,7 +104,7 @@ export function Navbar() {
   const lastName = user?.name?.split(" ").slice(1).join(" ");
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gray-200 dark:border-stone-800 bg-white/95 dark:bg-stone-900/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-gray-200 dark:border-stone-800 bg-surface/95 dark:bg-stone-900/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
         <Link href="/" className="flex items-center" aria-label="trato — inicio">
           <Logo size="md" />
@@ -165,7 +165,7 @@ export function Navbar() {
                 </button>
 
                 {menuOpen && (
-                  <div className="absolute right-0 mt-2 w-60 rounded-xl border border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900 py-1 shadow-lg">
+                  <div className="absolute right-0 mt-2 w-60 rounded-xl border border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900 py-1 shadow-lg">
                     <div className="border-b border-gray-100 dark:border-stone-800 px-4 py-3">
                       <p className="truncate text-sm font-medium">{user.name}</p>
                       <p className="truncate text-xs text-gray-500 dark:text-stone-400">{user.email}</p>

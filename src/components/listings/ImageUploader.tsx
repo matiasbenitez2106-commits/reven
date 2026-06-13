@@ -93,7 +93,7 @@ export function ImageUploader({
                   type="button"
                   onClick={() => makeCover(i)}
                   title="Usar como portada"
-                  className="rounded bg-white/90 dark:bg-stone-900/90 p-1 text-gray-700 dark:text-stone-200 hover:bg-white"
+                  className="rounded bg-surface/90 dark:bg-stone-900/90 p-1 text-gray-700 dark:text-stone-200 hover:bg-white"
                 >
                   <Star className="h-3.5 w-3.5" />
                 </button>
@@ -104,7 +104,7 @@ export function ImageUploader({
                 type="button"
                 onClick={() => remove(i)}
                 title="Quitar"
-                className="rounded bg-white/90 dark:bg-stone-900/90 p-1 text-red-600 dark:text-red-400 hover:bg-white"
+                className="rounded bg-surface/90 dark:bg-stone-900/90 p-1 text-red-600 dark:text-red-400 hover:bg-white"
               >
                 <X className="h-3.5 w-3.5" />
               </button>

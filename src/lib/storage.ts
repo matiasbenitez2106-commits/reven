@@ -33,6 +33,28 @@ export interface UploadResult {
   publicId: string | null;
 }
 
+/** Uso de almacenamiento/créditos de Cloudinary (para el panel de sistema). */
+export async function getCloudinaryUsage(): Promise<{
+  storageBytes: number;
+  credits: { used: number; limit: number | null } | null;
+} | null> {
+  if (!isCloudinaryConfigured()) return null;
+  try {
+    const u = (await cloudinary.api.usage()) as {
+      storage?: { usage?: number };
+      credits?: { usage?: number; limit?: number };
+    };
+    return {
+      storageBytes: u.storage?.usage ?? 0,
+      credits: u.credits
+        ? { used: u.credits.usage ?? 0, limit: u.credits.limit ?? null }
+        : null,
+    };
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Sube una imagen a partir de un Data URI (data:image/...;base64,XXXX).
  * @param dataUri  Imagen en formato data URI

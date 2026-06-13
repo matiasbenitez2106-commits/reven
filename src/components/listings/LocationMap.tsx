@@ -30,10 +30,10 @@ export function LocationMap({
   return (
     <div className="relative isolate h-48 overflow-hidden rounded-xl border border-gray-200 dark:border-stone-800">
       <OsmMap lat={lat} lng={lng} />
-      <div className="pointer-events-none absolute bottom-2 left-2 z-[1000] rounded-md bg-white/90 dark:bg-stone-900/90 px-2 py-1 text-xs text-gray-600 dark:text-stone-300 shadow-sm">
+      <div className="pointer-events-none absolute bottom-2 left-2 z-[1000] rounded-md bg-surface/90 dark:bg-stone-900/90 px-2 py-1 text-xs text-gray-600 dark:text-stone-300 shadow-sm">
         <MapPin className="mr-1 inline h-3 w-3" /> Zona aproximada · {label}
       </div>
-      <div className="pointer-events-none absolute bottom-1 right-1 z-[1000] rounded bg-white/70 dark:bg-stone-900/70 px-1 text-[9px] leading-tight text-gray-400 dark:text-stone-500">
+      <div className="pointer-events-none absolute bottom-1 right-1 z-[1000] rounded bg-surface/70 dark:bg-stone-900/70 px-1 text-[9px] leading-tight text-gray-400 dark:text-stone-500">
         © MapTiler · OpenStreetMap
       </div>
     </div>

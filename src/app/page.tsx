@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ShieldCheck, Tag, Lock, ArrowRight, UserPlus, ShoppingBag, Plus } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
@@ -11,8 +12,12 @@ import { HomeSearch } from "@/components/search/HomeSearch";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
+  // El admin es un usuario especial: va directo a su panel, no a la home de usuario.
+  const current = await getCurrentUser();
+  if (current?.role === "ADMIN") redirect("/admin");
+
   const [user, result, categories] = await Promise.all([
-    getCurrentUser(),
+    Promise.resolve(current),
     searchListings(searchSchema.parse({})),
     prisma.category.findMany({ orderBy: { order: "asc" }, select: { slug: true, name: true } }),
   ]);
@@ -40,7 +45,7 @@ export default async function Home() {
                 </Link>
                 <Link
                   href="/buscar"
-                  className="rounded-xl border border-brand-300 dark:border-brand-700 bg-white/70 dark:bg-stone-900/70 px-5 py-2.5 text-sm font-semibold text-brand-800 dark:text-brand-200 transition hover:bg-white dark:hover:bg-stone-800"
+                  className="rounded-xl border border-brand-300 dark:border-brand-700 bg-surface/70 dark:bg-stone-900/70 px-5 py-2.5 text-sm font-semibold text-brand-800 dark:text-brand-200 transition hover:bg-white dark:hover:bg-stone-800"
                 >
                   Explorar
                 </Link>
@@ -48,7 +53,7 @@ export default async function Home() {
             </>
           ) : (
             <>
-              <p className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-brand-200 dark:border-brand-700 bg-white/70 dark:bg-stone-900/70 px-3.5 py-1 text-xs font-medium text-brand-700 dark:text-brand-300">
+              <p className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-brand-200 dark:border-brand-700 bg-surface/70 dark:bg-stone-900/70 px-3.5 py-1 text-xs font-medium text-brand-700 dark:text-brand-300">
                 <ShieldCheck className="h-3.5 w-3.5" /> Hecho en Argentina 🇦🇷
               </p>
               <h1 className="text-4xl font-extrabold tracking-tight text-ink dark:text-stone-100 sm:text-5xl">
@@ -69,7 +74,7 @@ export default async function Home() {
                 </Link>
                 <Link
                   href="/buscar"
-                  className="rounded-xl border border-brand-300 dark:border-brand-700 bg-white/70 dark:bg-stone-900/70 px-6 py-3 text-sm font-semibold text-brand-800 dark:text-brand-200 transition hover:bg-white dark:hover:bg-stone-800"
+                  className="rounded-xl border border-brand-300 dark:border-brand-700 bg-surface/70 dark:bg-stone-900/70 px-6 py-3 text-sm font-semibold text-brand-800 dark:text-brand-200 transition hover:bg-white dark:hover:bg-stone-800"
                 >
                   Explorar publicaciones
                 </Link>
@@ -91,13 +96,13 @@ export default async function Home() {
       </section>
 
       {/* Categorías */}
-      <section className="mx-auto max-w-6xl px-4 py-8">
+      <section className="mx-auto max-w-6xl px-4 pb-2 pt-5">
         <div className="flex flex-wrap gap-2">
           {categories.map((c) => (
             <Link
               key={c.slug}
               href={`/buscar?category=${c.slug}`}
-              className="rounded-full border border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900 px-4 py-1.5 text-sm text-gray-700 dark:text-stone-200 transition hover:border-brand-300 dark:hover:border-brand-600 hover:text-brand-700 dark:hover:text-brand-200"
+              className="rounded-full border border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900 px-4 py-1.5 text-sm text-gray-700 dark:text-stone-200 transition hover:border-brand-300 dark:hover:border-brand-600 hover:text-brand-700 dark:hover:text-brand-200"
             >
               {c.name}
             </Link>
@@ -107,7 +112,7 @@ export default async function Home() {
 
       {/* Cómo funciona: solo para visitantes (onboarding) */}
       {!user && (
-        <section className="border-y border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900">
+        <section className="border-y border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900">
           <div className="mx-auto max-w-5xl px-4 py-10">
             <h2 className="text-center text-xl font-bold">Cómo funciona</h2>
             <p className="mt-1 text-center text-sm text-gray-500 dark:text-stone-400">
@@ -156,7 +161,7 @@ export default async function Home() {
       )}
 
       {/* Recientes */}
-      <section className="mx-auto max-w-6xl px-4 pb-12 pt-12">
+      <section className="mx-auto max-w-6xl px-4 pb-12 pt-6">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold">Publicaciones recientes</h2>
           <Link href="/buscar" className="inline-flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-300 hover:underline">

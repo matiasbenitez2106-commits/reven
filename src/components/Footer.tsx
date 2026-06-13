@@ -9,7 +9,7 @@ export function Footer() {
   const loggedIn = !!session?.user;
 
   return (
-    <footer className="mt-16 border-t border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900">
+    <footer className="mt-16 border-t border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900">
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -26,6 +26,7 @@ export function Footer() {
               <ul className="mt-2 space-y-1 text-gray-500 dark:text-stone-400">
                 <li><Link href="/buscar" className="hover:text-brand-600 dark:hover:text-brand-300">Explorar</Link></li>
                 <li><Link href="/publicar" className="hover:text-brand-600 dark:hover:text-brand-300">Publicar</Link></li>
+                <li><Link href="/contacto" className="hover:text-brand-600 dark:hover:text-brand-300">Contacto / Soporte</Link></li>
               </ul>
             </div>
             <div>

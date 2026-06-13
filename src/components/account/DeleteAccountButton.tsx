@@ -53,7 +53,7 @@ export function DeleteAccountButton() {
 
       {open && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md rounded-xl bg-white dark:bg-stone-900 p-6 shadow-xl">
+          <div className="w-full max-w-md rounded-xl bg-surface dark:bg-stone-900 p-6 shadow-xl">
             <div className="flex items-start justify-between">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-stone-100">¿Eliminar tu cuenta?</h3>
               <button

@@ -47,7 +47,7 @@ export default async function MessagesPage() {
           </p>
         </div>
       ) : (
-        <div className="divide-y divide-gray-100 dark:divide-stone-800 overflow-hidden rounded-xl border border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900">
+        <div className="divide-y divide-gray-100 dark:divide-stone-800 overflow-hidden rounded-xl border border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900">
           {convos.map((c) => {
             const other = c.buyerId === user.id ? c.seller : c.buyer;
             const last = c.messages[0];

@@ -61,7 +61,7 @@ export default async function AdminVerificationsPage() {
             <AdminVerificationViewer userId={u.id} />
             <Link
               href={`/admin/identidad/${u.id}`}
-              className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-stone-800"
+              className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 bg-surface dark:bg-stone-900 px-3 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-stone-800"
             >
               <FileText className="h-3.5 w-3.5" /> Dossier
             </Link>

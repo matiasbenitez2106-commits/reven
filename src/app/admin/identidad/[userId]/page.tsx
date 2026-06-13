@@ -116,7 +116,7 @@ export default async function IdentityDossierPage({
         </p>
       </div>
 
-      <div className="rounded-xl border border-gray-200 dark:border-stone-800 bg-white dark:bg-stone-900 p-6">
+      <div className="rounded-xl border border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900 p-6">
         <h2 className="text-xl font-bold text-gray-900 dark:text-stone-100">Dossier de identidad</h2>
         <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
           Generado el {formatDate(new Date())} · trato

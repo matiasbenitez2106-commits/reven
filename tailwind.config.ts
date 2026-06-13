@@ -37,9 +37,12 @@ const config: Config = {
           800: "#5e3520",
           900: "#412517",
         },
-        // Fondo "papel" cálido (limpio y luminoso) y tinta carbón.
-        cream: "#faf8f3",
-        ink: "#2e312a",
+        // Modo claro cálido de BAJO contraste: el fondo es una crema suave y las
+        // superficies (tarjetas, navbar) un blanco roto cálido muy cercano —
+        // se distinguen por borde/sombra sutil, sin el salto crema↔blanco puro.
+        cream: "#f4f1ea", // fondo de página
+        surface: "#fcfaf5", // tarjetas / navbar / footer
+        ink: "#2e312a", // tinta (texto)
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],

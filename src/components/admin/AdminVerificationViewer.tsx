@@ -58,7 +58,7 @@ export function AdminVerificationViewer({ userId }: { userId: string }) {
     <>
       <button
         onClick={openViewer}
-        className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-stone-800"
+        className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 bg-surface dark:bg-stone-900 px-3 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-stone-800"
       >
         <Eye className="h-3.5 w-3.5" /> Ver documentos
       </button>
@@ -69,7 +69,7 @@ export function AdminVerificationViewer({ userId }: { userId: string }) {
           onClick={() => setOpen(false)}
         >
           <div
-            className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white dark:bg-stone-900 p-6 shadow-xl"
+            className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-surface dark:bg-stone-900 p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between">

@@ -27,24 +27,29 @@ async function main() {
   }
   console.log(`✓ ${categories.length} categorías`);
 
-  // Usuario admin
-  const adminPass = await bcrypt.hash("admin1234", 10);
-  await prisma.user.upsert({
-    where: { email: "admin@reven.ar" },
-    update: {},
-    create: {
-      firstName: "Admin",
-      lastName: "trato",
-      email: "admin@reven.ar",
-      passwordHash: adminPass,
-      province: "Buenos Aires",
-      city: "CABA",
-      role: "ADMIN",
-      verification: "VERIFIED",
-      emailVerified: new Date(),
-    },
-  });
-  console.log("✓ admin@reven.ar (pass: admin1234)");
+  // Usuario admin — SOLO si se provee ADMIN_SEED_EMAIL + ADMIN_SEED_PASSWORD por env.
+  // Nunca creamos un admin con credenciales por defecto (sería un agujero en prod).
+  if (process.env.ADMIN_SEED_EMAIL && process.env.ADMIN_SEED_PASSWORD) {
+    const adminPass = await bcrypt.hash(process.env.ADMIN_SEED_PASSWORD, 10);
+    await prisma.user.upsert({
+      where: { email: process.env.ADMIN_SEED_EMAIL },
+      update: { role: "ADMIN" },
+      create: {
+        firstName: "trato",
+        lastName: "Admin",
+        email: process.env.ADMIN_SEED_EMAIL,
+        passwordHash: adminPass,
+        province: "Buenos Aires",
+        city: "CABA",
+        role: "ADMIN",
+        verification: "VERIFIED",
+        emailVerified: new Date(),
+      },
+    });
+    console.log(`✓ admin: ${process.env.ADMIN_SEED_EMAIL}`);
+  } else {
+    console.log("· (sin ADMIN_SEED_EMAIL/PASSWORD → no se crea admin)");
+  }
 
   // Usuario demo verificado, con ubicación en CABA (Obelisco)
   const demoPass = await bcrypt.hash("demo1234", 10);

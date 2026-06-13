@@ -48,7 +48,7 @@ export function SaveButton({
         onClick={toggle}
         disabled={loading}
         aria-label={fav ? "Quitar de favoritos" : "Guardar"}
-        className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 dark:bg-stone-900/90 shadow hover:bg-white"
+        className="flex h-9 w-9 items-center justify-center rounded-full bg-surface/90 dark:bg-stone-900/90 shadow hover:bg-white"
       >
         <Heart className={cn("h-4 w-4", fav ? "fill-red-500 text-red-500" : "text-gray-600 dark:text-stone-300")} />
       </button>
@@ -63,7 +63,7 @@ export function SaveButton({
         "inline-flex h-10 items-center justify-center gap-2 rounded-lg border px-4 text-sm font-medium transition disabled:opacity-50",
         fav
           ? "border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400"
-          : "border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-gray-700 dark:text-stone-200 hover:bg-gray-50 dark:hover:bg-stone-800"
+          : "border-gray-300 dark:border-stone-700 bg-surface dark:bg-stone-900 text-gray-700 dark:text-stone-200 hover:bg-gray-50 dark:hover:bg-stone-800"
       )}
     >
       <Heart className={cn("h-4 w-4", fav && "fill-current")} />

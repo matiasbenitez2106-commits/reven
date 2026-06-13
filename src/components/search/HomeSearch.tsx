@@ -21,7 +21,7 @@ export function HomeSearch() {
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder="¿Qué estás buscando? Ej: iPhone, bici, sillón..."
-        className="h-14 w-full rounded-full border border-gray-300 dark:border-stone-700 bg-white dark:bg-stone-900 pl-12 pr-28 text-base shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+        className="h-14 w-full rounded-full border border-gray-300 dark:border-stone-700 bg-surface dark:bg-stone-900 pl-12 pr-28 text-base shadow-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
       />
       <button
         type="submit"

@@ -14,7 +14,7 @@ body {
     @apply mb-1 block text-sm font-medium text-gray-700 dark:text-stone-300;
   }
   .card {
-    @apply rounded-xl border border-gray-200/80 bg-white shadow-sm dark:border-stone-800 dark:bg-stone-900 dark:shadow-none;
+    @apply rounded-xl border border-black/5 bg-surface shadow-sm dark:border-stone-800 dark:bg-stone-900 dark:shadow-none;
   }
   .field-error {
     @apply mt-1 text-xs text-red-600 dark:text-red-400;
