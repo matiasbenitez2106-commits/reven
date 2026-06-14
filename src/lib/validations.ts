@@ -14,8 +14,14 @@ export const registerSchema = z.object({
 });
 export type RegisterInput = z.infer<typeof registerSchema>;
 
+// Solo aceptamos URLs de nuestro almacenamiento (Cloudinary) o el fallback local
+// de desarrollo. Evita que se inyecten URLs externas (tracking pixel / fuga de IP
+// de quienes ven la publicación) en un <img> del sitio.
+const ownImageUrl = (u: string) =>
+  /^https:\/\/res\.cloudinary\.com\//.test(u) || u.startsWith("/uploads/");
+
 const imageInput = z.object({
-  url: z.string().min(1),
+  url: z.string().min(1).refine(ownImageUrl, "URL de imagen no permitida"),
   publicId: z.string().nullable().optional(),
 });
 
@@ -62,7 +68,12 @@ export const profileSchema = z.object({
   lastName: z.string().trim().min(2, "Ingresá tu apellido").max(50),
   province: z.string().trim().min(1, "Elegí tu provincia"),
   city: z.string().trim().min(1, "Ingresá tu ciudad"),
-  avatarUrl: z.string().max(500).optional().nullable(),
+  avatarUrl: z
+    .string()
+    .max(500)
+    .refine((u) => !u || ownImageUrl(u), "URL de avatar no permitida")
+    .optional()
+    .nullable(),
 });
 export type ProfileInput = z.infer<typeof profileSchema>;
 

@@ -5,7 +5,6 @@ import { verificationSubmitSchema } from "@/lib/validations";
 import { uploadPrivateImage } from "@/lib/storage";
 import { encrypt, hashSensitive } from "@/lib/crypto";
 import { purgeVerificationImages } from "@/lib/account";
-import { runIdentityCheck } from "@/lib/identity";
 import { notifyAdmin } from "@/lib/email";
 import { notify } from "@/lib/notifications";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
@@ -58,19 +57,20 @@ export async function POST(req: Request) {
 
   const { dniNumber, dniFront, dniBack, selfie, matchScore, livenessScore } = parsed.data;
 
-  // Número leído del PDF417 del dorso (si el navegador pudo decodificarlo): es la
-  // fuente más confiable. Lo usamos como AUTORITATIVO para el hash/almacenamiento,
-  // así nadie evade la unicidad escribiendo un número falso.
-  const rawScanned = (json as { scannedDni?: unknown })?.scannedDni;
-  const scannedDni =
-    typeof rawScanned === "string" && /^\d{7,8}$/.test(rawScanned) ? rawScanned : null;
-  const authoritativeDni = scannedDni ?? dniNumber;
+  // Límite de tamaño de cada imagen (data URI) — evita DoS / abuso de cuota de Cloudinary.
+  const MAX_IMG = 11_000_000; // ~8MB de imagen ≈ 11MB en base64
+  if (dniFront.length > MAX_IMG || dniBack.length > MAX_IMG || selfie.length > MAX_IMG) {
+    return NextResponse.json(
+      { error: "Alguna de las fotos es demasiado grande (máx. 8MB cada una)." },
+      { status: 413 }
+    );
+  }
 
   // 1 cuenta por persona física: si este Nº de DNI ya está VERIFICADO en OTRA cuenta,
   // bloqueamos. Comparamos por hash (nunca en claro). Solo contra VERIFIED para no
   // permitir que intentos PENDING ajenos "traben" (DoS) el DNI de una persona real;
   // los duplicados que queden en revisión los resuelve un admin.
-  const dniHash = hashSensitive(authoritativeDni);
+  const dniHash = hashSensitive(dniNumber);
   const dup = await prisma.verification.findFirst({
     where: { dniHash, userId: { not: user.id }, status: "VERIFIED" },
     select: { id: true },
@@ -102,42 +102,16 @@ export async function POST(req: Request) {
 
   // Decisión: si el cliente mandó scores de reconocimiento facial (face-api),
   // decidimos con ellos; si no, caemos al proveedor (mock/Onfido).
-  let status: "VERIFIED" | "REJECTED" | "PENDING";
-  let provider: string;
-  let providerRef: string | null = null;
-  let mScore: number | null;
-  let lScore: number | null;
-  let rejectionReason: string | null = null;
-
-  if (matchScore != null || livenessScore != null) {
-    provider = "face-api";
-    mScore = matchScore ?? null;
-    lScore = livenessScore ?? null;
-    if (mScore == null) {
-      status = "PENDING"; // no se detectó cara en alguna foto → revisión manual
-    } else if (mScore >= 0.5 && (lScore ?? 0) >= 0.4) {
-      status = "VERIFIED";
-    } else if (mScore < 0.4) {
-      status = "REJECTED";
-      rejectionReason = "La cara de la selfie no coincide con la del DNI.";
-    } else {
-      status = "PENDING"; // zona gris → revisión manual
-    }
-  } else {
-    const result = await runIdentityCheck({ dniNumber, dniFront, dniBack, selfie });
-    status = result.decision;
-    provider = result.provider;
-    providerRef = result.providerRef;
-    mScore = result.matchScore;
-    lScore = result.livenessScore;
-    if (status === "REJECTED") rejectionReason = "No se pudo confirmar tu identidad.";
-  }
-
-  // Si el número escrito NO coincide con el leído del documento, no auto-aprobamos:
-  // mandamos a revisión manual (posible intento de declarar un DNI ajeno).
-  if (scannedDni && scannedDni !== dniNumber && status === "VERIFIED") {
-    status = "PENDING";
-  }
+  // SEGURIDAD: los scores faciales se calculan en el NAVEGADOR (face-api), así que un
+  // cliente malicioso podría falsificarlos. NO se usan para aprobar por su cuenta: se
+  // guardan como AYUDA para el admin y TODA verificación pasa por REVISIÓN MANUAL
+  // (queda PENDING) antes de habilitar la cuenta. Ver SECURITY.md.
+  const status: "VERIFIED" | "REJECTED" | "PENDING" = "PENDING";
+  const provider = matchScore != null || livenessScore != null ? "face-api" : "manual";
+  const providerRef: string | null = null;
+  const mScore: number | null = matchScore ?? null;
+  const lScore: number | null = livenessScore ?? null;
+  const rejectionReason: string | null = null;
 
   // Purga de las imágenes del INTENTO ANTERIOR (evita duplicados/huérfanos en Cloudinary)
   if (previous) await purgeVerificationImages(previous);
@@ -151,7 +125,7 @@ export async function POST(req: Request) {
     dniFrontUrlEnc: encrypt(front.publicId ?? front.url),
     dniBackUrlEnc: encrypt(back.publicId ?? back.url),
     selfieUrlEnc: encrypt(self.publicId ?? self.url),
-    dniNumberEnc: encrypt(authoritativeDni),
+    dniNumberEnc: encrypt(dniNumber),
     dniHash,
     livenessScore: lScore,
     matchScore: mScore,
@@ -179,23 +153,13 @@ export async function POST(req: Request) {
     );
   }
 
-  if (status === "VERIFIED") {
-    await notify({
-      userId: user.id,
-      type: "VERIFICATION",
-      title: "¡Tu identidad fue verificada! ✅",
-      body: "Ya podés publicar y contactar vendedores.",
-      link: "/cuenta",
-    });
-  } else if (status === "REJECTED") {
-    await notify({
-      userId: user.id,
-      type: "VERIFICATION",
-      title: "Tu verificación fue rechazada",
-      body: "Podés reintentar con fotos más nítidas.",
-      link: "/verificacion",
-    });
-  }
+  await notify({
+    userId: user.id,
+    type: "VERIFICATION",
+    title: "Recibimos tu verificación 🪪",
+    body: "Estamos revisando tu identidad. Te avisamos apenas quede aprobada (suele ser rápido).",
+    link: "/verificacion",
+  });
 
   return NextResponse.json({ status });
 }

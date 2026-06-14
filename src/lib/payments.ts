@@ -6,10 +6,26 @@ import { BOOST_PLANS } from "./constants";
  * Idempotente: si ya está aprobado, no duplica el período.
  * El destacado se acumula (si ya estaba vigente, suma los días desde el vencimiento).
  */
-export async function approvePayment(paymentId: string, mpPaymentId?: string): Promise<boolean> {
+export async function approvePayment(
+  paymentId: string,
+  mpPaymentId?: string,
+  paidAmount?: number | null
+): Promise<boolean> {
   const payment = await prisma.payment.findUnique({ where: { id: paymentId } });
   if (!payment) return false;
   if (payment.status === "APPROVED") return true;
+
+  // Anti-fraude: el monto realmente pagado (según la API de MP) debe cubrir el
+  // precio del destacado fijado por el servidor. Si pagaron de menos, no aprobamos.
+  if (paidAmount != null && paidAmount < payment.amount) {
+    await prisma.payment
+      .update({ where: { id: paymentId }, data: { status: "REJECTED", mpPaymentId } })
+      .catch(() => {});
+    console.error(
+      `Pago ${paymentId}: monto insuficiente (pagó ${paidAmount}, requiere ${payment.amount}).`
+    );
+    return false;
+  }
 
   const plan = BOOST_PLANS[payment.type];
   const now = new Date();

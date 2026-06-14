@@ -162,12 +162,21 @@ export async function redeemIncludedBoost(
     listing.featuredUntil && listing.featuredUntil > now ? listing.featuredUntil : now;
   const featuredUntil = new Date(base.getTime() + INCLUDED_BOOST_DAYS * 86400000);
 
-  await prisma.$transaction([
-    prisma.listing.update({ where: { id: listingId }, data: { featuredUntil } }),
-    prisma.subscription.update({
-      where: { userId },
-      data: { boostsUsed: { increment: 1 } },
-    }),
-  ]);
+  // Consumo ATÓMICO del destacado: la condición boostsUsed < boostsIncluded va en el
+  // WHERE, así varias requests concurrentes no pueden gastar el mismo cupo (anti-carrera).
+  const claim = await prisma.subscription.updateMany({
+    where: {
+      userId,
+      status: "ACTIVE",
+      currentPeriodEnd: { gt: now },
+      boostsUsed: { lt: sub.boostsIncluded },
+    },
+    data: { boostsUsed: { increment: 1 } },
+  });
+  if (claim.count === 0) {
+    return { ok: false, error: "Ya usaste todos los destacados incluidos de este mes." };
+  }
+
+  await prisma.listing.update({ where: { id: listingId }, data: { featuredUntil } });
   return { ok: true };
 }

@@ -61,6 +61,36 @@ Residual / aceptado:
   revisión manual. KYC a prueba de todo requiere un proveedor server-side
   (Onfido/Didit) — stub `runOnfido` ya previsto en `src/lib/identity.ts`.
 
+## Ronda 3 (equipo de testers: 4 auditores en paralelo)
+
+Hallazgos confirmados y arreglados:
+- **CRÍTICO — auto-verificación de identidad falsificable.** Los scores faciales
+  (face-api) y el Nº de DNI se calculaban/leían en el NAVEGADOR y se usaban para
+  auto-aprobar (`VERIFIED`). Un cliente malicioso podía mandar `matchScore:0.99` y
+  un DNI ajeno → quedaba verificado y "tomaba" ese DNI (suplantación/squatting).
+  **Fix:** toda verificación queda **PENDING** y la aprueba un **admin** (los scores
+  quedan como ayuda visual). El nº de DNI lo confirma el admin contra la foto.
+- **ALTO — monto de pago no validado.** El webhook aprobaba destacados/suscripciones
+  mirando solo el `status`, sin comparar el importe pagado. **Fix:** `fetchMpPayment`
+  /`fetchMpPreapproval` ahora traen `transaction_amount`; se exige que cubra el precio
+  del plan/boost antes de aprobar.
+- **MEDIO — webhook fail-open.** Si MP estaba configurado pero faltaba
+  `MP_WEBHOOK_SECRET`, se aceptaban webhooks sin firma. **Fix:** fail-closed (rechaza).
+- **MEDIO — sin límite de tamaño en `/api/verification`** (DoS/cuota). **Fix:** 8MB por imagen.
+- **MEDIO — admin podía aprobar un DNI duplicado.** **Fix:** `verification/decision`
+  re-valida unicidad contra cuentas VERIFICADAS antes de aprobar.
+- **BAJO — carrera en destacados incluidos** (TOCTOU). **Fix:** consumo atómico con
+  guard `boostsUsed < boostsIncluded` en el `updateMany`.
+- **BAJO — URLs de imagen sin restringir** (tracking pixel / fuga de IP). **Fix:**
+  `imageInput.url` y `avatarUrl` solo aceptan `res.cloudinary.com` o `/uploads/`.
+- **Defensa en profundidad** — `/admin/*` ahora exige rol ADMIN también en el
+  middleware (antes solo el layout server-side).
+
+Verificado limpio por los testers: sin IDOR, sin escalada de privilegios, sin
+inyección SQL, sin XSS (emails escapan, JSX autoescapa), headers de seguridad
+completos, rate limiting en endpoints sensibles, tokens robustos, sin fuga de PII
+en superficies públicas, descripción oculta a invitados, borrado de cuenta estricto.
+
 ## Cómo se hizo
 
 Auditoría multi-agente (7 frentes: auth, IDOR, inyección, secretos, pagos,

@@ -23,10 +23,13 @@ export function isMpConfigured(): boolean {
 export function verifyMpWebhook(req: Request): boolean {
   const secret = process.env.MP_WEBHOOK_SECRET;
   if (!secret) {
+    // Si MP está configurado en producción pero falta el secret, es un error de
+    // configuración: NO aceptamos webhooks sin firma (fail-closed) para evitar abuso.
     if (isMpConfigured()) {
-      console.warn("MP_WEBHOOK_SECRET no configurado: no se valida la firma del webhook de MercadoPago.");
+      console.error("MP_WEBHOOK_SECRET no configurado con MercadoPago activo: se rechaza el webhook.");
+      return false;
     }
-    return true;
+    return true; // modo mock puro (sin credenciales)
   }
 
   const signature = req.headers.get("x-signature");
@@ -180,25 +183,35 @@ export async function createSubscriptionCheckout(args: {
 
 export async function fetchMpPreapproval(
   id: string
-): Promise<{ status: string; externalReference: string | null } | null> {
+): Promise<{ status: string; externalReference: string | null; amount: number | null; currency: string | null } | null> {
   if (!isMpConfigured()) return null;
   const res = await fetch(`https://api.mercadopago.com/preapproval/${id}`, {
     headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
   });
   if (!res.ok) return null;
   const data = await res.json();
-  return { status: data.status, externalReference: data.external_reference ?? null };
+  return {
+    status: data.status,
+    externalReference: data.external_reference ?? null,
+    amount: data.auto_recurring?.transaction_amount ?? null,
+    currency: data.auto_recurring?.currency_id ?? null,
+  };
 }
 
 // Consulta el estado de un pago en MercadoPago (usado por el webhook)
 export async function fetchMpPayment(
   mpPaymentId: string
-): Promise<{ status: string; externalReference: string | null } | null> {
+): Promise<{ status: string; externalReference: string | null; amount: number | null; currency: string | null } | null> {
   if (!isMpConfigured()) return null;
   const res = await fetch(`https://api.mercadopago.com/v1/payments/${mpPaymentId}`, {
     headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
   });
   if (!res.ok) return null;
   const data = await res.json();
-  return { status: data.status, externalReference: data.external_reference ?? null };
+  return {
+    status: data.status,
+    externalReference: data.external_reference ?? null,
+    amount: data.transaction_amount ?? null,
+    currency: data.currency_id ?? null,
+  };
 }

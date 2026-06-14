@@ -20,6 +20,27 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Parámetros inválidos" }, { status: 400 });
   }
 
+  // Al APROBAR, re-validamos la unicidad por DNI: no puede haber dos cuentas
+  // VERIFICADAS con el mismo documento (1 cuenta por persona física).
+  if (decision === "VERIFIED") {
+    const target = await prisma.verification.findUnique({
+      where: { userId },
+      select: { dniHash: true },
+    });
+    if (target?.dniHash) {
+      const dup = await prisma.verification.findFirst({
+        where: { dniHash: target.dniHash, userId: { not: userId }, status: "VERIFIED" },
+        select: { id: true },
+      });
+      if (dup) {
+        return NextResponse.json(
+          { error: "Ese DNI ya está verificado en otra cuenta. No se puede aprobar un duplicado." },
+          { status: 409 }
+        );
+      }
+    }
+  }
+
   // Nota: las imágenes de identidad se CONSERVAN (no se purgan al decidir) para poder
   // responder a requerimientos de la justicia/policía ante un eventual delito.
   await prisma.$transaction([
