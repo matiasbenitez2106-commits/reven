@@ -2,19 +2,28 @@ import { ImageResponse } from "next/og";
 
 // Logo de marca como PNG descargable — EXACTAMENTE el de la app (wordmark "trato"
 // con la o-check, en Bricolage Grotesque). /brand/logo → clic derecho → "Guardar".
-// El símbolo solo (la o-check) está en /icons/512.
+// Variantes por query: ?bg=light (def.) | dark | transparent. El símbolo solo
+// (la o-check) está en /icons/512.
 export const runtime = "edge";
 
 const SALVIA = "#66785B";
 const CREMA = "#F4F1EA";
 const TINTA = "#2E312A";
 const SURFACE = "#FCFAF5";
+const DARK = "#1C1917";
+const WHITE = "#FAF7F2";
 
 // Font real del logo (Bricolage Grotesque 700) desde un CDN estable.
 const FONT_URL =
   "https://cdn.jsdelivr.net/fontsource/fonts/bricolage-grotesque@latest/latin-700-normal.ttf";
 
-export async function GET() {
+export async function GET(request: Request) {
+  const theme = new URL(request.url).searchParams.get("bg") || "light";
+  // En oscuro/transparente el wordmark va en blanco; en claro, en tinta.
+  const textColor = theme === "light" ? TINTA : WHITE;
+  const background =
+    theme === "dark" ? DARK : theme === "transparent" ? "transparent" : SURFACE;
+
   let fonts: { name: string; data: ArrayBuffer; weight: 700; style: "normal" }[] = [];
   try {
     const data = await fetch(FONT_URL).then((r) => r.arrayBuffer());
@@ -32,11 +41,11 @@ export async function GET() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: SURFACE,
+          background,
           fontFamily: "Bricolage",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", color: TINTA }}>
+        <div style={{ display: "flex", alignItems: "center", color: textColor }}>
           <div style={{ fontSize: 180, fontWeight: 700, letterSpacing: -7, display: "flex" }}>
             trat
           </div>
