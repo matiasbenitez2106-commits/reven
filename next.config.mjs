@@ -33,6 +33,16 @@ const nextConfig = {
           },
         ],
       },
+      // Pantallas/respuestas que muestran datos de identidad (DNI/selfie): el
+      // navegador NO debe cachearlas, para que no queden en el equipo del admin.
+      {
+        source: "/admin/identidad/:path*",
+        headers: [{ key: "Cache-Control", value: "no-store" }],
+      },
+      {
+        source: "/api/admin/verification/:path*",
+        headers: [{ key: "Cache-Control", value: "no-store" }],
+      },
     ];
   },
 };

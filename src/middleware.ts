@@ -4,9 +4,13 @@ import { withAuth } from "next-auth/middleware";
 // para publicar/contactar) se chequea a nivel de página/endpoint con mensajes claros.
 export default withAuth({
   callbacks: {
-    // /admin exige rol ADMIN ya en el borde (además del guard del layout server-side).
+    // /admin y /api/admin exigen rol ADMIN ya en el borde (red de seguridad
+    // además del guard del layout y de cada endpoint).
     authorized: ({ token, req }) => {
-      if (req.nextUrl.pathname.startsWith("/admin")) return token?.role === "ADMIN";
+      const path = req.nextUrl.pathname;
+      if (path.startsWith("/admin") || path.startsWith("/api/admin")) {
+        return token?.role === "ADMIN";
+      }
       return !!token;
     },
   },
@@ -25,5 +29,6 @@ export const config = {
     "/favoritos/:path*",
     "/suscripcion/:path*",
     "/admin/:path*",
+    "/api/admin/:path*",
   ],
 };
