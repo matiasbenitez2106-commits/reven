@@ -45,6 +45,10 @@ export const authOptions: NextAuthOptions = {
           role: user.role,
           verification: user.verification,
           emailVerified: !!user.emailVerified,
+          // En proceso de baja (gracia): se expone para el portero y la pantalla.
+          deletionScheduledFor: user.deletionScheduledFor
+            ? user.deletionScheduledFor.toISOString()
+            : null,
         };
       },
     }),
@@ -56,17 +60,28 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role;
         token.verification = user.verification;
         token.emailVerified = !!user.emailVerified;
+        token.deletionScheduledFor = user.deletionScheduledFor;
       } else if (trigger === "update" && token.id) {
         // Refresca verificación, email y nombre cuando se llama a session.update()
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { role: true, verification: true, firstName: true, lastName: true, emailVerified: true },
+          select: {
+            role: true,
+            verification: true,
+            firstName: true,
+            lastName: true,
+            emailVerified: true,
+            deletionScheduledFor: true,
+          },
         });
         if (dbUser) {
           token.role = dbUser.role;
           token.verification = dbUser.verification;
           token.emailVerified = !!dbUser.emailVerified;
           token.name = `${dbUser.firstName} ${dbUser.lastName}`;
+          token.deletionScheduledFor = dbUser.deletionScheduledFor
+            ? dbUser.deletionScheduledFor.toISOString()
+            : null;
         }
       }
       return token;
@@ -77,6 +92,7 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role;
         session.user.verification = token.verification;
         session.user.emailVerified = token.emailVerified;
+        session.user.deletionScheduledFor = token.deletionScheduledFor;
       }
       return session;
     },

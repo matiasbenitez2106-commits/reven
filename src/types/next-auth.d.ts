@@ -8,6 +8,9 @@ declare module "next-auth" {
       role: Role;
       verification: VerificationStatus;
       emailVerified: boolean;
+      // Fecha de borrado programada (período de gracia). Si tiene valor → la
+      // persona está "en proceso de baja". Vacío (null) → cuenta normal.
+      deletionScheduledFor: string | null;
     } & DefaultSession["user"];
   }
 
@@ -15,6 +18,7 @@ declare module "next-auth" {
     role: Role;
     verification: VerificationStatus;
     emailVerified: boolean;
+    deletionScheduledFor: string | null;
   }
 }
 
@@ -24,5 +28,6 @@ declare module "next-auth/jwt" {
     role: Role;
     verification: VerificationStatus;
     emailVerified: boolean;
+    deletionScheduledFor: string | null;
   }
 }
