@@ -68,10 +68,15 @@ dar cumplimiento a una orden legal o para resolver el caso que generó el bloque
 Una vez que el caso se resuelve definitivamente, los datos siguen el proceso
 normal de eliminación.
 
-> Nota para el equipo legal: el enfoque general de esta política fue revisado y
-> aprobado por el abogado del proyecto. Falta confirmar con él la redacción fina
-> de los plazos exactos (los 90 días) y el mecanismo preciso de la excepción de
-> bloqueo, antes de incorporar esos textos a los documentos legales públicos.
+> Nota para el equipo legal: el abogado del proyecto ya revisó y confirmó la
+> redacción fina de los plazos (los 90 días) y el mecanismo preciso de la
+> excepción de bloqueo. Lo aprobado es la redacción de esos puntos. Sin embargo,
+> incorporar esos textos a los documentos legales públicos (Términos y
+> Condiciones y Política de Privacidad) sigue pendiente: primero hay que
+> actualizar el código de la app para que el borrado funcione en dos fases como
+> describe esta política. Hoy el código borra la cuenta al instante, no respeta
+> los 90 días. Hasta que eso esté implementado, los textos públicos no deben
+> reflejar este comportamiento porque generarían una promesa que la app no cumple.
 
 ---
 
@@ -133,9 +138,9 @@ para mantener la confianza de los usuarios de trato.
 | Punto | Estado |
 |---|---|
 | Enfoque general de retención y baja de datos | Revisado y aprobado por el abogado del proyecto |
-| Redacción fina de los plazos (los 90 días) | Pendiente de confirmar con el abogado |
-| Redacción fina de la excepción de bloqueo | Pendiente de confirmar con el abogado |
-| Incorporación a los textos legales públicos (T&C y Privacidad) | Pendiente (espera confirmación legal) |
+| Redacción fina de los plazos (los 90 días) | Confirmado / aprobado por el abogado del proyecto |
+| Redacción fina de la excepción de bloqueo | Confirmado / aprobado por el abogado del proyecto |
+| Incorporación a los textos legales públicos (T&C y Privacidad) | Pendiente — requiere que la app implemente el borrado en dos fases (90 días); hoy el código borra al instante |
 | Requisitos para reconocimiento facial | Definidos internamente, sin revisión legal aún |
 
 ---
