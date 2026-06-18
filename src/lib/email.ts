@@ -154,3 +154,65 @@ export async function sendSubscriptionCancelledEmail(
     ),
   });
 }
+
+// ── Baja de cuenta en dos fases (ver docs/plan-borrado-dos-fases.md) ──
+// Solo los textos + el molde de marca. Todavía NO se llaman desde ningún lado
+// (eso es del Paso 3 en adelante).
+
+/** Email 1 — Aviso de baja solicitada (cuenta en pausa 90 días, reactivable). */
+export async function sendBajaSolicitadaEmail(
+  to: string,
+  name: string,
+  reactivateUrl: string,
+  deletionDate: Date
+): Promise<void> {
+  await sendEmail({
+    to,
+    subject: "Todavía estás a tiempo de volver a trato",
+    html: wrap(
+      `<p>Hola ${escapeHtml(name)}:</p>
+       <p>Recibimos tu pedido de dar de baja tu cuenta en trato. Lo primero, para que te quedes tranquilo/a: <strong>tu cuenta todavía no se borró</strong>.</p>
+       <p>La dejamos <strong>en pausa durante 90 días</strong>. En ese tiempo no aparecés en la plataforma y tus publicaciones quedan ocultas, pero <strong>no perdiste nada</strong>. Si te arrepentís, podés reactivar tu cuenta con un clic y vuelve todo como estaba (tus publicaciones se reactivan solas).</p>
+       <p><a href="${reactivateUrl}" style="display:inline-block;background:#66785B;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Reactivar mi cuenta</a></p>
+       <p style="color:#666;font-size:13px">O pegá este link: ${reactivateUrl}</p>
+       <p>Si no hacés nada, el <strong>${fmtFecha(deletionDate)}</strong> vamos a <strong>borrar de forma definitiva todos tus datos y tu información de verificación</strong>. Eso no se puede deshacer.</p>
+       <p>Gracias por haber sido parte. Acá vamos a estar si querés volver. 💚<br/>— El equipo de trato</p>`
+    ),
+  });
+}
+
+/** Email 2 — Recordatorio unos días antes del borrado definitivo. */
+export async function sendBajaRecordatorioEmail(
+  to: string,
+  name: string,
+  reactivateUrl: string,
+  deletionDate: Date
+): Promise<void> {
+  await sendEmail({
+    to,
+    subject: "Te quedan pocos días para recuperar tu cuenta de trato",
+    html: wrap(
+      `<p>Hola ${escapeHtml(name)}:</p>
+       <p>Te escribimos para recordarte que pediste dar de baja tu cuenta en trato y que <strong>el plazo está por cumplirse</strong>: el <strong>${fmtFecha(deletionDate)}</strong> vamos a borrar definitivamente tus datos. Faltan pocos días.</p>
+       <p>Si cambiaste de idea, <strong>todavía estás a tiempo</strong>: reactivá tu cuenta y sigue todo como estaba, sin perder nada.</p>
+       <p><a href="${reactivateUrl}" style="display:inline-block;background:#66785B;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Reactivar mi cuenta</a></p>
+       <p style="color:#666;font-size:13px">O pegá este link: ${reactivateUrl}</p>
+       <p>Si preferís que se borre, no tenés que hacer nada: va a pasar solo en la fecha indicada.</p>
+       <p>— El equipo de trato</p>`
+    ),
+  });
+}
+
+/** Email 3 — Confirmación final, una vez borrada la cuenta. */
+export async function sendCuentaBorradaEmail(to: string, name: string): Promise<void> {
+  await sendEmail({
+    to,
+    subject: "Listo: borramos tus datos de trato",
+    html: wrap(
+      `<p>Hola ${escapeHtml(name)}:</p>
+       <p>Cumplimos con lo que nos pediste: <strong>borramos de forma definitiva tu cuenta y todos tus datos</strong>, incluida tu información de verificación. Ya no queda nada guardado, y este borrado <strong>es permanente</strong>.</p>
+       <p>Si algún día querés volver, vas a poder crear una cuenta nueva desde cero cuando quieras. Te vamos a estar esperando.</p>
+       <p>Gracias por haber sido parte de trato. 💚<br/>— El equipo de trato</p>`
+    ),
+  });
+}
