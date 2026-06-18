@@ -1,13 +1,15 @@
 # Plan: borrado de cuenta en dos fases
 
-_Última actualización: 17 de junio de 2026_
+_Última actualización: 18 de junio de 2026_
 
-> **Este documento es un plan, no una implementación.** Nada de lo que se describe
-> aquí fue programado todavía. Sirve para tener claro qué hay que construir, en qué
-> orden y por qué, antes de escribir una sola línea de código.
+> **Este es el plan de la baja de cuenta en dos fases de trato.** Los pasos 1 a 6 ya
+> están implementados y probados localmente; falta subirlos a producción. El paso 7
+> (robot diario) está en construcción. El paso 8 (actualizar los textos legales:
+> Términos y Condiciones y Política de Privacidad) sigue siendo el último y todavía
+> está pendiente.
 >
-> Una vez que todo esté funcionando, el último paso será actualizar los textos legales
-> públicos (Términos y Condiciones y Política de Privacidad). No antes.
+> Los textos legales públicos se actualizan recién al final, cuando todo lo anterior
+> esté funcionando y probado. No antes.
 
 ---
 
@@ -275,14 +277,62 @@ Implementar la lógica de denuncia abierta → cuenta bloqueada, y la resolució
 manual por el admin. Probar el flujo completo de bloqueo y desbloqueo.
 
 **Paso 7 — Robot diario**
-Este es el paso más delicado porque actúa solo y borra para siempre.
 
-Se hace en dos etapas:
-- Primero en modo "ensayo": el robot corre, detecta qué cuentas borraría, pero solo
-  lo registra en un log (un registro de actividad) sin borrar nada. Se revisa ese
-  registro para confirmar que la selección es correcta.
-- Cuando el modo ensayo da resultados correctos durante varios días, se activa el
-  borrado real.
+Este es el paso más delicado porque actúa solo y borra para siempre. Todo lo anterior (pasos 1 al 6) ya tiene que estar funcionando antes de arrancar este.
+
+**Qué crea este paso**
+
+Se construyen dos cosas nuevas:
+
+- **El endpoint del robot:** una dirección web privada dentro de la app que, cuando se la llama, ejecuta toda la rutina de borrado. Un endpoint es como un botón interno que se puede accionar desde afuera si se tiene la clave correcta.
+- **El despertador (Vercel Cron):** una instrucción que le dice a Vercel "llamá a ese endpoint una vez por día, a tal hora". Se configura en un archivo `vercel.json` y requiere el plan Vercel Pro. Se activa recién cuando todo esté probado y listo para producción.
+
+Importante: el endpoint se puede construir y probar a mano ahora mismo, llamándolo directamente, sin necesitar el despertador. El despertador solo suma la automatización diaria al final.
+
+**Qué se reutiliza de lo que ya existe**
+
+No se construye todo desde cero. El robot aprovecha piezas que ya están hechas:
+
+- La **función de borrado real** (`deleteUserAccount`): borra imágenes de Cloudinary y elimina todos los datos del usuario en cascada (incluyendo el borrado estricto del DNI).
+- Los **emails 2 y 3**: el recordatorio previo al borrado y la confirmación final ya están escritos. El robot solo decide cuándo dispararlos.
+- La **función que arma la URL base** para los links que van dentro de esos emails.
+- El **campo `deletionReminderSentAt`** en la base: ya se agregó en el Paso 1. Sirve para que el recordatorio (email 2) salga una sola vez por cuenta, no una vez por día.
+
+**Cómo decide el robot qué cuentas borrar**
+
+Antes de borrar, revisa las cuentas en proceso de baja y aplica tres condiciones a la vez. Las tres tienen que cumplirse:
+
+1. **Cumplió los 90 días:** la fecha programada de borrado ya pasó.
+2. **No se reactivó:** esa fecha sigue guardada en la cuenta. Cuando alguien reactiva, esa fecha se borra o queda vacía, y el robot la saltea.
+3. **No está bloqueada por denuncia:** la marca de bloqueo está vacía. Las bloqueadas las resuelve un admin a mano; el robot nunca las toca.
+
+**Red de seguridad antes de borrar cada cuenta**
+
+Justo antes de borrar cada cuenta (no al principio de la rutina, sino en ese momento exacto), el robot vuelve a chequear si la cuenta tiene una denuncia abierta.
+
+Esto cubre el caso del estafador: alguien que pidió la baja para "escaparse" con los datos borrados, pero durante los 90 días alguien lo denunció. Si el robot detecta esa denuncia al momento de borrar, no borra: en cambio le pone la marca de bloqueo y la deja para que un admin la revise. Es la segunda red de seguridad contra ese escenario.
+
+**Cuándo manda los emails (solo en modo real)**
+
+- **Email 2 — Recordatorio:** cuando a una cuenta le faltan aproximadamente 7 días para el borrado. Sale una sola vez gracias al campo `deletionReminderSentAt`: el robot lo marca cuando manda el correo, y en las corridas siguientes lo saltea.
+- **Email 3 — Confirmación de borrado:** después de que el robot efectivamente borró la cuenta.
+- El **email 1** (aviso inicial) no lo manda el robot: lo manda el sistema cuando la persona pide la baja (Paso 3).
+
+**El interruptor: modo ensayo y modo real**
+
+El robot tiene un interruptor controlado por una variable de entorno (una clave de configuración que vive en Vercel, nunca en el código):
+
+- **Apagado (modo ensayo, por defecto):** detecta qué cuentas borraría y lo anota en el log, pero no borra nada y no manda ningún email. El efecto hacia afuera es cero.
+- **Encendido (modo real):** borra de verdad y manda los emails.
+
+El plan es dejarlo en ensayo varios días, revisar el log, y recién entonces encenderlo desde el panel de Vercel (sin tocar el código). Si hay dudas, se vuelve a apagar al instante.
+
+Hay una segunda variable de entorno que actúa como llave: solo quien tenga esa clave (`CRON_SECRET`) puede llamar al endpoint del robot. Nadie ajeno puede dispararlo. Las claves de entorno nunca van al repositorio.
+
+**Decisiones ya tomadas**
+
+- El modo ensayo no manda emails. El efecto hacia afuera es cero hasta encender el modo real.
+- El campo `deletionReminderSentAt` garantiza que el recordatorio salga una sola vez por cuenta.
 
 **Paso 8 — Actualizar textos legales (T&C + Privacidad)**
 Solo cuando todo lo anterior funciona y está probado. Se actualizan los textos
