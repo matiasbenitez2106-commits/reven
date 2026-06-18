@@ -105,11 +105,13 @@ export async function DELETE(req: Request) {
   if (openReports > 0) {
     // Datos congelados (legalHoldAt), publicaciones pausadas, SIN fecha de borrado
     // y SIN Email 1. El borrado lo decidirá un admin a mano (Paso 6).
+    const now = new Date();
     await prisma.$transaction([
-      prisma.user.update({ where: { id: user.id }, data: { legalHoldAt: new Date() } }),
+      prisma.user.update({ where: { id: user.id }, data: { legalHoldAt: now } }),
       prisma.listing.updateMany({
         where: { sellerId: user.id, status: "ACTIVE" },
-        data: { status: "PAUSED" },
+        // Marcamos que LA BAJA las pausó, para despausar solo estas al reactivar.
+        data: { status: "PAUSED", deletionPausedAt: now },
       }),
     ]);
     return NextResponse.json({
@@ -132,7 +134,8 @@ export async function DELETE(req: Request) {
     }),
     prisma.listing.updateMany({
       where: { sellerId: user.id, status: "ACTIVE" },
-      data: { status: "PAUSED" },
+      // Marcamos que LA BAJA las pausó, para despausar solo estas al reactivar.
+      data: { status: "PAUSED", deletionPausedAt: now },
     }),
   ]);
 
