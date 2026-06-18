@@ -94,6 +94,7 @@ model User {
   deletionRequestedAt  DateTime? // cuándo el usuario pidió la baja
   deletionScheduledFor DateTime? // fecha de borrado definitivo (pedido + 90 días)
   legalHoldAt          DateTime? // marca de "bloqueada por motivo legal" (null = no bloqueada)
+  deletionReminderSentAt DateTime? // cuándo se mandó el email recordatorio (para no repetirlo)
   // Suscripción de vendedor (desnormalizado para ranking/badge)
   proPlan      SubscriptionPlan?
   proUntil     DateTime?
