@@ -89,6 +89,11 @@ model User {
   avatarUrl    String?
   // Suspensión por un admin: bloquea el login y pausa sus publicaciones
   suspendedAt  DateTime?
+  // Baja de cuenta en dos fases (ver docs/plan-borrado-dos-fases.md). Todos
+  // opcionales y vacíos por defecto: NO afectan a las cuentas existentes.
+  deletionRequestedAt  DateTime? // cuándo el usuario pidió la baja
+  deletionScheduledFor DateTime? // fecha de borrado definitivo (pedido + 90 días)
+  legalHoldAt          DateTime? // marca de "bloqueada por motivo legal" (null = no bloqueada)
   // Suscripción de vendedor (desnormalizado para ranking/badge)
   proPlan      SubscriptionPlan?
   proUntil     DateTime?
