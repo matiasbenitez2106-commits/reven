@@ -3,6 +3,7 @@ import { Search, ShieldCheck, Crown, FileSearch } from "lucide-react";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { AdminUserActions } from "@/components/admin/AdminUserActions";
+import { CompleteDeletionButton } from "@/components/admin/CompleteDeletionButton";
 import { formatRelative } from "@/lib/utils";
 
 export const metadata = { title: "Usuarios · Admin" };
@@ -242,6 +243,14 @@ export default async function AdminUsersPage({
                     </Link>
                     {u.role !== "ADMIN" && (
                       <AdminUserActions userId={u.id} suspended={!!u.suspendedAt} />
+                    )}
+                    {/* NUEVO: completar baja, solo en cuentas bloqueadas. */}
+                    {u.legalHoldAt && (
+                      <CompleteDeletionButton
+                        userId={u.id}
+                        email={u.email}
+                        openReports={openReportsBySeller.get(u.id) ?? 0}
+                      />
                     )}
                   </div>
                 </td>
