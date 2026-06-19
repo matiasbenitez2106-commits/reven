@@ -87,7 +87,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
 
   // (6) Borrado real reutilizando la función existente (Cloudinary + cascada).
   try {
-    await deleteUserAccount(target.id);
+    await deleteUserAccount(target.id, { requireNoOpenReports: true });
   } catch (e) {
     // El error completo queda en el LOG del servidor (para diagnóstico). Al admin
     // le devolvemos solo un texto genérico, sin exponer detalles internos

@@ -12,11 +12,9 @@ import { appBaseUrl } from "@/lib/urls";
 //   - ENCENDIDO (modo REAL): borra de verdad, bloquea las que tengan denuncias y manda
 //     los emails 2 (recordatorio) y 3 (confirmación).
 //
-// ⚠️ PENDIENTE ANTES DE ACTIVAR EL MODO REAL (ACCOUNT_DELETION_LIVE=true):
-//    reforzar la re-verificación de denuncias DENTRO de deleteUserAccount (último chequeo
-//    antes del delete) para cerrar la ventana TOCTOU entre el conteo de denuncias y el
-//    borrado. Hoy el chequeo está en este archivo, justo antes de borrar; falta la barrera
-//    final dentro de la función de borrado. No activar el modo real sin esto.
+// La re-verificación de denuncias se hace además DENTRO de deleteUserAccount (última
+// barrera, antes de tocar nada), pasándole { requireNoOpenReports: true } — cierra la
+// ventana TOCTOU entre el conteo de denuncias y el borrado.
 export const dynamic = "force-dynamic";
 
 // Tope de borrados por corrida (red contra timeouts). El resto queda para la corrida
@@ -93,7 +91,8 @@ async function runRobot(req: Request) {
         const nombre = `${datos.firstName} ${datos.lastName}`.trim();
 
         // Borrado real reusando la función existente (Cloudinary + cascada).
-        await deleteUserAccount(u.id);
+        // requireNoOpenReports: última barrera anti-TOCTOU (re-chequea denuncias adentro).
+        await deleteUserAccount(u.id, { requireNoOpenReports: true });
         borradas++;
         console.warn(`[cron:account-deletion] ${u.id}: BORRADA`);
 

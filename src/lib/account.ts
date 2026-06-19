@@ -51,7 +51,24 @@ export async function purgeVerificationImages(v: VerificationImageFields): Promi
  *    publicaciones, mensajes, conversaciones, favoritos, denuncias, pagos,
  *    suscripción, tokens y notificaciones.
  */
-export async function deleteUserAccount(userId: string): Promise<void> {
+export async function deleteUserAccount(
+  userId: string,
+  opts?: { requireNoOpenReports?: boolean }
+): Promise<void> {
+  // BARRERA (última, antes de destruir nada): si el llamador lo pide, re-verificamos
+  // denuncias abiertas JUSTO acá. Si hay alguna, cortamos sin tocar Cloudinary ni la base
+  // (cierra la ventana TOCTOU del robot). Ver docs/plan-borrado-dos-fases.md.
+  if (opts?.requireNoOpenReports) {
+    const open = await prisma.report.count({
+      where: { status: "PENDING", listing: { sellerId: userId } },
+    });
+    if (open > 0) {
+      throw new Error(
+        `No se puede borrar: la cuenta tiene ${open} denuncia(s) abierta(s). Se mantiene para revisión.`
+      );
+    }
+  }
+
   const [verification, listingImages, user] = await Promise.all([
     prisma.verification.findUnique({
       where: { userId },
