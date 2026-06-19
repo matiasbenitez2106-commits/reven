@@ -72,7 +72,7 @@ export async function DELETE(_req: Request, { params }: { params: { id: string }
   } catch (e) {
     console.error("Admin delete user error:", e);
     return NextResponse.json(
-      { error: e instanceof Error ? e.message : "No se pudo eliminar la cuenta." },
+      { error: "No se pudo eliminar la cuenta." },
       { status: 500 }
     );
   }
