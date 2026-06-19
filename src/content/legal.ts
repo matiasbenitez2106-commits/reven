@@ -174,7 +174,7 @@ export const PRIVACY_DOC: LegalDocContent = {
       heading: "Baja de cuenta: qué pasa con tus datos",
       body: [
         "Cuando pedís la baja de tu cuenta, los datos no se eliminan de inmediato. Tu cuenta entra en un período de pausa de 90 días corridos: durante ese tiempo deja de ser visible en la plataforma, tus publicaciones quedan ocultas y no podés operar. Sin embargo, los datos siguen existiendo en nuestros sistemas hasta que se cumpla ese plazo.",
-        "Durante los 90 días podés reactivar tu cuenta iniciando sesión. Si lo hacés, la cuenta vuelve al estado en que estaba: tus publicaciones se muestran de nuevo de forma automática y podés seguir usando trato normalmente.",
+        "Durante los 90 días podés reactivar tu cuenta: al iniciar sesión te llevamos a una pantalla de aviso desde la que podés reactivarla con un clic. Cuando lo hacés, la cuenta vuelve al estado en que estaba —tus publicaciones se muestran de nuevo de forma automática— y podés seguir usando trato normalmente.",
         "Si no reactivás y no existe ninguna denuncia o disputa abierta en tu contra, al cumplirse el plazo un proceso automático elimina de forma definitiva e irreversible todos tus datos, incluyendo la información de verificación de identidad (número de DNI, fotos del documento y selfie), y da de baja esas imágenes del almacenamiento donde se guardan (Cloudinary). Este borrado no se puede deshacer.",
         "Mientras tu cuenta está en pausa, tu email y tu número de DNI quedan reservados: como la cuenta todavía existe en nuestros sistemas, ninguna otra persona puede registrarse con ese mismo email ni con ese mismo DNI. Esa reserva se libera cuando el borrado se completa o si reactivás la cuenta.",
         "Si al momento de pedir la baja —o en cualquier momento durante los 90 días— hay una denuncia o disputa abierta en tu contra, la cuenta no se borra de forma automática: queda bloqueada y los datos se retienen hasta que el asunto se resuelva. Una vez resuelto, el equipo de trato decide manualmente si procede el borrado. Más detalle sobre este punto en la sección “Cooperación con autoridades y prevención de fraude”.",
@@ -276,6 +276,23 @@ export const TERMS_DOC: LegalDocContent = {
         "Sos responsable de mantener la confidencialidad de tus credenciales.",
         "Sos responsable de toda actividad realizada desde tu cuenta.",
         "Está prohibido suplantar la identidad de otra persona o crear cuentas en nombre de terceros sin autorización.",
+      ],
+    },
+    {
+      heading: "Baja de tu cuenta",
+      body: [
+        "Podés pedir la baja de tu cuenta cuando quieras, directamente desde la app. Sin embargo, la baja no es inmediata: cuando la solicitás, tu cuenta entra en un período de pausa de 90 días corridos. Durante ese tiempo deja de aparecer en la plataforma, tus publicaciones quedan ocultas y no podés operar con normalidad.",
+        "Durante esos 90 días podés reactivar tu cuenta: al iniciar sesión te llevamos a una pantalla desde la que podés reactivarla. Cuando lo hacés, todo vuelve al estado en que estaba y tus publicaciones se muestran de nuevo de forma automática, sin que tengas que hacer nada más.",
+        "Si no reactivás la cuenta antes de que se cumplan los 90 días y no existe ninguna denuncia o disputa abierta en tu contra, tu cuenta y todos los datos asociados se eliminan de forma definitiva e irreversible. Este borrado no se puede deshacer.",
+        "Si al momento de pedir la baja —o en cualquier momento durante los 90 días de pausa— existe una denuncia o disputa abierta en tu contra, la baja no se completa de forma automática: la cuenta queda bloqueada y los datos se retienen hasta que el asunto se resuelva. Una vez resuelto, el equipo de trato decide si procede el borrado.",
+        "Para el detalle de qué pasa con cada dato durante y después de este proceso (incluida la información de verificación de identidad), consultá la sección “Baja de cuenta: qué pasa con tus datos” de nuestra Política de Privacidad.",
+      ],
+      bullets: [
+        "La baja no es inmediata: tu cuenta entra en pausa por 90 días corridos.",
+        "Durante ese período, tu cuenta y tus publicaciones dejan de ser visibles.",
+        "Podés reactivarla en cualquier momento dentro de esos 90 días: iniciás sesión y la reactivás desde la pantalla de aviso.",
+        "Si no reactivás y no hay denuncias, al cumplirse el plazo el borrado es definitivo e irreversible.",
+        "Si hay una denuncia o disputa abierta, la baja queda suspendida hasta que se resuelva.",
       ],
     },
     {
