@@ -334,6 +334,58 @@ Hay una segunda variable de entorno que actúa como llave: solo quien tenga esa 
 - El modo ensayo no manda emails. El efecto hacia afuera es cero hasta encender el modo real.
 - El campo `deletionReminderSentAt` garantiza que el recordatorio salga una sola vez por cuenta.
 
-**Paso 8 — Actualizar textos legales (T&C + Privacidad)**
-Solo cuando todo lo anterior funciona y está probado. Se actualizan los textos
-públicos para reflejar el mecanismo completo.
+**Paso 8 — Actualizar los textos legales (Términos y Condiciones + Política de Privacidad)**
+
+> **Este es un plan.** El texto legal final todavía NO está redactado. Se redactará recién después de que un abogado revise el enfoque descripto acá y apruebe cada punto. Solo entonces se publicará.
+
+Solo cuando todo lo anterior (pasos 1 a 7) funciona y está probado en producción, se actualizan los textos legales públicos. El motivo es simple: no tiene sentido publicar promesas legales sobre algo que todavía no está funcionando.
+
+Hoy los Términos y Condiciones y la Política de Privacidad describen la baja de cuenta como si fuera inmediata. Hay que reescribir las partes relevantes para reflejar lo que el sistema realmente hace: 90 días de gracia, reactivación posible, bloqueo si hay denuncia, y borrado definitivo (incluida la verificación de DNI y selfie) al final del plazo si no hubo reactivación ni hay denuncias. Todos estos cambios van al archivo `src/content/legal.ts`.
+
+**Cambios en la Política de Privacidad (`PRIVACY_DOC` en `src/content/legal.ts`)**
+
+- **P1 — AGREGAR una sección nueva: "Baja de cuenta: qué pasa con tus datos"**
+  Va junto al bloque de conservación de datos que ya existe. Describe el ciclo completo: la cuenta entra en pausa 90 días, es reactivable en ese plazo, y si no se reactiva se borran todos los datos al final (incluyendo las imágenes de verificación de DNI y selfie almacenadas en Cloudinary). Si hay una denuncia o disputa, en cambio, la cuenta no se borra: queda bloqueada con los datos retenidos hasta que el asunto se resuelva.
+
+- **P2 — REEMPLAZAR frases en "Plazos de conservación de los datos"**
+  Hoy esa sección suena a borrado inmediato. Hay que corregir los puntos referidos a datos de cuenta e imágenes de DNI y selfie: sacar la expresión vaga de "plazo prudencial" y poner el plazo concreto de 90 días. Además hay que distinguir claramente "baja pedida" (inicio del período de gracia) de "borrado efectivo" (cuando se cumplen los 90 días sin reactivación).
+
+- **P3 — REEMPLAZAR/precisar en "Cooperación con autoridades y prevención de fraude"**
+  La frase que ya existe sobre las denuncias tiene que decir con precisión: si al momento de pedir la baja hay una denuncia o disputa abierta, la cuenta no entra en período de gracia ni se programa para borrado. Queda bloqueada con los datos congelados, y el borrado lo decide trato manualmente una vez que el asunto se resuelva.
+
+- **P4 — AGREGAR aclaración en "Tus derechos sobre tus datos" (punto Supresión)**
+  La baja desde la app (con gracia reactivable de 90 días) no es la única opción. Tampoco limita el derecho legal a la supresión del artículo 16 de la Ley 25.326. El texto tiene que ofrecer los dos caminos con claridad: la baja con gracia (desde la app) y la solicitud de supresión inmediata (por los canales de contacto indicados).
+
+- **P5 — AGREGAR: reserva de email y número de DNI durante la gracia**
+  Mientras la cuenta está en período de gracia, el email y el número de DNI de esa persona quedan reservados: nadie más puede registrarse con esos datos hasta que el borrado se complete o la persona reactive.
+
+- **P6 — AGREGAR: mención de los tres emails automáticos**
+  Informar que el sistema manda tres correos al usuario relacionados con la baja: uno al pedir la baja (con la fecha de borrado y el link para reactivar), uno de recordatorio antes de que se cumpla el plazo, y uno de confirmación cuando los datos son efectivamente borrados.
+
+- **P7 — REEMPLAZAR: fechas de la política**
+  Cuando se publique esta versión, actualizar la constante `LEGAL_UPDATED` y la sección "Cambios en esta política" a la fecha real de publicación.
+
+**Cambios en los Términos y Condiciones (`TERMS_DOC` en `src/content/legal.ts`)**
+
+- **T1 — AGREGAR una sección nueva: "Baja de tu cuenta"**
+  Va después de la sección "Tu cuenta" que ya existe. Explica que el usuario puede pedir la baja cuando quiera, pero que no es inmediata: la cuenta entra en pausa 90 días (publicaciones ocultas), es reactivable en ese plazo, y si no se reactiva se borra al final. Si hay una denuncia o disputa en curso, la baja queda pendiente y bloqueada hasta que se resuelva. Esta sección remite a la Política de Privacidad para el detalle de qué pasa con cada dato.
+
+- **T2 — REEMPLAZAR/ajustar en "Moderación, suspensión y eliminación de cuentas"**
+  Distinguir claramente dos situaciones distintas: la eliminación por incumplimiento (decisión de trato por mal comportamiento) y la baja voluntaria pedida por el propio usuario (que es lo que describe la nueva sección T1). Agregar una referencia cruzada entre ambas para que quede claro que son caminos separados.
+
+- **T3 — AGREGAR en "Tu cuenta" / "Requisitos" (opcional)**
+  Mientras una cuenta está en proceso de baja, no se puede abrir otra cuenta con el mismo email o el mismo número de DNI hasta que el borrado se complete. Si se considera que esto ya queda cubierto con lo que dice la Política de Privacidad (P5), se puede dejar solo ahí para no duplicar.
+
+**Notas para la revisión del abogado**
+
+Estos son los puntos que el abogado tiene que revisar y aprobar antes de publicar cualquier texto. Son la parte más importante de este paso.
+
+- **N1 — Gracia vs. derecho de supresión (art. 16 de la Ley 25.326):** confirmar que el período de gracia de 90 días no va en contra del derecho legal a la supresión inmediata. El texto tiene que ofrecer los dos caminos. Este es el punto más delicado de todo el paso.
+
+- **N2 — Base legal para retener los datos durante los 90 días:** validar que el fundamento para conservar los datos durante la gracia (facilitar la reactivación, prevención de fraude, interés legítimo) sea sólido y que la redacción lo refleje correctamente.
+
+- **N3 — Bloqueo por denuncia y retención asociada:** confirmar el fundamento legal para retener los datos de una cuenta bloqueada por denuncia (deber de conservación, cooperación con la justicia, Ley 25.326).
+
+- **N4 — Plazo de 90 días:** confirmar tanto el plazo en sí como la redacción pública que lo describe.
+
+- **N5 — Promesas verificables:** asegurarse de que "borrado definitivo e irreversible" y la descripción de los tres emails coincidan exactamente con lo que el sistema hace, sin prometer más de lo que puede cumplir.
