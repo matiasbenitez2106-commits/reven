@@ -125,7 +125,7 @@ export const PRIVACY_DOC: LegalDocContent = {
       body: [
         "Conservamos los datos de verificación de identidad (número de DNI, fotos del documento y selfie), encriptados y con acceso restringido a administradores, para prevenir fraudes y poder colaborar con la justicia.",
         "Si ocurre un delito vinculado a una operación (por ejemplo, una estafa o un robo), podemos divulgar estos datos a la autoridad competente —policía, fiscalía o juzgado— cuando exista un requerimiento legal o una denuncia que lo justifique. Importante: estos datos NO se entregan directamente a otras personas usuarias; la información de identidad de un tercero solo se comparte con las autoridades por los canales legales correspondientes.",
-        "Por este motivo, si tenés una denuncia en revisión en tu contra, es posible que no puedas eliminar tu cuenta hasta que se resuelva.",
+        "Si al momento de pedir la baja —o en cualquier momento durante el período de pausa— hay una denuncia o disputa abierta en tu contra, la cuenta no se borra de forma automática: queda bloqueada y los datos se retienen hasta que el asunto se resuelva. Una vez resuelto, el equipo de trato decide manualmente si procede el borrado. Para el detalle completo de este proceso, consultá la sección “Baja de cuenta: qué pasa con tus datos”.",
       ],
     },
     {
