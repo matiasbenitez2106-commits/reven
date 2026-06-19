@@ -4,6 +4,14 @@ import type { LegalDocContent } from "@/components/LegalDoc";
 // IMPORTANTE: reemplazá los correos provisorios (privacidad@apptrato.com / soporte@apptrato.com)
 // y completá la razón social y el domicilio legal del responsable antes de operar en serio.
 // Este contenido es informativo y no constituye asesoramiento legal.
+//
+// ⚠️ NO PUBLICAR TODAVÍA (Paso 8 — baja en dos fases): la sección "Baja de cuenta: qué pasa
+//    con tus datos" (en PRIVACY_DOC) y las secciones equivalentes que se sumen a TERMS_DOC
+//    describen el borrado automático a los 90 días y los emails de recordatorio/confirmación.
+//    Eso recién ocurre cuando el ROBOT DE BORRADO esté ACTIVADO en producción (refuerzo
+//    TOCTOU → vercel.json → ACCOUNT_DELETION_LIVE=true). NO desplegar estos textos hasta
+//    entonces: antes prometerían algo que todavía no sucede. Ver docs/plan-borrado-dos-fases.md
+//    (Paso 8) y src/app/api/cron/account-deletion/route.ts.
 
 export const LEGAL_UPDATED = "7 de junio de 2026";
 
@@ -160,6 +168,23 @@ export const PRIVACY_DOC: LegalDocContent = {
         "Descriptores y plantillas biométricas: no se conservan, porque el reconocimiento facial corre en tu dispositivo y nunca llegan a nuestros servidores.",
         "Datos de pagos: la información mínima de operaciones puede conservarse por el plazo que exijan las normas fiscales y legales aplicables.",
         "Al ejercer la supresión o al darte de baja, eliminamos efectivamente las imágenes (incluida su baja en Cloudinary) y los datos sensibles asociados, salvo que exista una denuncia o investigación en curso, o una obligación legal que nos exija conservarlos por un plazo determinado.",
+      ],
+    },
+    {
+      heading: "Baja de cuenta: qué pasa con tus datos",
+      body: [
+        "Cuando pedís la baja de tu cuenta, los datos no se eliminan de inmediato. Tu cuenta entra en un período de pausa de 90 días corridos: durante ese tiempo deja de ser visible en la plataforma, tus publicaciones quedan ocultas y no podés operar. Sin embargo, los datos siguen existiendo en nuestros sistemas hasta que se cumpla ese plazo.",
+        "Durante los 90 días podés reactivar tu cuenta iniciando sesión. Si lo hacés, la cuenta vuelve al estado en que estaba: tus publicaciones se muestran de nuevo de forma automática y podés seguir usando trato normalmente.",
+        "Si no reactivás y no existe ninguna denuncia o disputa abierta en tu contra, al cumplirse el plazo un proceso automático elimina de forma definitiva e irreversible todos tus datos, incluyendo la información de verificación de identidad (número de DNI, fotos del documento y selfie), y da de baja esas imágenes del almacenamiento donde se guardan (Cloudinary). Este borrado no se puede deshacer.",
+        "Mientras tu cuenta está en pausa, tu email y tu número de DNI quedan reservados: como la cuenta todavía existe en nuestros sistemas, ninguna otra persona puede registrarse con ese mismo email ni con ese mismo DNI. Esa reserva se libera cuando el borrado se completa o si reactivás la cuenta.",
+        "Si al momento de pedir la baja —o en cualquier momento durante los 90 días— hay una denuncia o disputa abierta en tu contra, la cuenta no se borra de forma automática: queda bloqueada y los datos se retienen hasta que el asunto se resuelva. Una vez resuelto, el equipo de trato decide manualmente si procede el borrado. Más detalle sobre este punto en la sección “Cooperación con autoridades y prevención de fraude”.",
+        "Para más detalle sobre qué datos conservamos y por cuánto tiempo en otras situaciones, consultá la sección “Plazos de conservación de los datos”. Para ejercer el derecho de supresión sin necesidad de dar de baja la cuenta, o si tenés dudas sobre este proceso, escribinos a privacidad@apptrato.com.",
+        "Te avisamos por email en tres momentos:",
+      ],
+      bullets: [
+        "Al solicitar la baja: te enviamos una confirmación con la fecha exacta en que se completará el borrado y un enlace para reactivar tu cuenta si cambiás de opinión.",
+        "Unos días antes de que se cumpla el plazo: te enviamos un recordatorio.",
+        "Cuando el borrado se concretó: te enviamos una confirmación de que tus datos fueron eliminados.",
       ],
     },
     {
