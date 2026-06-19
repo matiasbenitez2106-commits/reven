@@ -397,6 +397,7 @@ export const TERMS_DOC: LegalDocContent = {
       body: [
         "trato puede revisar denuncias y moderar el contenido de la plataforma para hacer cumplir estos Términos y la ley.",
         "Cuando detectemos incumplimientos, podremos adoptar medidas proporcionales al caso, incluyendo despublicar avisos, restringir funciones, y suspender o eliminar cuentas. En casos graves o de actividad ilícita, podremos actuar de inmediato y, si corresponde, colaborar con las autoridades competentes.",
+        "Esta sección trata las medidas que puede tomar trato por incumplimiento o actividad ilícita: son decisiones de moderación de la plataforma, no de vos. Si en cambio sos vos quien quiere dar de baja tu cuenta por tu propia voluntad, ese es un proceso diferente: podés pedirlo cuando quieras desde la app, y tiene un período de pausa de 90 días durante el cual podés arrepentirte y reactivarla. Ese proceso se describe en detalle en la sección “Baja de tu cuenta”.",
       ],
       bullets: [
         "Revisar denuncias de usuarios.",
