@@ -48,7 +48,7 @@ export const PRIVACY_NUEVO: LegalDocContent = {
         "Denuncias y reportes: la información que enviás al denunciar una publicación o a otra persona usuaria. Finalidad: moderar contenidos y mantener la comunidad segura.",
         "Suscripciones y pagos: los pagos de suscripciones y publicaciones destacadas se procesan a través de MercadoPago. trato NO almacena los datos de tu tarjeta. Finalidad: cobrar planes y servicios pagos.",
         "Notificaciones: tus preferencias y el envío de notificaciones dentro de la app y por email. Finalidad: avisarte de mensajes, actividad de tus avisos y novedades del servicio.",
-        "Cookies de sesión: usamos cookies técnicas de sesión (NextAuth, JWT). Finalidad: mantener tu sesión iniciada. Más detalle en la sección 11.",
+        "Cookies de sesión: usamos cookies técnicas de sesión (NextAuth, JWT). Finalidad: mantener tu sesión iniciada. Más detalle en la sección 12.",
       ],
     },
     {
@@ -57,7 +57,7 @@ export const PRIVACY_NUEVO: LegalDocContent = {
         "Para verificar tu identidad necesitamos tratar datos sensibles: tu número de DNI, las fotos del frente y dorso de tu DNI, y una selfie. Bajo la Ley 25.326, el tratamiento de datos sensibles está prohibido salvo excepciones, y la única base que usamos es tu consentimiento expreso, libre e informado. Queremos que entiendas bien tres puntos clave.",
         "Primero: el reconocimiento facial se hace EN TU DISPOSITIVO. La comparación entre la cara de tu DNI y la de tu selfie se ejecuta en tu propio navegador (con la tecnología face-api.js). Los descriptores y plantillas biométricas de tu rostro NO se envían a nuestros servidores ni se almacenan. Al servidor solo llegan dos números: un “match score” (similitud entre la selfie y la cara del DNI) y un “liveness score” (indicio de que hay una persona real frente a la cámara). Esos números los conservamos como evidencia de la decisión de verificación.",
         "Segundo: los datos sensibles son FACULTATIVOS. No estás obligado a darnos tu DNI, las fotos ni la selfie. Ahora bien, la verificación de identidad es un paso necesario para operar en trato: si decidís no aportar estos datos, no vas a poder completar la verificación y, por lo tanto, no vas a poder publicar ni realizar ciertas operaciones dentro del marketplace.",
-        "Tercero: tu consentimiento se pide por separado. Cuando iniciás el proceso de verificación, te pedimos un consentimiento específico y diferenciado de la aceptación general de los Términos y Condiciones, mediante una casilla dedicada en la que se te advierte el carácter sensible de los datos y la finalidad concreta (verificación de identidad antifraude). Registramos la fecha y hora de ese consentimiento para poder acreditarlo. Podés revocar tu consentimiento en cualquier momento (ver sección 9).",
+        "Tercero: tu consentimiento se pide por separado. Cuando iniciás el proceso de verificación, te pedimos un consentimiento específico y diferenciado de la aceptación general de los Términos y Condiciones, mediante una casilla dedicada en la que se te advierte el carácter sensible de los datos y la finalidad concreta (verificación de identidad antifraude). Registramos la fecha y hora de ese consentimiento para poder acreditarlo. Podés revocar tu consentimiento en cualquier momento (ver sección 10).",
       ],
     },
     {
@@ -82,7 +82,7 @@ export const PRIVACY_NUEVO: LegalDocContent = {
         "Existencia de la base de datos e identidad del responsable: existe una base de datos de personas usuarias administrada por REVEN TECHNOLOGIES ARGENTINA S.A. (titular de trato), cuya identidad y domicilio legal figuran en las secciones “Quiénes somos” y “Contacto” de este documento.",
         "Carácter obligatorio o facultativo: los datos básicos de cuenta son necesarios para tener una cuenta. Los datos sensibles de verificación son facultativos, pero sin ellos no vas a poder completar la verificación ni operar plenamente en la app.",
         "Consecuencias de dar, no dar o dar datos inexactos: si no completás la verificación, no vas a poder publicar ni realizar ciertas operaciones; si proporcionás datos inexactos, la verificación puede ser rechazada o tu cuenta puede ser suspendida.",
-        "Tus derechos: podés ejercer en cualquier momento los derechos de acceso, rectificación, actualización y supresión de tus datos (ver sección 9).",
+        "Tus derechos: podés ejercer en cualquier momento los derechos de acceso, rectificación, actualización y supresión de tus datos (ver sección 10).",
       ],
     },
     {
@@ -365,7 +365,7 @@ export const TERMS_NUEVO: LegalDocContent = {
       body: [
         "Las suscripciones PRO y PRO+ se renuevan automáticamente al finalizar cada período mensual, mediante el cobro a través de MercadoPago, salvo que las canceles antes de la fecha de renovación.",
         "Podés cancelar tu suscripción cuando quieras desde tu cuenta. La cancelación detiene las futuras renovaciones, pero tu plan sigue activo hasta el final del período ya pagado; no se realizan cobros adicionales luego de la cancelación.",
-        "Reembolsos: salvo el ejercicio del derecho de arrepentimiento previsto por la ley (ver sección 16) y los casos en que la ley argentina obligue a reintegrar, los importes abonados por suscripciones ya iniciadas y por publicaciones destacadas no son reembolsables. Si tenés un problema con un cobro, escribinos y lo vamos a revisar.",
+        "Reembolsos: salvo el ejercicio del derecho de arrepentimiento previsto por la ley (ver sección 17) y los casos en que la ley argentina obligue a reintegrar, los importes abonados por suscripciones ya iniciadas y por publicaciones destacadas no son reembolsables. Si tenés un problema con un cobro, escribinos y lo vamos a revisar.",
       ],
       bullets: [
         "Renovación automática mensual de PRO y PRO+ hasta que canceles.",
