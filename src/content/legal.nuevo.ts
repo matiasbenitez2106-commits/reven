@@ -1,8 +1,9 @@
 import type { LegalDocContent } from "@/components/LegalDoc";
 
 // Contenido legal de trato. Redactado para el MVP en base a la Ley 25.326 (Argentina).
-// IMPORTANTE: reemplazá los correos provisorios (privacidad@apptrato.com / soporte@apptrato.com)
-// y completá la razón social y el domicilio legal del responsable antes de operar en serio.
+// PENDIENTE ANTES DE PUBLICAR: verificar que los correos (privacidad@apptrato.com /
+// soporte@apptrato.com) existan y reciban mail. Razón social y domicilio del responsable
+// ya cargados. Pendiente también: revisión legal final del abogado.
 // Este contenido es informativo y no constituye asesoramiento legal.
 
 export const UPDATED_NUEVO = "7 de junio de 2026";
@@ -15,11 +16,12 @@ export const PRIVACY_NUEVO: LegalDocContent = {
     {
       heading: "Quiénes somos (Responsable de los datos)",
       body: [
-        "trato es un marketplace entre particulares (C2C) para la compraventa de productos usados en la Argentina, en el que las personas usuarias están verificadas. El responsable de la base de datos personales es quien opera el servicio “trato” (en adelante, “trato”, “nosotros” o “la app”).",
+        "trato es un marketplace entre particulares (C2C) para la compraventa de productos usados en la Argentina, en el que las personas usuarias están verificadas. El responsable de la base de datos personales es REVEN TECHNOLOGIES ARGENTINA S.A. (CUIT 30-71294856-4), con domicilio legal en Alberti 1764, Ciudad Autónoma de Buenos Aires (CABA), CP 1249, titular y operadora del servicio “trato” (en adelante, “trato”, “nosotros” o “la app”).",
         "Para cualquier consulta sobre tus datos o esta política, podés contactarnos a través de los canales que figuran al final de este documento. Allí también indicamos la dirección y el correo a los que podés dirigir tus solicitudes.",
       ],
       bullets: [
-        "Responsable: trato (titular del marketplace).",
+        "Responsable: REVEN TECHNOLOGIES ARGENTINA S.A. (CUIT 30-71294856-4), titular del marketplace trato.",
+        "Domicilio legal: Alberti 1764, Ciudad Autónoma de Buenos Aires (CABA), CP 1249.",
         "Correo para temas de privacidad y datos personales: privacidad@apptrato.com",
         "Correo de soporte general: soporte@apptrato.com",
       ],
@@ -77,7 +79,7 @@ export const PRIVACY_NUEVO: LegalDocContent = {
       ],
       bullets: [
         "Finalidad y destinatarios: usamos tus datos para operar el marketplace, verificar identidades y prevenir fraudes, habilitar la mensajería y procesar pagos de suscripciones y publicaciones destacadas. Los destinatarios son trato y los encargados de tratamiento (terceros) que detallamos en la sección 8.",
-        "Existencia de la base de datos e identidad del responsable: existe una base de datos de personas usuarias administrada por trato, cuya identidad y domicilio figuran en este documento.",
+        "Existencia de la base de datos e identidad del responsable: existe una base de datos de personas usuarias administrada por REVEN TECHNOLOGIES ARGENTINA S.A. (titular de trato), cuya identidad y domicilio legal figuran en las secciones “Quiénes somos” y “Contacto” de este documento.",
         "Carácter obligatorio o facultativo: los datos básicos de cuenta son necesarios para tener una cuenta. Los datos sensibles de verificación son facultativos, pero sin ellos no vas a poder completar la verificación ni operar plenamente en la app.",
         "Consecuencias de dar, no dar o dar datos inexactos: si no completás la verificación, no vas a poder publicar ni realizar ciertas operaciones; si proporcionás datos inexactos, la verificación puede ser rechazada o tu cuenta puede ser suspendida.",
         "Tus derechos: podés ejercer en cualquier momento los derechos de acceso, rectificación, actualización y supresión de tus datos (ver sección 9).",
@@ -208,6 +210,8 @@ export const PRIVACY_NUEVO: LegalDocContent = {
         "Si tenés preguntas, quejas o querés ejercer tus derechos sobre tus datos personales, escribinos. Estamos para ayudarte.",
       ],
       bullets: [
+        "Responsable: REVEN TECHNOLOGIES ARGENTINA S.A. (CUIT 30-71294856-4).",
+        "Domicilio legal: Alberti 1764, Ciudad Autónoma de Buenos Aires (CABA), CP 1249.",
         "Privacidad y protección de datos: privacidad@apptrato.com",
         "Soporte general: soporte@apptrato.com",
         "Órgano de control: Agencia de Acceso a la Información Pública (AAIP) — ante la cual podés presentar denuncias en materia de protección de datos personales.",
@@ -224,7 +228,7 @@ export const TERMS_NUEVO: LegalDocContent = {
     {
       heading: "Qué es trato (y qué no es)",
       body: [
-        "trato es una plataforma digital que CONECTA a compradores y vendedores particulares de productos usados en Argentina. Nuestra función es poner en contacto a las partes y ofrecer herramientas para que publiquen, busquen y se comuniquen entre sí.",
+        "trato es una plataforma digital que CONECTA a compradores y vendedores particulares de productos usados en Argentina. Nuestra función es poner en contacto a las partes y ofrecer herramientas para que publiquen, busquen y se comuniquen entre sí. trato es operado por REVEN TECHNOLOGIES ARGENTINA S.A. (CUIT 30-71294856-4), con domicilio legal en Alberti 1764, Ciudad Autónoma de Buenos Aires (CABA), CP 1249.",
         "Es muy importante que entiendas el rol de trato. trato NO es vendedor ni comprador, NO es parte de la compraventa que se realiza entre los usuarios, y NO interviene en la entrega de los productos ni en el pago entre las partes. trato tampoco retiene dinero de las transacciones ni cobra comisión por venta.",
         "trato obtiene sus ingresos exclusivamente a través de suscripciones (planes pagos) y publicaciones destacadas. Cualquier acuerdo de compraventa se celebra directa y únicamente entre el comprador y el vendedor, que son los responsables exclusivos de cumplirlo.",
       ],
@@ -443,6 +447,7 @@ export const TERMS_NUEVO: LegalDocContent = {
       body: [
         "Si tenés dudas, reclamos o querés ejercer alguno de tus derechos (incluido el de arrepentimiento), escribinos. Vamos a responderte a la brevedad.",
         "Correo de contacto: soporte@apptrato.com",
+        "Responsable: REVEN TECHNOLOGIES ARGENTINA S.A. (CUIT 30-71294856-4), con domicilio legal en Alberti 1764, Ciudad Autónoma de Buenos Aires (CABA), CP 1249.",
       ],
     },
   ],
