@@ -33,7 +33,7 @@ _Última actualización: 20 de junio de 2026_
   - [ ] **Si falta alguna:** **Create address** → escribí `privacidad` + `@apptrato.com` → Action **Send to an email** → elegí tu Gmail → **Save**. Repetí con `soporte`. Verificá que queden **Active**.
   - [ ] **Prueba final (la que vale):** desde tu Gmail mandá un mail a `privacidad@apptrato.com` y otro a `soporte@apptrato.com`; esperá 1–5 min y confirmá que **llegan** (revisá también Spam). Si llegan → listo.
   - [ ] *(Para después, no bloquea el lanzamiento)* Si querés **responder como** `@apptrato.com` y no desde tu Gmail, hay que configurar "Enviar como" en Gmail o usar Resend con el dominio verificado: Email Routing **solo reenvía**.
-- [ ] **Visto bueno final del abogado** sobre los textos **ya con esos datos puestos** (razón social, domicilio, correos).
+- [x] **Visto bueno final del abogado** sobre los textos **ya con esos datos puestos** (razón social, domicilio, correos). *(Hecho: OK del abogado sobre la versión de `legal.nuevo.ts` con los datos de la S.A. cargados.)*
 - [ ] Consultarle **cuánto tiempo retiene Vercel los logs** (contienen el email de usuarios borrados, por el rastro de auditoría del robot) y confirmar que ese plazo es compatible con la **Ley 25.326**.
 
 ## 3) Qué quedó probado en local (para llegar tranquilo)
