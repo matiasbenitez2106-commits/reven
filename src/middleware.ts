@@ -66,8 +66,11 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    // Todo el sitio EXCEPTO: internos de Next, favicon y archivos con extensión
-    // (imágenes, .js, .css, etc. = "archivos estáticos").
-    "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)",
+    // Todo el sitio EXCEPTO: internos de Next, favicon, archivos con extensión
+    // (imágenes, .js, .css, etc.) y la ruta del cron del robot de borrado.
+    // Esa ruta se protege sola con CRON_SECRET y NO necesita la sesión de
+    // NextAuth; withAuth reventaba ahí con "URI malformed" (lo dispara
+    // vercel-cron/1.0). Excluirla en el matcher = el middleware ni se invoca.
+    "/((?!api/cron/account-deletion|_next/static|_next/image|favicon.ico|.*\\..*).*)",
   ],
 };
