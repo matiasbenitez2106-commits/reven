@@ -6,5 +6,5 @@ export const contentType = "image/png";
 
 // Ícono para "Agregar a pantalla de inicio" en iOS.
 export default function AppleIcon() {
-  return new ImageResponse(brandIcon(180), { ...size });
+  return new ImageResponse(brandIcon(180, "solid"), { ...size });
 }
