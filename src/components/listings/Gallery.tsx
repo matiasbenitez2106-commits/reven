@@ -39,7 +39,7 @@ export function Gallery({
 
   return (
     <div>
-      <div className="relative overflow-hidden rounded-xl border border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900">
+      <div className="relative overflow-hidden rounded-xl border border-line dark:border-stone-800 bg-surface dark:bg-stone-900">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={images[active].url}

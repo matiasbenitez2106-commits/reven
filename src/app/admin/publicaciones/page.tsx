@@ -75,7 +75,7 @@ export default async function AdminListingsPage({
               className={`rounded-full border px-3 py-1 text-xs font-medium ${
                 estado === f.key
                   ? "border-brand-600 bg-brand-600 text-white"
-                  : "border-gray-200 dark:border-stone-800 text-gray-600 dark:text-stone-300 hover:bg-gray-50 dark:hover:bg-stone-800"
+                  : "border-line dark:border-stone-800 text-gray-600 dark:text-stone-300 hover:bg-gray-50 dark:hover:bg-stone-800"
               }`}
             >
               {f.label}
@@ -87,7 +87,7 @@ export default async function AdminListingsPage({
       <div className="card overflow-x-auto">
         <table className="w-full min-w-[760px] text-sm">
           <thead>
-            <tr className="border-b border-gray-200 dark:border-stone-800 text-left text-xs uppercase tracking-wide text-gray-400 dark:text-stone-500">
+            <tr className="border-b border-line dark:border-stone-800 text-left text-xs uppercase tracking-wide text-gray-400 dark:text-stone-500">
               <th className="px-4 py-3">Publicación</th>
               <th className="px-4 py-3">Vendedor</th>
               <th className="px-4 py-3">Precio</th>

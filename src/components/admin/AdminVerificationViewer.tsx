@@ -22,7 +22,7 @@ function Img({ label, src }: { label: string; src: string | null }) {
       <p className="mb-1 text-xs font-medium text-gray-500 dark:text-stone-400">{label}</p>
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={label} className="w-full rounded-lg border border-gray-200 dark:border-stone-800" />
+        <img src={src} alt={label} className="w-full rounded-lg border border-line dark:border-stone-800" />
       ) : (
         <div className="flex h-24 items-center justify-center rounded-lg bg-gray-100 dark:bg-stone-800 text-xs text-gray-400 dark:text-stone-500">
           Sin imagen
@@ -58,7 +58,7 @@ export function AdminVerificationViewer({ userId }: { userId: string }) {
     <>
       <button
         onClick={openViewer}
-        className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 bg-surface dark:bg-stone-900 px-3 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-stone-800"
+        className="inline-flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 bg-surface dark:bg-stone-900 px-3 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-stone-800"
       >
         <Eye className="h-3.5 w-3.5" /> Ver documentos
       </button>

@@ -46,7 +46,7 @@ export default async function AccountPage() {
           </div>
           <Link
             href="/cuenta/editar"
-            className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
+            className="inline-flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
           >
             <Pencil className="h-3.5 w-3.5" /> Editar
           </Link>

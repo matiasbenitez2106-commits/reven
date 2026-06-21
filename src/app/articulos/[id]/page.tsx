@@ -266,7 +266,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
             {listing.description}
           </p>
         ) : (
-          <div className="rounded-lg border border-dashed border-gray-300 dark:border-stone-700 bg-gray-50 dark:bg-stone-900 p-5 text-center">
+          <div className="rounded-lg border border-dashed border-line dark:border-stone-700 bg-gray-50 dark:bg-stone-900 p-5 text-center">
             <p className="text-sm text-gray-600 dark:text-stone-300">
               Iniciá sesión para ver la descripción completa y contactar al vendedor.
             </p>

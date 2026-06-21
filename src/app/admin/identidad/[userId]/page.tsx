@@ -116,7 +116,7 @@ export default async function IdentityDossierPage({
         </p>
       </div>
 
-      <div className="rounded-xl border border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900 p-6">
+      <div className="rounded-xl border border-line dark:border-stone-800 bg-surface dark:bg-stone-900 p-6">
         <h2 className="text-xl font-bold text-gray-900 dark:text-stone-100">Dossier de identidad</h2>
         <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
           Generado el {formatDate(new Date())} · trato
@@ -162,7 +162,7 @@ export default async function IdentityDossierPage({
                       <img
                         src={img.src}
                         alt={img.label}
-                        className="w-full rounded-lg border border-gray-200 dark:border-stone-800"
+                        className="w-full rounded-lg border border-line dark:border-stone-800"
                       />
                     ) : (
                       <div className="flex h-24 items-center justify-center rounded-lg bg-gray-100 dark:bg-stone-800 text-xs text-gray-400 dark:text-stone-500">
@@ -188,7 +188,7 @@ export default async function IdentityDossierPage({
           ) : (
             <ul className="mt-2 space-y-2 text-sm">
               {reports.map((r) => (
-                <li key={r.id} className="rounded-lg border border-gray-100 dark:border-stone-800 p-2">
+                <li key={r.id} className="rounded-lg border border-line dark:border-stone-800 p-2">
                   <span className="font-medium">{r.listing.title}</span> · {r.reason} · {r.status}
                   {r.details && <span className="text-gray-500 dark:text-stone-400"> — “{r.details}”</span>}
                   <span className="block text-xs text-gray-400 dark:text-stone-500">{formatDate(r.createdAt)}</span>

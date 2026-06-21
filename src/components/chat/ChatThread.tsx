@@ -113,7 +113,7 @@ export function ChatThread({
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={send} className="mt-2 flex items-center gap-2 border-t border-gray-200 dark:border-stone-800 pt-3">
+      <form onSubmit={send} className="mt-2 flex items-center gap-2 border-t border-line dark:border-stone-800 pt-3">
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}

@@ -101,7 +101,7 @@ export function EditProfileForm({
 
       <div className="flex items-center gap-4">
         <Avatar firstName={initial.firstName} lastName={initial.lastName} src={avatarUrl} size={64} />
-        <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-300 dark:border-stone-700 px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-stone-800">
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-line dark:border-stone-700 px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-stone-800">
           <Camera className="h-4 w-4" />
           {uploading ? "Subiendo..." : "Cambiar foto"}
           <input type="file" accept="image/*" className="hidden" onChange={onAvatar} />

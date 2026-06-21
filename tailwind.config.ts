@@ -37,13 +37,12 @@ const config: Config = {
           800: "#5e3520",
           900: "#412517",
         },
-        // Modo claro: superficie crema ÚNICA y plana. El fondo de página y las
-        // superficies elevadas (tarjetas, navbar, footer, chips, modales) comparten
-        // el MISMO crema; se distinguen solo por borde/sombra, sin diferencia de color.
-        // (El modo oscuro NO usa estos tokens: va por las variantes dark:bg-stone-*.)
-        cream: "#f0ebdd", // fondo de página (modo claro)
-        surface: "#f0ebdd", // superficies elevadas (tarjetas, navbar, footer, chips, modales)
-        "surface-hover": "#ebe5d4", // hover de superficies sobre crema (botones del hero en claro)
+        // Modo claro (paleta neutro cálido, sistematizada). El modo oscuro NO usa
+        // estos tokens: va por las variantes dark:bg-stone-* / dark:border-stone-*.
+        cream: "#f2f1ec", // fondo de página
+        surface: "#fbfaf7", // superficie elevada (tarjetas, paneles, navbar, footer, chips, modales)
+        "surface-hover": "#ebe5d4", // hover de superficies sobre crema (botones del hero)
+        line: "#e5e3dc", // borde sutil que separa superficies (utilidad border-line)
         ink: "#2e312a", // tinta (texto)
       },
       fontFamily: {

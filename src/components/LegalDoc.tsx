@@ -51,7 +51,7 @@ export function LegalDoc({ doc, updated }: { doc: LegalDocContent; updated: stri
         ))}
       </div>
 
-      <p className="mt-10 border-t border-gray-100 dark:border-stone-800 pt-6 text-xs text-gray-400 dark:text-stone-500">
+      <p className="mt-10 border-t border-line dark:border-stone-800 pt-6 text-xs text-gray-400 dark:text-stone-500">
         Este documento es un resumen informativo para el funcionamiento del servicio y no
         constituye asesoramiento legal. Ante dudas, consultá con un profesional.
       </p>

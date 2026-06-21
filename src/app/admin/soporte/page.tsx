@@ -30,13 +30,13 @@ export default async function AdminSupportPage({
       <div className="mb-4 flex items-center gap-1.5 text-sm">
         <a
           href="/admin/soporte"
-          className={`rounded-full px-3 py-1 font-medium ${!showClosed ? "bg-brand-600 text-white" : "border border-gray-200 dark:border-stone-800 text-gray-600 dark:text-stone-300"}`}
+          className={`rounded-full px-3 py-1 font-medium ${!showClosed ? "bg-brand-600 text-white" : "border border-line dark:border-stone-800 text-gray-600 dark:text-stone-300"}`}
         >
           Abiertos
         </a>
         <a
           href="/admin/soporte?estado=cerrados"
-          className={`rounded-full px-3 py-1 font-medium ${showClosed ? "bg-brand-600 text-white" : "border border-gray-200 dark:border-stone-800 text-gray-600 dark:text-stone-300"}`}
+          className={`rounded-full px-3 py-1 font-medium ${showClosed ? "bg-brand-600 text-white" : "border border-line dark:border-stone-800 text-gray-600 dark:text-stone-300"}`}
         >
           Resueltos
         </a>

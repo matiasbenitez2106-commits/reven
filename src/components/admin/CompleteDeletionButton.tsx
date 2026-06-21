@@ -31,7 +31,7 @@ export function CompleteDeletionButton({
     return (
       <span
         title="Resolvé las denuncias abiertas antes de completar la baja"
-        className="inline-flex cursor-not-allowed items-center gap-1 rounded-lg border border-gray-200 dark:border-stone-800 px-2 py-1 text-xs font-medium text-gray-400 dark:text-stone-600"
+        className="inline-flex cursor-not-allowed items-center gap-1 rounded-lg border border-line dark:border-stone-800 px-2 py-1 text-xs font-medium text-gray-400 dark:text-stone-600"
       >
         <Trash2 className="h-3.5 w-3.5" /> Completar baja
       </span>

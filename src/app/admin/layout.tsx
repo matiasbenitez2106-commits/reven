@@ -13,7 +13,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <ShieldCheck className="h-6 w-6 text-brand-600 dark:text-brand-300" />
         <h1 className="text-2xl font-bold">Panel de administración</h1>
       </div>
-      <nav className="mb-6 flex gap-1 overflow-x-auto border-b border-gray-200 dark:border-stone-800 text-sm">
+      <nav className="mb-6 flex gap-1 overflow-x-auto border-b border-line dark:border-stone-800 text-sm">
         {[
           { href: "/admin", label: "Resumen" },
           { href: "/admin/usuarios", label: "Usuarios" },
@@ -26,7 +26,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link
             key={t.href}
             href={t.href}
-            className="whitespace-nowrap border-b-2 border-transparent px-3 py-2 font-medium text-gray-600 dark:text-stone-300 hover:border-gray-300 dark:hover:border-stone-600 hover:text-gray-900 dark:hover:text-stone-100"
+            className="whitespace-nowrap border-b-2 border-transparent px-3 py-2 font-medium text-gray-600 dark:text-stone-300 hover:border-line dark:hover:border-stone-600 hover:text-gray-900 dark:hover:text-stone-100"
           >
             {t.label}
           </Link>

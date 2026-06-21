@@ -79,7 +79,7 @@ export function ImageUploader({
     <div>
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
         {value.map((img, i) => (
-          <div key={img.url} className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 dark:border-stone-800">
+          <div key={img.url} className="group relative aspect-square overflow-hidden rounded-lg border border-line dark:border-stone-800">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={img.url} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
             {i === 0 && (
@@ -116,7 +116,7 @@ export function ImageUploader({
           <div
             {...getRootProps()}
             className={`flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed text-center text-xs ${
-              isDragActive ? "border-brand-400 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-300" : "border-gray-300 dark:border-stone-700 text-gray-400 dark:text-stone-500 hover:border-brand-300 dark:hover:border-brand-600"
+              isDragActive ? "border-brand-400 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-300" : "border-line dark:border-stone-700 text-gray-400 dark:text-stone-500 hover:border-brand-300 dark:hover:border-brand-600"
             }`}
           >
             <input {...getInputProps()} />

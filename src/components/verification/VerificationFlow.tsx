@@ -236,7 +236,7 @@ export function VerificationFlow() {
                 setConsent(e.target.checked);
                 if (e.target.checked) setError(null);
               }}
-              className="mt-0.5 h-4 w-4 rounded border-gray-300 dark:border-stone-700 text-brand-600 dark:text-brand-300 focus:ring-brand-500"
+              className="mt-0.5 h-4 w-4 rounded border-line dark:border-stone-700 text-brand-600 dark:text-brand-300 focus:ring-brand-500"
             />
             <span>
               Presto mi <strong>consentimiento expreso</strong> para que trato trate mi DNI,
@@ -314,7 +314,7 @@ function PhotoInput({
       {value ? (
         <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={value} alt={title} className="w-full rounded-lg border border-gray-200 dark:border-stone-800" />
+          <img src={value} alt={title} className="w-full rounded-lg border border-line dark:border-stone-800" />
           <button
             onClick={() => onChange(null)}
             className="absolute right-2 top-2 flex items-center gap-1 rounded-lg bg-surface/90 dark:bg-stone-900/90 px-2 py-1 text-xs font-medium shadow"
@@ -325,7 +325,7 @@ function PhotoInput({
       ) : (
         <button
           onClick={() => inputRef.current?.click()}
-          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 dark:border-stone-700 bg-gray-50 dark:bg-stone-900 px-4 py-10 text-gray-500 dark:text-stone-400 hover:border-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/30"
+          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-line dark:border-stone-700 bg-gray-50 dark:bg-stone-900 px-4 py-10 text-gray-500 dark:text-stone-400 hover:border-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/30"
         >
           <Icon className="h-8 w-8" />
           <span className="text-sm font-medium">
@@ -427,10 +427,10 @@ function SelfieCapture({
       {value ? (
         <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={value} alt="Selfie" className="mx-auto w-64 rounded-xl border border-gray-200 dark:border-stone-800" />
+          <img src={value} alt="Selfie" className="mx-auto w-64 rounded-xl border border-line dark:border-stone-800" />
           <button
             onClick={() => onChange(null)}
-            className="mx-auto mt-3 flex items-center gap-1 rounded-lg border border-gray-300 dark:border-stone-700 px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
+            className="mx-auto mt-3 flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
           >
             <RotateCcw className="h-4 w-4" /> Volver a capturar
           </button>
@@ -446,7 +446,7 @@ function SelfieCapture({
         </div>
       ) : (
         <div className="space-y-3">
-          <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-stone-800 bg-black">
+          <div className="overflow-hidden rounded-xl border border-line dark:border-stone-800 bg-black">
             <video
               ref={videoRef}
               playsInline
@@ -478,7 +478,7 @@ function Thumb({ label, src }: { label: string; src: string | null }) {
       <p className="mb-1 text-xs font-medium text-gray-500 dark:text-stone-400">{label}</p>
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={label} className="aspect-square w-full rounded-lg border border-gray-200 dark:border-stone-800 object-cover" />
+        <img src={src} alt={label} className="aspect-square w-full rounded-lg border border-line dark:border-stone-800 object-cover" />
       ) : (
         <div className="aspect-square w-full rounded-lg bg-gray-100 dark:bg-stone-800" />
       )}

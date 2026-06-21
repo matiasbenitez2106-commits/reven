@@ -9,7 +9,7 @@ export function Footer() {
   const loggedIn = !!session?.user;
 
   return (
-    <footer className="mt-16 border-t border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900">
+    <footer className="mt-16 border-t border-line dark:border-stone-800 bg-surface dark:bg-stone-900">
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -56,7 +56,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-8 flex flex-col gap-2 border-t border-gray-100 dark:border-stone-800 pt-6 text-xs text-gray-400 dark:text-stone-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-8 flex flex-col gap-2 border-t border-line dark:border-stone-800 pt-6 text-xs text-gray-400 dark:text-stone-500 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} trato · Hecho en Argentina 🇦🇷</p>
           <p className="flex gap-3">
             <Link href="/terminos" className="hover:text-brand-600 dark:hover:text-brand-300">Términos</Link>

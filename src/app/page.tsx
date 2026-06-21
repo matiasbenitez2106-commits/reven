@@ -102,7 +102,7 @@ export default async function Home() {
             <Link
               key={c.slug}
               href={`/buscar?category=${c.slug}`}
-              className="rounded-full border border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900 px-4 py-1.5 text-sm text-gray-700 dark:text-stone-200 transition hover:border-brand-300 dark:hover:border-brand-600 hover:text-brand-700 dark:hover:text-brand-200"
+              className="rounded-full border border-line dark:border-stone-800 bg-surface dark:bg-stone-900 px-4 py-1.5 text-sm text-gray-700 dark:text-stone-200 transition hover:border-brand-300 dark:hover:border-brand-600 hover:text-brand-700 dark:hover:text-brand-200"
             >
               {c.name}
             </Link>
@@ -112,7 +112,7 @@ export default async function Home() {
 
       {/* Cómo funciona: solo para visitantes (onboarding) */}
       {!user && (
-        <section className="border-y border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900">
+        <section className="border-y border-line dark:border-stone-800 bg-surface dark:bg-stone-900">
           <div className="mx-auto max-w-5xl px-4 py-10">
             <h2 className="text-center text-xl font-bold">Cómo funciona</h2>
             <p className="mt-1 text-center text-sm text-gray-500 dark:text-stone-400">

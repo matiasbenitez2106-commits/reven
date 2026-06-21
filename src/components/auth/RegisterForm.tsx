@@ -114,7 +114,7 @@ export function RegisterForm() {
               setAccepted(e.target.checked);
               if (e.target.checked) setAcceptError(false);
             }}
-            className="mt-0.5 h-4 w-4 rounded border-gray-300 dark:border-stone-700 text-brand-600 dark:text-brand-300 focus:ring-brand-500"
+            className="mt-0.5 h-4 w-4 rounded border-line dark:border-stone-700 text-brand-600 dark:text-brand-300 focus:ring-brand-500"
           />
           <span>
             Soy mayor de 18 años y acepto los{" "}

@@ -66,7 +66,7 @@ export function PlanCards({ currentPlan }: { currentPlan: SubscriptionPlan | nul
             <div
               key={plan}
               className={`relative flex flex-col rounded-xl border p-5 ${
-                highlight ? "border-indigo-300 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-950/40" : "border-gray-200 dark:border-stone-800 bg-surface dark:bg-stone-900"
+                highlight ? "border-indigo-300 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-950/40" : "border-line dark:border-stone-800 bg-surface dark:bg-stone-900"
               }`}
             >
               <div className="flex items-center gap-2">

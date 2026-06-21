@@ -19,7 +19,7 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 dark:border-stone-800 bg-surface/95 dark:bg-stone-900/95 backdrop-blur sm:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-line dark:border-stone-800 bg-surface/95 dark:bg-stone-900/95 backdrop-blur sm:hidden">
       <div className="flex items-stretch justify-around">
         {items.map((it) => {
           const active = pathname === it.href;

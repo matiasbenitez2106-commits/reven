@@ -63,7 +63,7 @@ export function SaveButton({
         "inline-flex h-10 items-center justify-center gap-2 rounded-lg border px-4 text-sm font-medium transition disabled:opacity-50",
         fav
           ? "border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400"
-          : "border-gray-300 dark:border-stone-700 bg-surface dark:bg-stone-900 text-gray-700 dark:text-stone-200 hover:bg-gray-50 dark:hover:bg-stone-800"
+          : "border-line dark:border-stone-700 bg-surface dark:bg-stone-900 text-gray-700 dark:text-stone-200 hover:bg-gray-50 dark:hover:bg-stone-800"
       )}
     >
       <Heart className={cn("h-4 w-4", fav && "fill-current")} />

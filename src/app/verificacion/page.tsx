@@ -34,7 +34,7 @@ export default async function VerificationPage() {
             <Link href="/publicar" className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700">
               Publicar un artículo
             </Link>
-            <Link href="/" className="rounded-lg border border-gray-300 dark:border-stone-700 px-4 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-stone-800">
+            <Link href="/" className="rounded-lg border border-line dark:border-stone-700 px-4 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-stone-800">
               Explorar
             </Link>
           </div>
