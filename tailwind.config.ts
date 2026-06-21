@@ -43,6 +43,7 @@ const config: Config = {
         // (El modo oscuro NO usa estos tokens: va por las variantes dark:bg-stone-*.)
         cream: "#f0ebdd", // fondo de página (modo claro)
         surface: "#f0ebdd", // superficies elevadas (tarjetas, navbar, footer, chips, modales)
+        "surface-hover": "#ebe5d4", // hover de superficies sobre crema (botones del hero en claro)
         ink: "#2e312a", // tinta (texto)
       },
       fontFamily: {

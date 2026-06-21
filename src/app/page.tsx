@@ -45,7 +45,7 @@ export default async function Home() {
                 </Link>
                 <Link
                   href="/buscar"
-                  className="rounded-xl border border-brand-300 dark:border-brand-700 bg-surface/70 dark:bg-stone-900/70 px-5 py-2.5 text-sm font-semibold text-brand-800 dark:text-brand-200 transition hover:bg-white dark:hover:bg-stone-800"
+                  className="rounded-xl border border-brand-300 dark:border-brand-700 bg-surface/70 dark:bg-stone-900/70 px-5 py-2.5 text-sm font-semibold text-brand-800 dark:text-brand-200 transition hover:bg-surface-hover dark:hover:bg-stone-800"
                 >
                   Explorar
                 </Link>
@@ -74,7 +74,7 @@ export default async function Home() {
                 </Link>
                 <Link
                   href="/buscar"
-                  className="rounded-xl border border-brand-300 dark:border-brand-700 bg-surface/70 dark:bg-stone-900/70 px-6 py-3 text-sm font-semibold text-brand-800 dark:text-brand-200 transition hover:bg-white dark:hover:bg-stone-800"
+                  className="rounded-xl border border-brand-300 dark:border-brand-700 bg-surface/70 dark:bg-stone-900/70 px-6 py-3 text-sm font-semibold text-brand-800 dark:text-brand-200 transition hover:bg-surface-hover dark:hover:bg-stone-800"
                 >
                   Explorar publicaciones
                 </Link>
