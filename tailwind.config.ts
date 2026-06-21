@@ -37,11 +37,12 @@ const config: Config = {
           800: "#5e3520",
           900: "#412517",
         },
-        // Modo claro cálido de BAJO contraste: el fondo es una crema suave y las
-        // superficies (tarjetas, navbar) un blanco roto cálido muy cercano —
-        // se distinguen por borde/sombra sutil, sin el salto crema↔blanco puro.
-        cream: "#f4f1ea", // fondo de página
-        surface: "#fcfaf5", // tarjetas / navbar / footer
+        // Modo claro: superficie crema ÚNICA y plana. El fondo de página y las
+        // superficies elevadas (tarjetas, navbar, footer, chips, modales) comparten
+        // el MISMO crema; se distinguen solo por borde/sombra, sin diferencia de color.
+        // (El modo oscuro NO usa estos tokens: va por las variantes dark:bg-stone-*.)
+        cream: "#f0ebdd", // fondo de página (modo claro)
+        surface: "#f0ebdd", // superficies elevadas (tarjetas, navbar, footer, chips, modales)
         ink: "#2e312a", // tinta (texto)
       },
       fontFamily: {
