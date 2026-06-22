@@ -152,7 +152,7 @@ export default async function AdminUsersPage({
               <th className="px-4 py-3 text-right">Acciones</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100 dark:divide-stone-800">
+          <tbody className="divide-y divide-line dark:divide-stone-800">
             {users.map((u) => (
               <tr key={u.id} className={u.suspendedAt || u.legalHoldAt ? "opacity-60" : ""}>
                 <td className="px-4 py-3">

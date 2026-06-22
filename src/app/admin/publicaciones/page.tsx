@@ -97,7 +97,7 @@ export default async function AdminListingsPage({
               <th className="px-4 py-3 text-right">Acciones</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100 dark:divide-stone-800">
+          <tbody className="divide-y divide-line dark:divide-stone-800">
             {listings.map((l) => {
               const st = STATUS_LABELS[l.status] ?? STATUS_LABELS.ACTIVE;
               return (

@@ -168,7 +168,7 @@ export default async function AdminOverviewPage() {
           {recentReports.length === 0 ? (
             <p className="py-6 text-center text-sm text-gray-400 dark:text-stone-500">No hay denuncias pendientes 🎉</p>
           ) : (
-            <ul className="divide-y divide-gray-100 dark:divide-stone-800">
+            <ul className="divide-y divide-line dark:divide-stone-800">
               {recentReports.map((r) => (
                 <li key={r.id} className="flex items-center justify-between gap-3 py-2 text-sm">
                   <Link href={`/articulos/${r.listing.id}`} className="min-w-0 truncate hover:text-brand-600 dark:hover:text-brand-300">
@@ -193,7 +193,7 @@ export default async function AdminOverviewPage() {
           {recentUsers.length === 0 ? (
             <p className="py-6 text-center text-sm text-gray-400 dark:text-stone-500">Todavía no hay usuarios.</p>
           ) : (
-            <ul className="divide-y divide-gray-100 dark:divide-stone-800">
+            <ul className="divide-y divide-line dark:divide-stone-800">
               {recentUsers.map((u) => (
                 <li key={u.id} className="flex items-center justify-between gap-3 py-2 text-sm">
                   <Link href={`/usuarios/${u.id}`} className="min-w-0 truncate hover:text-brand-600 dark:hover:text-brand-300">
