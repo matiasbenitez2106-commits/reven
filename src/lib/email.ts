@@ -156,8 +156,10 @@ export async function sendSubscriptionCancelledEmail(
 }
 
 // ── Baja de cuenta en dos fases (ver docs/plan-borrado-dos-fases.md) ──
-// Solo los textos + el molde de marca. Todavía NO se llaman desde ningún lado
-// (eso es del Paso 3 en adelante).
+// Email 1 (baja solicitada): se llama desde el handler DELETE de
+//   src/app/api/me/route.ts cuando la persona pide la baja (cuenta en gracia).
+// Emails 2 (recordatorio) y 3 (cuenta borrada): se llaman desde el robot diario
+//   en src/app/api/cron/account-deletion/route.ts.
 
 /** Email 1 — Aviso de baja solicitada (cuenta en pausa 90 días, reactivable). */
 export async function sendBajaSolicitadaEmail(
