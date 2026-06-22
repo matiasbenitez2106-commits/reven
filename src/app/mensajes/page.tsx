@@ -57,7 +57,7 @@ export default async function MessagesPage() {
               <Link
                 key={c.id}
                 href={`/mensajes/${c.id}`}
-                className="flex items-center gap-3 p-3 transition hover:bg-gray-50 dark:hover:bg-stone-800"
+                className="flex items-center gap-3 p-3 transition hover:bg-surface-hover dark:hover:bg-stone-800"
               >
                 <div className="relative">
                   <Avatar firstName={other.firstName} lastName={other.lastName} src={other.avatarUrl} size={44} />

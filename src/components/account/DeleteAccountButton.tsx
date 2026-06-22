@@ -65,7 +65,7 @@ export function DeleteAccountButton() {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-stone-100">¿Dar de baja tu cuenta?</h3>
               <button
                 onClick={() => !loading && setOpen(false)}
-                className="rounded-lg p-1 text-gray-400 dark:text-stone-500 hover:bg-gray-100 dark:hover:bg-stone-800"
+                className="rounded-lg p-1 text-gray-400 dark:text-stone-500 hover:bg-surface-hover dark:hover:bg-stone-800"
                 aria-label="Cerrar"
               >
                 <X className="h-5 w-5" />

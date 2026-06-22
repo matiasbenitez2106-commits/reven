@@ -132,7 +132,7 @@ export default async function AdminUsersPage({
             className={`rounded-full px-3 py-1 font-medium ${
               estado === f.key
                 ? "bg-brand-600 text-white"
-                : "border border-line dark:border-stone-800 text-gray-600 dark:text-stone-300 hover:bg-gray-50 dark:hover:bg-stone-800"
+                : "border border-line dark:border-stone-800 text-gray-600 dark:text-stone-300 hover:bg-surface-hover dark:hover:bg-stone-800"
             }`}
           >
             {f.label}
@@ -237,7 +237,7 @@ export default async function AdminUsersPage({
                   <div className="flex items-center justify-end gap-1.5">
                     <Link
                       href={`/admin/identidad/${u.id}`}
-                      className="inline-flex items-center gap-1 rounded-lg border border-line dark:border-stone-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-stone-300 hover:bg-gray-50 dark:hover:bg-stone-800"
+                      className="inline-flex items-center gap-1 rounded-lg border border-line dark:border-stone-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-stone-300 hover:bg-surface-hover dark:hover:bg-stone-800"
                     >
                       <FileSearch className="h-3.5 w-3.5" /> Ver DNI
                     </Link>

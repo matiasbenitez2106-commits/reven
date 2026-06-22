@@ -86,7 +86,7 @@ export default async function BuscarPage({ searchParams }: { searchParams: SP })
                   {result.page > 1 && (
                     <Link
                       href={hrefWithPage(raw, result.page - 1)}
-                      className="inline-flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 bg-surface dark:bg-stone-900 px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
+                      className="inline-flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 bg-surface dark:bg-stone-900 px-3 py-2 text-sm hover:bg-surface-hover dark:hover:bg-stone-800"
                     >
                       <ChevronLeft className="h-4 w-4" /> Anterior
                     </Link>
@@ -97,7 +97,7 @@ export default async function BuscarPage({ searchParams }: { searchParams: SP })
                   {result.hasMore && (
                     <Link
                       href={hrefWithPage(raw, result.page + 1)}
-                      className="inline-flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 bg-surface dark:bg-stone-900 px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
+                      className="inline-flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 bg-surface dark:bg-stone-900 px-3 py-2 text-sm hover:bg-surface-hover dark:hover:bg-stone-800"
                     >
                       Siguiente <ChevronRight className="h-4 w-4" />
                     </Link>

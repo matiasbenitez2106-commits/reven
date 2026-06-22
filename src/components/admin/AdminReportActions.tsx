@@ -46,7 +46,7 @@ export function AdminReportActions({
       <button
         onClick={() => setStatus("REVIEWED")}
         disabled={loading !== null}
-        className={`${btn} border-line dark:border-stone-700 bg-surface dark:bg-stone-900 text-gray-700 dark:text-stone-200 hover:bg-gray-50 dark:hover:bg-stone-800`}
+        className={`${btn} border-line dark:border-stone-700 bg-surface dark:bg-stone-900 text-gray-700 dark:text-stone-200 hover:bg-surface-hover dark:hover:bg-stone-800`}
       >
         {loading === "REVIEWED" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
         Revisado
@@ -54,7 +54,7 @@ export function AdminReportActions({
       <button
         onClick={() => setStatus("DISMISSED")}
         disabled={loading !== null}
-        className={`${btn} border-line dark:border-stone-700 bg-surface dark:bg-stone-900 text-gray-700 dark:text-stone-200 hover:bg-gray-50 dark:hover:bg-stone-800`}
+        className={`${btn} border-line dark:border-stone-700 bg-surface dark:bg-stone-900 text-gray-700 dark:text-stone-200 hover:bg-surface-hover dark:hover:bg-stone-800`}
       >
         {loading === "DISMISSED" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Ban className="h-3.5 w-3.5" />}
         Desestimar

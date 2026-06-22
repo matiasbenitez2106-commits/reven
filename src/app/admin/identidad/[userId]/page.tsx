@@ -165,7 +165,7 @@ export default async function IdentityDossierPage({
                         className="w-full rounded-lg border border-line dark:border-stone-800"
                       />
                     ) : (
-                      <div className="flex h-24 items-center justify-center rounded-lg bg-gray-100 dark:bg-stone-800 text-xs text-gray-400 dark:text-stone-500">
+                      <div className="flex h-24 items-center justify-center rounded-lg bg-surface-sunken dark:bg-stone-800 text-xs text-gray-400 dark:text-stone-500">
                         Sin imagen
                       </div>
                     )}

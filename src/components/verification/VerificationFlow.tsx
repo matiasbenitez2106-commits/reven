@@ -145,7 +145,7 @@ export function VerificationFlow() {
                   ? "bg-brand-600 text-white"
                   : i === stepIndex
                   ? "bg-brand-100 dark:bg-brand-800/40 text-brand-700 dark:text-brand-300 ring-2 ring-brand-500"
-                  : "bg-gray-100 dark:bg-stone-800 text-gray-400 dark:text-stone-500"
+                  : "bg-surface-sunken dark:bg-stone-800 text-gray-400 dark:text-stone-500"
               }`}
             >
               {i < stepIndex ? <Check className="h-3.5 w-3.5" /> : i + 1}
@@ -325,7 +325,7 @@ function PhotoInput({
       ) : (
         <button
           onClick={() => inputRef.current?.click()}
-          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-line dark:border-stone-700 bg-gray-50 dark:bg-stone-900 px-4 py-10 text-gray-500 dark:text-stone-400 hover:border-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/30"
+          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-line dark:border-stone-700 bg-surface-sunken dark:bg-stone-900 px-4 py-10 text-gray-500 dark:text-stone-400 hover:border-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/30"
         >
           <Icon className="h-8 w-8" />
           <span className="text-sm font-medium">
@@ -430,7 +430,7 @@ function SelfieCapture({
           <img src={value} alt="Selfie" className="mx-auto w-64 rounded-xl border border-line dark:border-stone-800" />
           <button
             onClick={() => onChange(null)}
-            className="mx-auto mt-3 flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
+            className="mx-auto mt-3 flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 px-3 py-1.5 text-sm hover:bg-surface-hover dark:hover:bg-stone-800"
           >
             <RotateCcw className="h-4 w-4" /> Volver a capturar
           </button>
@@ -480,7 +480,7 @@ function Thumb({ label, src }: { label: string; src: string | null }) {
         // eslint-disable-next-line @next/next/no-img-element
         <img src={src} alt={label} className="aspect-square w-full rounded-lg border border-line dark:border-stone-800 object-cover" />
       ) : (
-        <div className="aspect-square w-full rounded-lg bg-gray-100 dark:bg-stone-800" />
+        <div className="aspect-square w-full rounded-lg bg-surface-sunken dark:bg-stone-800" />
       )}
     </div>
   );

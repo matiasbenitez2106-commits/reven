@@ -31,7 +31,7 @@ export function Gallery({
 
   if (!images.length) {
     return (
-      <div className="flex aspect-square items-center justify-center rounded-xl bg-gray-100 dark:bg-stone-800 text-gray-300 dark:text-stone-600">
+      <div className="flex aspect-square items-center justify-center rounded-xl bg-surface-sunken dark:bg-stone-800 text-gray-300 dark:text-stone-600">
         <ImageOff className="h-12 w-12" />
       </div>
     );

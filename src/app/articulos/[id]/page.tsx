@@ -157,10 +157,10 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
           <p className="mt-2 text-3xl font-extrabold text-gray-900 dark:text-stone-100">{formatPrice(price)}</p>
 
           <div className="mt-4 flex flex-wrap gap-2 text-sm">
-            <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 dark:bg-stone-800 px-3 py-1">
+            <span className="inline-flex items-center gap-1 rounded-full bg-surface-sunken dark:bg-stone-800 px-3 py-1">
               <Tag className="h-4 w-4 text-gray-500 dark:text-stone-400" /> {CONDITION_LABELS[listing.condition]}
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 dark:bg-stone-800 px-3 py-1">
+            <span className="inline-flex items-center gap-1 rounded-full bg-surface-sunken dark:bg-stone-800 px-3 py-1">
               <MapPin className="h-4 w-4 text-gray-500 dark:text-stone-400" />
               {listing.neighborhood ? `${listing.neighborhood}, ` : ""}
               {listing.city}
@@ -180,7 +180,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                 {listing.status === "ACTIVE" ? (
                   <ContactSellerButton listingId={listing.id} sellerId={listing.sellerId} />
                 ) : (
-                  <p className="rounded-lg bg-gray-100 dark:bg-stone-800 p-3 text-sm text-gray-500 dark:text-stone-400">
+                  <p className="rounded-lg bg-surface-sunken dark:bg-stone-800 p-3 text-sm text-gray-500 dark:text-stone-400">
                     Esta publicación no está disponible para contacto.
                   </p>
                 )}
@@ -226,7 +226,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
           {/* Vendedor */}
           <Link
             href={`/usuarios/${listing.seller.id}`}
-            className="card mt-6 block p-4 transition hover:bg-gray-50 dark:hover:bg-stone-800"
+            className="card mt-6 block p-4 transition hover:bg-surface-hover dark:hover:bg-stone-800"
           >
             <p className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-stone-500">
               Vendedor
@@ -266,7 +266,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
             {listing.description}
           </p>
         ) : (
-          <div className="rounded-lg border border-dashed border-line dark:border-stone-700 bg-gray-50 dark:bg-stone-900 p-5 text-center">
+          <div className="rounded-lg border border-dashed border-line dark:border-stone-700 bg-surface-sunken dark:bg-stone-900 p-5 text-center">
             <p className="text-sm text-gray-600 dark:text-stone-300">
               Iniciá sesión para ver la descripción completa y contactar al vendedor.
             </p>

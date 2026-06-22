@@ -96,7 +96,7 @@ export function ChatThread({
                   "max-w-[75%] rounded-2xl px-3 py-2 text-sm",
                   mine
                     ? "rounded-br-sm bg-brand-600 text-white"
-                    : "rounded-bl-sm bg-gray-100 dark:bg-stone-800 text-gray-800 dark:text-stone-100"
+                    : "rounded-bl-sm bg-surface-sunken dark:bg-stone-800 text-gray-800 dark:text-stone-100"
                 )}
               >
                 <p className="whitespace-pre-wrap break-words">{m.body}</p>

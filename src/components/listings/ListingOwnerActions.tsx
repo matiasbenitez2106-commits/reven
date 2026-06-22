@@ -41,7 +41,7 @@ export function ListingOwnerActions({
     <div className="flex flex-wrap gap-2">
       <Link
         href={`/articulos/${listingId}/editar`}
-        className="inline-flex h-10 items-center gap-2 rounded-lg border border-line dark:border-stone-700 bg-surface dark:bg-stone-900 px-4 text-sm font-medium hover:bg-gray-50 dark:hover:bg-stone-800"
+        className="inline-flex h-10 items-center gap-2 rounded-lg border border-line dark:border-stone-700 bg-surface dark:bg-stone-900 px-4 text-sm font-medium hover:bg-surface-hover dark:hover:bg-stone-800"
       >
         <Pencil className="h-4 w-4" /> Editar
       </Link>

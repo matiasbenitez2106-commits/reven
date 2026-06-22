@@ -41,7 +41,8 @@ const config: Config = {
         // estos tokens: va por las variantes dark:bg-stone-* / dark:border-stone-*.
         cream: "#f2f1ec", // fondo de página
         surface: "#fbfaf7", // superficie elevada (tarjetas, paneles, navbar, footer, chips, modales)
-        "surface-hover": "#ebe5d4", // hover de superficies sobre crema (botones del hero)
+        "surface-hover": "#ebe5d4", // hover cálido de superficies (botones, filas, links)
+        "surface-sunken": "#ece7da", // fondo hundido cálido (placeholders, skeletons, badges, cajas, input deshabilitado)
         line: "#e5e3dc", // borde sutil que separa superficies (utilidad border-line)
         ink: "#2e312a", // tinta (texto)
       },

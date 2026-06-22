@@ -57,7 +57,7 @@ export default async function MyListingsPage() {
           {listings.map((l) => (
             <div key={l.id} className="card flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
               <Link href={`/articulos/${l.id}`} className="flex min-w-0 flex-1 items-center gap-4">
-                <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-stone-800">
+                <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-surface-sunken dark:bg-stone-800">
                   {l.images[0] ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={l.images[0].url} alt={l.title} className="h-full w-full object-cover" />

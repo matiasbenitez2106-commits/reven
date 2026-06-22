@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 const STATUS_LABELS: Record<string, { label: string; cls: string }> = {
   ACTIVE: { label: "Activa", cls: "bg-brand-100 dark:bg-brand-800/40 text-brand-700 dark:text-brand-300" },
   PAUSED: { label: "Pausada", cls: "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300" },
-  SOLD: { label: "Vendida", cls: "bg-gray-100 dark:bg-stone-800 text-gray-600 dark:text-stone-300" },
+  SOLD: { label: "Vendida", cls: "bg-surface-sunken dark:bg-stone-800 text-gray-600 dark:text-stone-300" },
   DELETED: { label: "Eliminada", cls: "bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400" },
 };
 
@@ -75,7 +75,7 @@ export default async function AdminListingsPage({
               className={`rounded-full border px-3 py-1 text-xs font-medium ${
                 estado === f.key
                   ? "border-brand-600 bg-brand-600 text-white"
-                  : "border-line dark:border-stone-800 text-gray-600 dark:text-stone-300 hover:bg-gray-50 dark:hover:bg-stone-800"
+                  : "border-line dark:border-stone-800 text-gray-600 dark:text-stone-300 hover:bg-surface-hover dark:hover:bg-stone-800"
               }`}
             >
               {f.label}

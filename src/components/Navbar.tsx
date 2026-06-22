@@ -123,7 +123,7 @@ export function Navbar() {
 
         <div className="ml-auto flex items-center gap-2">
           {status === "loading" ? (
-            <div className="h-9 w-24 animate-pulse rounded-lg bg-gray-100 dark:bg-stone-800" />
+            <div className="h-9 w-24 animate-pulse rounded-lg bg-surface-sunken dark:bg-stone-800" />
           ) : user ? (
             <>
               <Link
@@ -134,7 +134,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/favoritos"
-                className="hidden rounded-lg p-2 text-gray-600 dark:text-stone-300 hover:bg-gray-100 dark:hover:bg-stone-800 sm:block"
+                className="hidden rounded-lg p-2 text-gray-600 dark:text-stone-300 hover:bg-surface-hover dark:hover:bg-stone-800 sm:block"
                 aria-label="Favoritos"
               >
                 <Heart className="h-5 w-5" />
@@ -142,7 +142,7 @@ export function Navbar() {
               <NotificationBell />
               <Link
                 href="/mensajes"
-                className="relative rounded-lg p-2 text-gray-600 dark:text-stone-300 hover:bg-gray-100 dark:hover:bg-stone-800"
+                className="relative rounded-lg p-2 text-gray-600 dark:text-stone-300 hover:bg-surface-hover dark:hover:bg-stone-800"
                 aria-label="Mensajes"
               >
                 <MessageCircle className="h-5 w-5" />
@@ -205,7 +205,7 @@ export function Navbar() {
                     )}
                     <button
                       onClick={() => signOut({ callbackUrl: "/" })}
-                      className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-stone-800"
+                      className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-surface-hover dark:hover:bg-stone-800"
                     >
                       <LogOut className="h-4 w-4" /> Cerrar sesión
                     </button>
@@ -217,7 +217,7 @@ export function Navbar() {
             <>
               <Link
                 href="/ingresar"
-                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-stone-200 hover:bg-gray-100 dark:hover:bg-stone-800"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-stone-200 hover:bg-surface-hover dark:hover:bg-stone-800"
               >
                 Ingresar
               </Link>
@@ -250,7 +250,7 @@ function MenuLink({
     <Link
       href={href}
       onClick={onClick}
-      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-stone-200 hover:bg-gray-50 dark:hover:bg-stone-800"
+      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-stone-200 hover:bg-surface-hover dark:hover:bg-stone-800"
     >
       <Icon className="h-4 w-4 text-gray-500 dark:text-stone-400" /> {children}
     </Link>

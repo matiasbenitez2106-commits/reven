@@ -46,7 +46,7 @@ export default async function AccountPage() {
           </div>
           <Link
             href="/cuenta/editar"
-            className="inline-flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
+            className="inline-flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 px-3 py-1.5 text-sm hover:bg-surface-hover dark:hover:bg-stone-800"
           >
             <Pencil className="h-3.5 w-3.5" /> Editar
           </Link>
@@ -63,7 +63,7 @@ export default async function AccountPage() {
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Link href="/mis-publicaciones" className="card flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-stone-800">
+        <Link href="/mis-publicaciones" className="card flex items-center gap-3 p-4 hover:bg-surface-hover dark:hover:bg-stone-800">
           <Package className="h-5 w-5 text-brand-600 dark:text-brand-300" />
           <div>
             <p className="text-sm font-medium">Mis publicaciones</p>
@@ -72,22 +72,22 @@ export default async function AccountPage() {
             </p>
           </div>
         </Link>
-        <Link href="/favoritos" className="card flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-stone-800">
+        <Link href="/favoritos" className="card flex items-center gap-3 p-4 hover:bg-surface-hover dark:hover:bg-stone-800">
           <Heart className="h-5 w-5 text-red-500" />
           <div>
             <p className="text-sm font-medium">Favoritos</p>
             <p className="text-xs text-gray-500 dark:text-stone-400">{favCount} guardados</p>
           </div>
         </Link>
-        <Link href="/mensajes" className="card flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-stone-800">
+        <Link href="/mensajes" className="card flex items-center gap-3 p-4 hover:bg-surface-hover dark:hover:bg-stone-800">
           <MessageCircle className="h-5 w-5 text-brand-600 dark:text-brand-300" />
           <span className="text-sm font-medium">Mensajes</span>
         </Link>
-        <Link href="/verificacion" className="card flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-stone-800">
+        <Link href="/verificacion" className="card flex items-center gap-3 p-4 hover:bg-surface-hover dark:hover:bg-stone-800">
           <ShieldCheck className="h-5 w-5 text-brand-600 dark:text-brand-300" />
           <span className="text-sm font-medium">Verificación de identidad</span>
         </Link>
-        <Link href="/suscripcion" className="card flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-stone-800">
+        <Link href="/suscripcion" className="card flex items-center gap-3 p-4 hover:bg-surface-hover dark:hover:bg-stone-800">
           <Crown className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
           <div>
             <p className="text-sm font-medium">Suscripción de vendedor</p>

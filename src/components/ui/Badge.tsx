@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 type Color = "gray" | "green" | "yellow" | "red" | "blue" | "brand";
 
 const colors: Record<Color, string> = {
-  gray: "bg-gray-100 dark:bg-stone-800 text-gray-700 dark:text-stone-200",
+  gray: "bg-surface-sunken dark:bg-stone-800 text-gray-700 dark:text-stone-200",
   green: "bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300",
   yellow: "bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300",
   red: "bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300",

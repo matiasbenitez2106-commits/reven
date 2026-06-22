@@ -208,7 +208,7 @@ export function ListingForm({ categories, listingId, initial }: Props) {
         <button
           type="button"
           onClick={useMyLocation}
-          className="inline-flex items-center gap-2 rounded-lg border border-line dark:border-stone-700 px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-stone-800"
+          className="inline-flex items-center gap-2 rounded-lg border border-line dark:border-stone-700 px-3 py-2 text-sm hover:bg-surface-hover dark:hover:bg-stone-800"
         >
           {coords ? <Check className="h-4 w-4 text-green-600 dark:text-green-400" /> : <MapPin className="h-4 w-4" />}
           {coords ? "Ubicación capturada" : "Usar mi ubicación actual (mejora la búsqueda por cercanía)"}

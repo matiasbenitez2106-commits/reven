@@ -33,7 +33,7 @@ export function ListingCard({
       href={`/articulos/${item.id}`}
       className="group card overflow-hidden transition hover:shadow-md"
     >
-      <div className="relative aspect-square w-full overflow-hidden bg-gray-100 dark:bg-stone-800">
+      <div className="relative aspect-square w-full overflow-hidden bg-surface-sunken dark:bg-stone-800">
         {item.image ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -64,7 +64,7 @@ export function ListingCard({
           </span>
         </div>
         <div className="mt-1.5 flex items-center justify-between text-[11px] text-gray-400 dark:text-stone-500">
-          <span className="rounded bg-gray-100 dark:bg-stone-800 px-1.5 py-0.5">{CONDITION_LABELS[item.condition]}</span>
+          <span className="rounded bg-surface-sunken dark:bg-stone-800 px-1.5 py-0.5">{CONDITION_LABELS[item.condition]}</span>
           {item.distanceKm != null && <span>{formatDistance(item.distanceKm)}</span>}
         </div>
       </div>

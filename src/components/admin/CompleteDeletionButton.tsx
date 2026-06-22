@@ -111,7 +111,7 @@ export function CompleteDeletionButton({
                   </h3>
                   <button
                     onClick={() => !loading && setOpen(false)}
-                    className="rounded-lg p-1 text-gray-400 dark:text-stone-500 hover:bg-gray-100 dark:hover:bg-stone-800"
+                    className="rounded-lg p-1 text-gray-400 dark:text-stone-500 hover:bg-surface-hover dark:hover:bg-stone-800"
                     aria-label="Cerrar"
                   >
                     <X className="h-5 w-5" />
@@ -123,7 +123,7 @@ export function CompleteDeletionButton({
                   (incluidas las imágenes de verificación). No se puede deshacer. Para confirmar,
                   escribí el email de la cuenta:
                 </p>
-                <p className="mt-2 rounded-lg bg-gray-50 dark:bg-stone-800/60 px-3 py-2 text-sm font-medium text-gray-700 dark:text-stone-200">
+                <p className="mt-2 rounded-lg bg-surface-sunken dark:bg-stone-800/60 px-3 py-2 text-sm font-medium text-gray-700 dark:text-stone-200">
                   {email}
                 </p>
 
@@ -146,7 +146,7 @@ export function CompleteDeletionButton({
                   <button
                     onClick={() => setOpen(false)}
                     disabled={loading}
-                    className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 dark:text-stone-200 hover:bg-gray-100 dark:hover:bg-stone-800 disabled:opacity-50"
+                    className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 dark:text-stone-200 hover:bg-surface-hover dark:hover:bg-stone-800 disabled:opacity-50"
                   >
                     Cancelar
                   </button>

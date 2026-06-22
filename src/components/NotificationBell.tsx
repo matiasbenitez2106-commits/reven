@@ -96,7 +96,7 @@ export function NotificationBell() {
     <div className="relative" ref={ref}>
       <button
         onClick={toggle}
-        className="relative rounded-lg p-2 text-gray-600 dark:text-stone-300 hover:bg-gray-100 dark:hover:bg-stone-800"
+        className="relative rounded-lg p-2 text-gray-600 dark:text-stone-300 hover:bg-surface-hover dark:hover:bg-stone-800"
         aria-label="Notificaciones"
       >
         <Bell className="h-5 w-5" />
@@ -125,7 +125,7 @@ export function NotificationBell() {
                     key={n.id}
                     onClick={() => openItem(n)}
                     className={cn(
-                      "flex w-full items-start gap-3 border-b border-gray-50 px-4 py-3 text-left last:border-0 hover:bg-gray-50 dark:hover:bg-stone-800",
+                      "flex w-full items-start gap-3 border-b border-gray-50 px-4 py-3 text-left last:border-0 hover:bg-surface-hover dark:hover:bg-stone-800",
                       !n.read && "bg-brand-50/60 dark:bg-brand-900/30"
                     )}
                   >

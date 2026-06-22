@@ -68,7 +68,7 @@ export function BajaScreen({ deletionScheduledFor }: { deletionScheduledFor: str
           si te arrepentís, volvés con un clic y queda todo como estaba.
         </p>
 
-        <div className="mt-4 rounded-lg bg-gray-50 dark:bg-stone-800/60 p-3 text-sm text-gray-700 dark:text-stone-200">
+        <div className="mt-4 rounded-lg bg-surface-sunken dark:bg-stone-800/60 p-3 text-sm text-gray-700 dark:text-stone-200">
           Si no hacés nada, vamos a borrar tu cuenta y todos tus datos el{" "}
           <strong>{fmtFecha(deletionScheduledFor)}</strong>. Eso no se puede deshacer.
         </div>

@@ -6,7 +6,7 @@ import { MapPin } from "lucide-react";
 // El mapa Leaflet se carga solo en el cliente (usa window).
 const OsmMap = dynamic(() => import("./OsmMap"), {
   ssr: false,
-  loading: () => <div className="h-full w-full animate-pulse bg-gray-100 dark:bg-stone-800" />,
+  loading: () => <div className="h-full w-full animate-pulse bg-surface-sunken dark:bg-stone-800" />,
 });
 
 // Ubicación APROXIMADA (no muestra dirección exacta). Gratis, sin API key.
@@ -21,7 +21,7 @@ export function LocationMap({
 }) {
   if (lat == null || lng == null) {
     return (
-      <div className="flex h-48 items-center justify-center rounded-xl border border-line dark:border-stone-800 bg-gray-50 dark:bg-stone-900 text-sm text-gray-500 dark:text-stone-400">
+      <div className="flex h-48 items-center justify-center rounded-xl border border-line dark:border-stone-800 bg-surface-sunken dark:bg-stone-900 text-sm text-gray-500 dark:text-stone-400">
         <MapPin className="mr-1 h-4 w-4" /> Zona: {label}
       </div>
     );

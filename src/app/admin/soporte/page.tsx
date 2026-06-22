@@ -10,7 +10,7 @@ const TOPIC_LABEL: Record<string, { label: string; cls: string }> = {
   SOPORTE: { label: "Soporte", cls: "bg-brand-100 dark:bg-brand-800/40 text-brand-700 dark:text-brand-300" },
   PRIVACIDAD: { label: "Privacidad", cls: "bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300" },
   DENUNCIA: { label: "Denuncia", cls: "bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300" },
-  OTRO: { label: "Otro", cls: "bg-gray-100 dark:bg-stone-800 text-gray-600 dark:text-stone-300" },
+  OTRO: { label: "Otro", cls: "bg-surface-sunken dark:bg-stone-800 text-gray-600 dark:text-stone-300" },
 };
 
 export default async function AdminSupportPage({

@@ -55,7 +55,7 @@ export default async function ConversationPage({ params }: { params: { id: strin
     <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-3xl flex-col px-4 py-4">
       {/* Encabezado */}
       <div className="mb-3 flex items-center gap-3 border-b border-line dark:border-stone-800 pb-3">
-        <Link href="/mensajes" className="rounded-lg p-1.5 text-gray-500 dark:text-stone-400 hover:bg-gray-100 dark:hover:bg-stone-800">
+        <Link href="/mensajes" className="rounded-lg p-1.5 text-gray-500 dark:text-stone-400 hover:bg-surface-hover dark:hover:bg-stone-800">
           <ArrowLeft className="h-5 w-5" />
         </Link>
         <Avatar firstName={other.firstName} lastName={other.lastName} src={other.avatarUrl} size={40} />
@@ -67,9 +67,9 @@ export default async function ConversationPage({ params }: { params: { id: strin
         </div>
         <Link
           href={`/articulos/${convo.listing.id}`}
-          className="flex items-center gap-2 rounded-lg border border-line dark:border-stone-800 p-1.5 hover:bg-gray-50 dark:hover:bg-stone-800"
+          className="flex items-center gap-2 rounded-lg border border-line dark:border-stone-800 p-1.5 hover:bg-surface-hover dark:hover:bg-stone-800"
         >
-          <div className="h-9 w-9 overflow-hidden rounded bg-gray-100 dark:bg-stone-800">
+          <div className="h-9 w-9 overflow-hidden rounded bg-surface-sunken dark:bg-stone-800">
             {thumb ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={thumb} alt="" className="h-full w-full object-cover" />
