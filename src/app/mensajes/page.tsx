@@ -62,6 +62,8 @@ export default async function MessagesPage() {
                 <div className="relative">
                   <Avatar firstName={other.firstName} lastName={other.lastName} src={other.avatarUrl} size={44} />
                   {thumb ? (
+                    // Anillo blanco intencional: separa la miniatura del avatar (contraste sobre
+                    // imagen, mismo criterio que los botones sobre foto). No migrar a token de paleta.
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={thumb}

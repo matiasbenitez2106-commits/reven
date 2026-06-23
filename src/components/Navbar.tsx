@@ -160,7 +160,7 @@ export function Navbar() {
                 >
                   <Avatar firstName={firstName} lastName={lastName} src={user.image} />
                   {isAdmin && adminPending > 0 && (
-                    <span className="absolute right-0 top-0 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white dark:ring-stone-900" />
+                    <span className="absolute right-0 top-0 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-surface dark:ring-stone-900" />
                   )}
                 </button>
 
