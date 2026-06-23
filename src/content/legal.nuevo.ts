@@ -6,7 +6,7 @@ import type { LegalDocContent } from "@/components/LegalDoc";
 // ya cargados. Pendiente también: revisión legal final del abogado.
 // Este contenido es informativo y no constituye asesoramiento legal.
 
-export const UPDATED_NUEVO = "7 de junio de 2026";
+export const UPDATED_NUEVO = "23 de junio de 2026";
 
 export const PRIVACY_NUEVO: LegalDocContent = {
   title: "Política de Privacidad de trato",
@@ -202,7 +202,7 @@ export const PRIVACY_NUEVO: LegalDocContent = {
         "Podemos actualizar esta Política de Privacidad para reflejar cambios en el servicio, en nuestros proveedores o en la normativa aplicable. Cuando hagamos cambios relevantes, te lo comunicaremos a través de la app o por email, e indicaremos siempre la fecha de vigencia de la versión actualizada.",
         "Te recomendamos revisar esta página periódicamente. El uso continuado del servicio luego de la entrada en vigencia de los cambios implica que tomaste conocimiento de ellos. Cuando se trate de cambios que afecten el tratamiento de datos sensibles, te pediremos nuevamente tu consentimiento cuando corresponda.",
       ],
-      bullets: ["Fecha de vigencia: 7 de junio de 2026.", "Última actualización: 7 de junio de 2026."],
+      bullets: ["Fecha de vigencia: 23 de junio de 2026.", "Última actualización: 23 de junio de 2026."],
     },
     {
       heading: "Contacto",
