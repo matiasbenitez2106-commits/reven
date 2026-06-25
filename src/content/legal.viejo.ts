@@ -313,7 +313,7 @@ export const TERMS_VIEJO: LegalDocContent = {
         "trato ofrece suscripciones pagas que habilitan funciones y beneficios adicionales dentro del Servicio. Los planes disponibles y sus precios son:",
         "El cobro de las suscripciones se realiza a través de MercadoPago. Al contratar un plan, autorizás el cobro recurrente correspondiente a través de ese medio de pago.",
       ],
-      bullets: ["Plan PRO: $3.990 por mes.", "Plan PRO+: $8.990 por mes."],
+      bullets: ["Plan PRO: $1.990 por mes.", "Plan PRO+: $2.990 por mes."],
     },
     {
       heading: "Publicaciones destacadas",
