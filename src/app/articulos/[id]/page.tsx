@@ -16,7 +16,7 @@ import { VerificationBadge } from "@/components/VerificationBadge";
 import { ProBadge } from "@/components/ProBadge";
 import { activePlan } from "@/lib/subscriptions";
 import { geocode } from "@/lib/geo";
-import { formatPrice, formatRelative } from "@/lib/utils";
+import { formatPrice, formatRelative, hideContactInfo } from "@/lib/utils";
 import { CONDITION_LABELS } from "@/lib/constants";
 
 export async function generateMetadata({
@@ -257,27 +257,13 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
         </div>
       </div>
 
-      {/* Descripción — visible solo para usuarios registrados (puede incluir datos
-          de contacto; protegemos de scrapers y de invitados anónimos). */}
+      {/* Descripción — visible para todos, pero con los datos de contacto ocultos
+          (links, teléfonos, @usuarios, emails) para que el trato quede dentro de la app. */}
       <div className="mt-8 card p-6">
         <h2 className="mb-2 font-semibold">Descripción</h2>
-        {user ? (
-          <p className="whitespace-pre-line text-sm leading-relaxed text-gray-700 dark:text-stone-200">
-            {listing.description}
-          </p>
-        ) : (
-          <div className="rounded-lg border border-dashed border-line dark:border-stone-700 bg-surface-sunken dark:bg-stone-900 p-5 text-center">
-            <p className="text-sm text-gray-600 dark:text-stone-300">
-              Iniciá sesión para ver la descripción completa y contactar al vendedor.
-            </p>
-            <Link
-              href={`/ingresar?callbackUrl=/articulos/${listing.id}`}
-              className="mt-3 inline-block rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
-            >
-              Ingresar o crear cuenta
-            </Link>
-          </div>
-        )}
+        <p className="whitespace-pre-line text-sm leading-relaxed text-gray-700 dark:text-stone-200">
+          {hideContactInfo(listing.description)}
+        </p>
       </div>
 
       {/* Ubicación aproximada */}

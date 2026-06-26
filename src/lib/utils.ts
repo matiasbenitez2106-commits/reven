@@ -43,3 +43,27 @@ export function formatDistance(km: number): string {
   if (km < 1) return `a ${Math.round(km * 1000)} m`;
   return `a ${km.toLocaleString("es-AR", { maximumFractionDigits: 1 })} km`;
 }
+
+/**
+ * Oculta datos de contacto en texto libre (descripciones), para que el trato
+ * quede DENTRO de Trato y no se derive a WhatsApp / Instagram / etc.
+ * No es infalible, pero cubre los casos comunes: emails, links, dominios sueltos,
+ * @usuarios y teléfonos. Cada coincidencia se reemplaza por "•••".
+ */
+export function hideContactInfo(text: string): string {
+  if (!text) return text;
+  return text
+    // Emails
+    .replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/gi, "•••")
+    // Links con http(s):// o www.
+    .replace(/\b(?:https?:\/\/|www\.)\S+/gi, "•••")
+    // Dominios sueltos (midominio.com, tienda.com.ar, etc.)
+    .replace(
+      /\b[\w-]+\.(?:com|ar|net|org|io|co|me|app|shop|store|online)\b(?:\.[a-z]{2,3})?\/?\S*/gi,
+      "•••"
+    )
+    // @usuarios (Instagram, etc.)
+    .replace(/(^|[\s(])@\w{2,}/g, "$1•••")
+    // Teléfonos (7+ dígitos con espacios, guiones, paréntesis o +)
+    .replace(/\+?\d[\d\s().-]{6,}\d/g, "•••");
+}
