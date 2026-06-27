@@ -76,3 +76,68 @@ El material de campaña (posters, guiones, calendario) vive en la carpeta local
 `Campaña Marketing Trato/` (fuera del repo, ver `.gitignore`). Al regenerarlo,
 usar esta identidad: paleta de la sección 2, Bricolage Grotesque para títulos,
 fotos con luz cálida y estética de feria americana / thrift.
+
+## 6. Misión, visión y valores
+
+- **Misión:** hacer de la compraventa entre particulares un lugar de confianza,
+  sin comisiones y al alcance de todos.
+- **Visión:** ser el lugar donde los argentinos eligen comprar y vender usados,
+  porque saben que del otro lado hay alguien real.
+- **Valores:** confianza ante todo · cercanía (hablamos como personas, no como
+  empresa) · justo y sin comisiones · cuidado (de las personas y sus datos) ·
+  simpleza.
+
+## 7. A quién le hablamos
+
+- **Vendedor ideal:** joven (≈18–30), vende ropa vintage / de segunda mano, ya
+  activo en Instagram; busca herramientas y una vidriera con confianza. Es a
+  quien apunta la captación.
+- **Comprador ideal:** joven, busca moda con onda a buen precio, y le importa
+  **no ser estafado**.
+- A ambos les hablamos de igual a igual, en voseo, sin tecnicismos.
+
+## 8. Firma de marca (la marca es el mensaje)
+
+- La firma es la propia palabra: **"trato."** usada sola, como cierre. El nombre
+  lo dice todo (en la línea de marcas que se vuelven la palabra, tipo Rappi).
+- **Aspiración:** que **"trato" se vuelva verbo/expresión cotidiana**. Cultivar
+  **"hacé trato"** como llamado a la acción y forma de hablar ("lo vendí por
+  trato", "hacé trato").
+- El **claim funcional** sigue siendo, dentro de la app:
+  "Comprá y vendé lo que quieras, entre personas reales."
+
+## 9. Voz — ejemplos "sí / no"
+
+| Situación | ✅ Así (on-brand) | ❌ Así no |
+|---|---|---|
+| Botón publicar | "Publicá gratis" | "Crear publicación" |
+| Bienvenida | "¡Hola! Bienvenido a trato 🌿" | "Estimado usuario:" |
+| Error | "Uy, algo salió mal. Probá de nuevo." | "Error 500: Internal Server Error" |
+| Verificación | "Verificá tu identidad — es rápido y tus datos van encriptados." | "Complete el proceso de validación KYC." |
+| Sin resultados | "No encontramos nada. Probá con otras palabras." | "0 resultados para la consulta." |
+
+Regla: cálido, breve, en voseo. Nunca corporativo ni técnico de cara al usuario.
+
+## 10. Uso del logo
+
+- **Espacio libre:** dejar aire alrededor del logo (al menos la altura del sello).
+- **Tamaño mínimo:** que el check del sello se lea (≈24 px el sello; ≈80 px el wordmark).
+- **Fondos válidos:** crema, blanco o salvia profundo. Evitar fotos con poco contraste detrás.
+- **Mal uso (no hacer):** no estirar ni rotar · no cambiar los colores · no
+  reemplazar la "o" · no agregar sombras · no usar Bricolage Grotesque fuera del logo.
+
+## 11. Fotografía e imágenes
+
+- **Sí:** luz natural cálida, estética feria americana / thrift, prendas y gente
+  **reales**, fondos crema o neutros.
+- **No:** stock corporativo frío, fondos blancos de catálogo, sobreedición.
+- **En marketing** se permite (y se busca) más energía: collage, texturas, el
+  óxido más protagonista. _Confianza adentro de la app, personalidad afuera._
+
+## 12. Accesibilidad de la paleta
+
+- **Texto principal:** siempre en **ink `#2E312A`** sobre crema (contraste altísimo).
+- ⚠️ **Salvia `#66785B` sobre crema** queda **borderline para texto chico** (puede
+  no llegar a WCAG AA). Para texto pequeño usar ink o **salvia profundo `#515E48`**;
+  reservar el salvia medio para acciones, íconos y textos grandes.
+- Pendiente: verificar formalmente los contrastes (auditoría de accesibilidad, frente D4).
