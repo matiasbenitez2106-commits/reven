@@ -27,7 +27,52 @@ function isFeatured(featuredUntil: Date | null, now: Date): boolean {
   return featuredUntil ? new Date(featuredUntil) > now : false;
 }
 
-function toCard(l: ListingWithRel, now: Date, distanceKm: number | null = null): ListingCardItem {
+// ── Reputación del vendedor (promedio + nº de reseñas) para las tarjetas ──
+
+export interface SellerRating {
+  rating: number | null; // promedio redondeado a 1 decimal, o null si no hay reseñas
+  count: number;
+}
+
+/** Redondea un promedio de rating a 1 decimal; null si no hay datos. */
+export function roundRating(avg: number | null | undefined): number | null {
+  return avg == null ? null : Math.round(avg * 10) / 10;
+}
+
+/** Indexa el resultado de un groupBy de Review (by targetId) en un Map por vendedor. */
+export function summarizeRatings(
+  rows: { targetId: string; _avg: { rating: number | null }; _count: number }[]
+): Map<string, SellerRating> {
+  const map = new Map<string, SellerRating>();
+  for (const r of rows) {
+    map.set(r.targetId, { rating: roundRating(r._avg.rating), count: r._count });
+  }
+  return map;
+}
+
+/**
+ * Reputación de un conjunto de vendedores en UNA sola consulta (sin N+1 por
+ * tarjeta): groupBy de Review por targetId para los sellerIds del set de resultados.
+ */
+export async function getSellerRatings(sellerIds: string[]): Promise<Map<string, SellerRating>> {
+  const ids = Array.from(new Set(sellerIds));
+  if (ids.length === 0) return new Map();
+  const rows = await prisma.review.groupBy({
+    by: ["targetId"],
+    where: { targetId: { in: ids } },
+    _avg: { rating: true },
+    _count: true,
+  });
+  return summarizeRatings(rows);
+}
+
+function toCard(
+  l: ListingWithRel,
+  now: Date,
+  distanceKm: number | null = null,
+  ratings?: Map<string, SellerRating>
+): ListingCardItem {
+  const sr = ratings?.get(l.sellerId);
   return {
     id: l.id,
     title: l.title,
@@ -43,6 +88,8 @@ function toCard(l: ListingWithRel, now: Date, distanceKm: number | null = null):
     sellerFirstName: l.seller.firstName,
     sellerLastName: l.seller.lastName,
     sellerAvatar: l.seller.avatarUrl,
+    sellerRating: sr?.rating ?? null,
+    sellerReviewCount: sr?.count ?? 0,
   };
 }
 
@@ -125,10 +172,10 @@ export async function searchListings(p: SearchParams): Promise<SearchResult> {
 
     const total = enriched.length;
     const start = (p.page - 1) * PAGE_SIZE;
+    const pageItems = enriched.slice(start, start + PAGE_SIZE);
+    const ratings = await getSellerRatings(pageItems.map((e) => e.listing.sellerId));
     return {
-      items: enriched
-        .slice(start, start + PAGE_SIZE)
-        .map((e) => toCard(e.listing, now, e.distanceKm)),
+      items: pageItems.map((e) => toCard(e.listing, now, e.distanceKm, ratings)),
       total,
       page: p.page,
       pageSize: PAGE_SIZE,
@@ -186,8 +233,9 @@ export async function searchListings(p: SearchParams): Promise<SearchResult> {
     offset = bucketEnd;
   }
 
+  const ratings = await getSellerRatings(rows.map((l) => l.sellerId));
   return {
-    items: rows.map((l) => toCard(l, now)),
+    items: rows.map((l) => toCard(l, now, null, ratings)),
     total,
     page: p.page,
     pageSize: PAGE_SIZE,

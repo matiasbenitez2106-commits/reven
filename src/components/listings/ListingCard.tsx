@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, ImageOff, Sparkles, BadgeCheck } from "lucide-react";
+import { MapPin, ImageOff, Sparkles, BadgeCheck, Star } from "lucide-react";
 import { formatPrice, formatDistance } from "@/lib/utils";
 import { CONDITION_LABELS } from "@/lib/constants";
 import { Avatar } from "@/components/ui/Avatar";
@@ -20,6 +20,8 @@ export interface ListingCardItem {
   sellerFirstName?: string;
   sellerLastName?: string | null;
   sellerAvatar?: string | null;
+  sellerRating?: number | null;
+  sellerReviewCount?: number;
 }
 
 // `showFeatured` solo lo activan las vistas del DUEÑO (p.ej. "Mis publicaciones").
@@ -80,6 +82,17 @@ export function ListingCard({
             {item.sellerVerified && (
               <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-brand-600 dark:text-brand-300" />
             )}
+            {/* Reputación: solo si el vendedor tiene reseñas (si no, no ensucia). */}
+            {item.sellerReviewCount ? (
+              <span className="ml-auto flex shrink-0 items-center gap-0.5 text-[11px] text-gray-500 dark:text-stone-400">
+                <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                {(item.sellerRating ?? 0).toLocaleString("es-AR", {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+                })}
+                <span className="text-gray-400 dark:text-stone-500">({item.sellerReviewCount})</span>
+              </span>
+            ) : null}
           </div>
         )}
 

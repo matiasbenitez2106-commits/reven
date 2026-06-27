@@ -4,6 +4,7 @@ import { Heart } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { ListingCard } from "@/components/listings/ListingCard";
+import { getSellerRatings } from "@/lib/listings";
 
 export const metadata = { title: "Favoritos" };
 
@@ -17,7 +18,9 @@ export default async function FavoritesPage() {
       listing: {
         include: {
           images: { orderBy: { position: "asc" }, take: 1 },
-          seller: { select: { verification: true } },
+          seller: {
+            select: { verification: true, firstName: true, lastName: true, avatarUrl: true },
+          },
         },
       },
     },
@@ -25,9 +28,11 @@ export default async function FavoritesPage() {
   });
 
   const now = new Date();
-  const items = favs
-    .filter((f) => f.listing.status !== "DELETED")
-    .map((f) => ({
+  const visible = favs.filter((f) => f.listing.status !== "DELETED");
+  const ratings = await getSellerRatings(visible.map((f) => f.listing.sellerId));
+  const items = visible.map((f) => {
+    const sr = ratings.get(f.listing.sellerId);
+    return {
       id: f.listing.id,
       title: f.listing.title,
       price: Number(f.listing.price),
@@ -36,9 +41,15 @@ export default async function FavoritesPage() {
       neighborhood: f.listing.neighborhood,
       condition: f.listing.condition,
       sellerVerified: f.listing.seller.verification === "VERIFIED",
+      sellerFirstName: f.listing.seller.firstName,
+      sellerLastName: f.listing.seller.lastName,
+      sellerAvatar: f.listing.seller.avatarUrl,
+      sellerRating: sr?.rating ?? null,
+      sellerReviewCount: sr?.count ?? 0,
       distanceKm: null,
       featured: f.listing.featuredUntil ? new Date(f.listing.featuredUntil) > now : false,
-    }));
+    };
+  });
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">

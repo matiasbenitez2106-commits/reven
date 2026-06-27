@@ -10,7 +10,13 @@ vi.mock("@/lib/prisma", () => ({
 }));
 
 import { prisma } from "@/lib/prisma";
-import { canReviewListing, normalizeTitle, titlesAreSimilar } from "@/lib/listings";
+import {
+  canReviewListing,
+  normalizeTitle,
+  titlesAreSimilar,
+  roundRating,
+  summarizeRatings,
+} from "@/lib/listings";
 
 const db = prisma as unknown as {
   listing: { findUnique: ReturnType<typeof vi.fn> };
@@ -19,6 +25,30 @@ const db = prisma as unknown as {
 
 beforeEach(() => {
   vi.clearAllMocks();
+});
+
+describe("roundRating", () => {
+  it("redondea el promedio a 1 decimal", () => {
+    expect(roundRating(4.83)).toBe(4.8);
+    expect(roundRating(4.27)).toBe(4.3);
+    expect(roundRating(5)).toBe(5);
+  });
+  it("null si no hay promedio (sin reseñas)", () => {
+    expect(roundRating(null)).toBe(null);
+    expect(roundRating(undefined)).toBe(null);
+  });
+});
+
+describe("summarizeRatings (agregado por vendedor, sin N+1)", () => {
+  it("indexa por targetId con promedio redondeado y conteo", () => {
+    const map = summarizeRatings([
+      { targetId: "s1", _avg: { rating: 4.833 }, _count: 12 },
+      { targetId: "s2", _avg: { rating: 3 }, _count: 1 },
+    ]);
+    expect(map.get("s1")).toEqual({ rating: 4.8, count: 12 });
+    expect(map.get("s2")).toEqual({ rating: 3, count: 1 });
+    expect(map.get("s3")).toBeUndefined();
+  });
 });
 
 describe("normalizeTitle (puro, sin DB)", () => {
