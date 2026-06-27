@@ -71,3 +71,8 @@ export function hideContactInfo(text: string): string {
     // paréntesis, o secuencias largas de dígitos sin puntos) sí se ocultan.
     .replace(/\+?\d[\d\s()-]{6,}\d/g, "•••");
 }
+
+/** True si `hideContactInfo` modificaría el texto (es decir, detectó datos de contacto). */
+export function hasContactInfo(text: string): boolean {
+  return hideContactInfo(text) !== text;
+}

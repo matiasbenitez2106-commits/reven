@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { hideContactInfo, getInitials, formatDistance, formatPrice } from "@/lib/utils";
+import { hideContactInfo, hasContactInfo, getInitials, formatDistance, formatPrice } from "@/lib/utils";
 
 describe("hideContactInfo", () => {
   it("oculta emails", () => {
@@ -56,6 +56,30 @@ describe("hideContactInfo", () => {
 
   it("devuelve el texto vacío sin cambios", () => {
     expect(hideContactInfo("")).toBe("");
+  });
+});
+
+describe("hideContactInfo en mensajes de chat", () => {
+  it("enmascara un WhatsApp/teléfono en un mensaje típico", () => {
+    const out = hideContactInfo("pasame tu whatsapp 11 2345 6789");
+    expect(out).toContain("•••");
+    expect(out).not.toMatch(/2345/);
+  });
+  it("enmascara un @usuario de Instagram", () => {
+    const out = hideContactInfo("mi insta es @juan");
+    expect(out).toContain("•••");
+    expect(out).not.toContain("@juan");
+  });
+});
+
+describe("hasContactInfo (decide la nota sutil)", () => {
+  it("true cuando el mensaje trae datos de contacto", () => {
+    expect(hasContactInfo("pasame tu whatsapp 11 2345 6789")).toBe(true);
+    expect(hasContactInfo("mi insta es @juan")).toBe(true);
+  });
+  it("false en mensajes normales y precios", () => {
+    expect(hasContactInfo("hola, ¿sigue disponible?")).toBe(false);
+    expect(hasContactInfo("te ofrezco 1.500.000")).toBe(false);
   });
 });
 

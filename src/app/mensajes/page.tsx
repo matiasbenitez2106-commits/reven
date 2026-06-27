@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
-import { formatRelative } from "@/lib/utils";
+import { formatRelative, hideContactInfo } from "@/lib/utils";
 
 export const metadata = { title: "Mensajes" };
 
@@ -87,7 +87,7 @@ export default async function MessagesPage() {
                   {last && (
                     <p className="truncate text-sm text-gray-600 dark:text-stone-300">
                       {last.senderId === user.id ? "Vos: " : ""}
-                      {last.body}
+                      {hideContactInfo(last.body)}
                     </p>
                   )}
                 </div>

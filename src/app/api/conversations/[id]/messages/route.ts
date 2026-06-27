@@ -5,6 +5,7 @@ import { messageSchema } from "@/lib/validations";
 import { notify } from "@/lib/notifications";
 import { sendNewMessageEmail } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
+import { hideContactInfo } from "@/lib/utils";
 
 type Params = { params: { id: string } };
 
@@ -99,11 +100,14 @@ export async function POST(req: Request, { params }: Params) {
   });
   if (convo) {
     const recipientId = convo.buyerId === user.id ? convo.sellerId : convo.buyerId;
+    // Enmascaramos el contacto en la notif y el email (de cara al usuario). El
+    // Message ya quedó guardado CRUDO arriba, así que no se pierde para moderar.
+    const safeBody = hideContactInfo(parsed.data.body);
     await notify({
       userId: recipientId,
       type: "MESSAGE",
       title: `Nuevo mensaje de ${user.name ?? "alguien"}`,
-      body: parsed.data.body.slice(0, 80),
+      body: safeBody.slice(0, 80),
       link: `/mensajes/${params.id}`,
     });
 
@@ -118,7 +122,7 @@ export async function POST(req: Request, { params }: Params) {
             recipient.email,
             user.name ?? "Alguien",
             convo.listing.title,
-            parsed.data.body,
+            safeBody,
             params.id
           );
         }

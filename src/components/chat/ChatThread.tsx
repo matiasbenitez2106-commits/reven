@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, hideContactInfo, hasContactInfo } from "@/lib/utils";
 
 interface Msg {
   id: string;
@@ -79,6 +79,9 @@ export function ChatThread({
     }
   }
 
+  // Solo para la nota sutil: ¿algún mensaje tiene datos de contacto enmascarados?
+  const anyMasked = messages.some((m) => hasContactInfo(m.body));
+
   return (
     <div className={cn("flex flex-col", className)}>
       <div className="flex-1 space-y-2 overflow-y-auto p-1">
@@ -99,7 +102,8 @@ export function ChatThread({
                     : "rounded-bl-sm bg-surface-sunken dark:bg-stone-800 text-gray-800 dark:text-stone-100"
                 )}
               >
-                <p className="whitespace-pre-wrap break-words">{m.body}</p>
+                {/* Enmascaramos AL MOSTRAR (el Message original queda crudo en la DB). */}
+                <p className="whitespace-pre-wrap break-words">{hideContactInfo(m.body)}</p>
                 <p className={cn("mt-0.5 text-[10px]", mine ? "text-brand-100" : "text-gray-400 dark:text-stone-500")}>
                   {new Date(m.createdAt).toLocaleTimeString("es-AR", {
                     hour: "2-digit",
@@ -112,6 +116,12 @@ export function ChatThread({
         })}
         <div ref={bottomRef} />
       </div>
+
+      {anyMasked && (
+        <p className="mt-1 px-1 text-[11px] text-gray-400 dark:text-stone-500">
+          Por tu seguridad, los datos de contacto se ocultan — hacé el trato dentro de Trato.
+        </p>
+      )}
 
       <form onSubmit={send} className="mt-2 flex items-center gap-2 border-t border-line dark:border-stone-800 pt-3">
         <input
