@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation";
-import { Package } from "lucide-react";
+import { Package, Star } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Avatar } from "@/components/ui/Avatar";
+import { Stars } from "@/components/ui/Stars";
 import { VerificationBadge } from "@/components/VerificationBadge";
 import { ProBadge } from "@/components/ProBadge";
 import { ListingCard } from "@/components/listings/ListingCard";
 import { activePlan } from "@/lib/subscriptions";
+import { formatRelative } from "@/lib/utils";
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const u = await prisma.user.findUnique({
@@ -34,6 +36,29 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
   if (!u) notFound();
 
   const plan = activePlan(u.proPlan, u.proUntil);
+
+  // Reseñas recibidas: promedio + conteo (sobre todas) y la lista (hasta 50).
+  const [reviewStats, reviews] = await Promise.all([
+    prisma.review.aggregate({
+      where: { targetId: u.id },
+      _avg: { rating: true },
+      _count: true,
+    }),
+    prisma.review.findMany({
+      where: { targetId: u.id },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+      select: {
+        id: true,
+        rating: true,
+        comment: true,
+        createdAt: true,
+        author: { select: { firstName: true, lastName: true, avatarUrl: true } },
+      },
+    }),
+  ]);
+  const reviewCount = reviewStats._count;
+  const avg = reviewStats._avg.rating ?? 0;
 
   const now = new Date();
   const listings = await prisma.listing.findMany({
@@ -71,6 +96,15 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
             {plan && <ProBadge plan={plan} />}
             <span>· {u.city}, {u.province}</span>
           </div>
+          {reviewCount > 0 && (
+            <div className="mt-1.5 flex items-center gap-1.5 text-sm">
+              <Stars value={Math.round(avg)} size={15} />
+              <span className="font-semibold">{avg.toFixed(1)}</span>
+              <span className="text-gray-400 dark:text-stone-500">
+                · {reviewCount} {reviewCount === 1 ? "reseña" : "reseñas"}
+              </span>
+            </div>
+          )}
           <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
             Miembro desde {new Date(u.createdAt).getFullYear()}
           </p>
@@ -90,6 +124,41 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {items.map((item) => (
             <ListingCard key={item.id} item={item} />
+          ))}
+        </div>
+      )}
+
+      <h2 className="mb-4 mt-10 text-lg font-bold">Reseñas ({reviewCount})</h2>
+      {reviewCount === 0 ? (
+        <div className="card flex flex-col items-center gap-2 p-12 text-center text-gray-500 dark:text-stone-400">
+          <Star className="h-10 w-10 text-gray-300 dark:text-stone-600" />
+          <p>Todavía no tiene reseñas.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {reviews.map((r) => (
+            <div key={r.id} className="card p-4">
+              <div className="flex items-center gap-3">
+                <Avatar
+                  firstName={r.author.firstName}
+                  lastName={r.author.lastName}
+                  src={r.author.avatarUrl}
+                  size={36}
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">
+                    {r.author.firstName} {r.author.lastName}
+                  </p>
+                  <Stars value={r.rating} size={14} />
+                </div>
+                <span className="shrink-0 text-xs text-gray-400 dark:text-stone-500">
+                  {formatRelative(r.createdAt)}
+                </span>
+              </div>
+              {r.comment && (
+                <p className="mt-2 text-sm text-gray-600 dark:text-stone-300">{r.comment}</p>
+              )}
+            </div>
           ))}
         </div>
       )}

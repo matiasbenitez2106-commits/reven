@@ -269,6 +269,70 @@ export function titlesAreSimilar(a: string, b: string): boolean {
   return inter >= 2 && (jaccard >= 0.6 || containment >= 0.72);
 }
 
+// ── Compradores de una publicación (candidatos al marcar "vendido") ──
+
+export interface ListingBuyer {
+  id: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl: string | null;
+}
+
+/**
+ * Compradores que iniciaron una conversación en una publicación. Son los
+ * candidatos válidos a "comprador" al marcarla como vendida. Por el
+ * @@unique([listingId, buyerId]) de Conversation, cada conversación corresponde
+ * a un comprador distinto (no hay duplicados).
+ */
+export async function getListingBuyers(listingId: string): Promise<ListingBuyer[]> {
+  const convos = await prisma.conversation.findMany({
+    where: { listingId },
+    orderBy: { createdAt: "asc" },
+    select: {
+      buyer: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } },
+    },
+  });
+  return convos.map((c) => c.buyer);
+}
+
+// ── Elegibilidad para reseñar al vendedor ──
+
+export interface ReviewEligibility {
+  /** true solo si está SOLD, el usuario fue el comprador y aún no reseñó. */
+  canReview: boolean;
+  /** Vendedor de la publicación (target de la reseña), o null si no existe. */
+  sellerId: string | null;
+  /** true si el usuario ya dejó una reseña para esta publicación. */
+  alreadyReviewed: boolean;
+}
+
+/**
+ * ¿Puede `userId` reseñar la publicación `listingId`? Solo si:
+ *  - la publicación está SOLD,
+ *  - su soldToId === userId (fue el comprador registrado), y
+ *  - todavía no dejó una Review para esa publicación.
+ * Devuelve además el sellerId, que es el target de la reseña.
+ */
+export async function canReviewListing(
+  userId: string,
+  listingId: string
+): Promise<ReviewEligibility> {
+  const listing = await prisma.listing.findUnique({
+    where: { id: listingId },
+    select: { sellerId: true, status: true, soldToId: true },
+  });
+  if (!listing) return { canReview: false, sellerId: null, alreadyReviewed: false };
+
+  const isBuyer = listing.status === "SOLD" && listing.soldToId === userId;
+  if (!isBuyer) return { canReview: false, sellerId: listing.sellerId, alreadyReviewed: false };
+
+  const existing = await prisma.review.findUnique({
+    where: { listingId_authorId: { listingId, authorId: userId } },
+    select: { id: true },
+  });
+  return { canReview: !existing, sellerId: listing.sellerId, alreadyReviewed: !!existing };
+}
+
 /** Devuelve el título de una publicación activa similar del mismo vendedor, o null. */
 export async function findDuplicateActiveListing(
   sellerId: string,

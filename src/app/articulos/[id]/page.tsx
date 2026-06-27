@@ -11,10 +11,13 @@ import { SaveButton } from "@/components/listings/SaveButton";
 import { LocationMap } from "@/components/listings/LocationMap";
 import { ViewTracker } from "@/components/listings/ViewTracker";
 import { ReportButton } from "@/components/listings/ReportButton";
+import { SellerReviewAction } from "@/components/listings/SellerReviewAction";
 import { Avatar } from "@/components/ui/Avatar";
+import { Stars } from "@/components/ui/Stars";
 import { VerificationBadge } from "@/components/VerificationBadge";
 import { ProBadge } from "@/components/ProBadge";
 import { activePlan } from "@/lib/subscriptions";
+import { getListingBuyers } from "@/lib/listings";
 import { geocode } from "@/lib/geo";
 import { formatPrice, formatRelative, hideContactInfo } from "@/lib/utils";
 import { CONDITION_LABELS } from "@/lib/constants";
@@ -102,6 +105,15 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
   const memberSince = new Date(listing.seller.createdAt).getFullYear();
   const sellerPlan = activePlan(listing.seller.proPlan, listing.seller.proUntil);
 
+  // Reputación del vendedor (promedio + conteo) para mostrar en su tarjeta.
+  const sellerReviews = await prisma.review.aggregate({
+    where: { targetId: listing.seller.id },
+    _avg: { rating: true },
+    _count: true,
+  });
+  const sellerAvg = sellerReviews._avg.rating ?? 0;
+  const sellerReviewCount = sellerReviews._count;
+
   // Si la publicación no tiene coordenadas (geocoding falló al crearla), las
   // calculamos al vuelo para que el mapa de la zona aproximada se muestre igual.
   let mapLat = listing.latitude;
@@ -128,6 +140,22 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
       prisma.conversation.count({ where: { listingId: listing.id } }),
     ]);
     stats = { views: listing.viewCount, favs, contacts };
+  }
+
+  // Candidatos a comprador (los que escribieron por la publicación). Solo se
+  // calcula para el dueño y mientras no esté vendida (es cuando se elige).
+  const buyers =
+    isOwner && listing.status !== "SOLD" ? await getListingBuyers(listing.id) : [];
+
+  // ¿Soy el comprador registrado de esta venta? Entonces puedo calificar al
+  // vendedor (o ver mi calificación si ya la dejé).
+  const isBuyer = !!user && listing.status === "SOLD" && listing.soldToId === user.id;
+  let myReview: { rating: number; comment: string | null } | null = null;
+  if (isBuyer && user) {
+    myReview = await prisma.review.findUnique({
+      where: { listingId_authorId: { listingId: listing.id, authorId: user.id } },
+      select: { rating: true, comment: true },
+    });
   }
 
   return (
@@ -174,7 +202,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
           {/* Acciones */}
           <div className="mt-6 space-y-3">
             {isOwner ? (
-              <ListingOwnerActions listingId={listing.id} status={listing.status} />
+              <ListingOwnerActions listingId={listing.id} status={listing.status} buyers={buyers} />
             ) : (
               <>
                 {listing.status === "ACTIVE" ? (
@@ -183,6 +211,9 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                   <p className="rounded-lg bg-surface-sunken dark:bg-stone-800 p-3 text-sm text-gray-500 dark:text-stone-400">
                     Esta publicación no está disponible para contacto.
                   </p>
+                )}
+                {isBuyer && (
+                  <SellerReviewAction listingId={listing.id} initialReview={myReview} />
                 )}
                 <SaveButton listingId={listing.id} initialFavorited={favorited} />
               </>
@@ -247,6 +278,17 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                   {sellerPlan && <ProBadge plan={sellerPlan} />}
                   <span>· {listing.seller.city}</span>
                 </div>
+                {sellerReviewCount > 0 && (
+                  <div className="mt-1 flex items-center gap-1.5 text-xs">
+                    <Stars value={Math.round(sellerAvg)} size={13} />
+                    <span className="font-semibold text-gray-600 dark:text-stone-300">
+                      {sellerAvg.toFixed(1)}
+                    </span>
+                    <span className="text-gray-400 dark:text-stone-500">
+                      · {sellerReviewCount} {sellerReviewCount === 1 ? "reseña" : "reseñas"}
+                    </span>
+                  </div>
+                )}
                 <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
                   Miembro desde {memberSince} · {sellerActiveCount}{" "}
                   {sellerActiveCount === 1 ? "publicación activa" : "publicaciones activas"}

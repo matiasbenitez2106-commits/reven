@@ -65,9 +65,45 @@ export async function PATCH(req: Request, { params }: Params) {
     if (!["ACTIVE", "SOLD", "PAUSED"].includes(status)) {
       return NextResponse.json({ error: "Estado inválido" }, { status: 400 });
     }
+
+    // Comprador (opcional) al marcar como vendido. Se valida SIEMPRE en el
+    // servidor: no se confía en lo que manda el cliente.
+    let soldToId: string | null = null;
+    if (status === "SOLD") {
+      // Marcar como vendido es solo del dueño (el admin modera por su propia ruta).
+      if (existing.sellerId !== user.id) {
+        return NextResponse.json(
+          { error: "Solo el dueño puede marcar como vendido" },
+          { status: 403 }
+        );
+      }
+      const raw = body.soldToId;
+      if (typeof raw === "string" && raw.length > 0) {
+        // El comprador tiene que haber escrito por ESTA publicación (tener una
+        // conversación). Si no, se rechaza: evita asignar a cualquier usuario.
+        const convo = await prisma.conversation.findUnique({
+          where: { listingId_buyerId: { listingId: existing.id, buyerId: raw } },
+          select: { id: true },
+        });
+        if (!convo) {
+          return NextResponse.json(
+            { error: "El comprador seleccionado no escribió por esta publicación" },
+            { status: 400 }
+          );
+        }
+        soldToId = raw;
+      }
+      // Si no viene soldToId válido, queda null: "vendí por fuera de Trato".
+    }
+
     const updated = await prisma.listing.update({
       where: { id: existing.id },
-      data: { status, soldAt: status === "SOLD" ? new Date() : null },
+      data: {
+        status,
+        // Al vender: fija fecha y comprador. Al reactivar/pausar: los limpia.
+        soldAt: status === "SOLD" ? new Date() : null,
+        soldToId: status === "SOLD" ? soldToId : null,
+      },
       select: { id: true, status: true },
     });
     return NextResponse.json(updated);
