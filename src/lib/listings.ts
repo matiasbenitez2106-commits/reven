@@ -10,7 +10,7 @@ export const PAGE_SIZE = 24;
 const listInclude = {
   images: { orderBy: { position: "asc" as const }, take: 1 },
   category: { select: { name: true, slug: true } },
-  seller: { select: { verification: true, proPlan: true, proUntil: true } },
+  seller: { select: { verification: true, proPlan: true, proUntil: true, firstName: true, lastName: true, avatarUrl: true } },
 } satisfies Prisma.ListingInclude;
 
 type ListingWithRel = Prisma.ListingGetPayload<{ include: typeof listInclude }>;
@@ -40,6 +40,9 @@ function toCard(l: ListingWithRel, now: Date, distanceKm: number | null = null):
     sellerVerified: l.seller.verification === "VERIFIED",
     featured: isFeatured(l.featuredUntil, now),
     sellerPro: activePlan(l.seller.proPlan, l.seller.proUntil),
+    sellerFirstName: l.seller.firstName,
+    sellerLastName: l.seller.lastName,
+    sellerAvatar: l.seller.avatarUrl,
   };
 }
 
