@@ -19,7 +19,7 @@ export function LegalDoc({ doc, updated }: { doc: LegalDocContent; updated: stri
     <div className="mx-auto max-w-3xl px-4 py-10">
       <Link
         href="/"
-        className="mb-6 inline-flex items-center gap-1 text-sm text-gray-500 dark:text-stone-400 hover:text-brand-600 dark:hover:text-brand-300"
+        className="mb-6 inline-flex items-center gap-1 text-sm text-gray-500 dark:text-stone-400 hover:text-brand-700 dark:hover:text-brand-300"
       >
         <ArrowLeft className="h-4 w-4" /> Volver al inicio
       </Link>

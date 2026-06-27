@@ -243,7 +243,7 @@ export function VerificationFlow() {
               las fotos del documento y mi selfie —que son <strong>datos sensibles</strong>—
               con el único fin de verificar mi identidad y prevenir fraudes. Sé que darlos es
               voluntario y que puedo revocar este consentimiento. Leí la{" "}
-              <Link href="/privacidad" target="_blank" className="text-brand-600 dark:text-brand-300 hover:underline">
+              <Link href="/privacidad" target="_blank" className="text-brand-700 dark:text-brand-300 hover:underline">
                 Política de Privacidad
               </Link>
               .

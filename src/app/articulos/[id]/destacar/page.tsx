@@ -40,7 +40,7 @@ export default async function BoostPage({
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
-      <Link href={`/articulos/${listing.id}`} className="text-sm text-gray-500 dark:text-stone-400 hover:text-brand-600 dark:hover:text-brand-300">
+      <Link href={`/articulos/${listing.id}`} className="text-sm text-gray-500 dark:text-stone-400 hover:text-brand-700 dark:hover:text-brand-300">
         ← Volver a la publicación
       </Link>
       <h1 className="mt-2 flex items-center gap-2 text-2xl font-bold">

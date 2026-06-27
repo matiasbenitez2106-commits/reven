@@ -61,7 +61,7 @@ export default async function AdminSupportPage({
                     <span className="font-medium">{m.name}</span>
                     <a
                       href={`mailto:${m.email}?subject=Re: tu consulta en trato`}
-                      className="inline-flex items-center gap-1 text-xs text-brand-600 dark:text-brand-300 hover:underline"
+                      className="inline-flex items-center gap-1 text-xs text-brand-700 dark:text-brand-300 hover:underline"
                     >
                       <Mail className="h-3.5 w-3.5" /> {m.email}
                     </a>

@@ -15,7 +15,7 @@ export default async function LoginPage() {
       <h1 className="text-2xl font-bold">Ingresar</h1>
       <p className="mt-1 text-sm text-gray-500 dark:text-stone-400">
         ¿No tenés cuenta?{" "}
-        <Link href="/registrarse" className="font-medium text-brand-600 dark:text-brand-300 hover:underline">
+        <Link href="/registrarse" className="font-medium text-brand-700 dark:text-brand-300 hover:underline">
           Creá una gratis
         </Link>
       </p>
@@ -27,7 +27,7 @@ export default async function LoginPage() {
       </div>
 
       <p className="mt-3 text-center text-sm">
-        <Link href="/recuperar" className="text-brand-600 dark:text-brand-300 hover:underline">
+        <Link href="/recuperar" className="text-brand-700 dark:text-brand-300 hover:underline">
           ¿Olvidaste tu contraseña?
         </Link>
       </p>

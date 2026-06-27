@@ -157,7 +157,7 @@ export default async function AdminUsersPage({
               <tr key={u.id} className={u.suspendedAt || u.legalHoldAt ? "opacity-60" : ""}>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1.5 font-medium">
-                    <Link href={`/usuarios/${u.id}`} className="hover:text-brand-600 dark:hover:text-brand-300">
+                    <Link href={`/usuarios/${u.id}`} className="hover:text-brand-700 dark:hover:text-brand-300">
                       {u.firstName} {u.lastName}
                     </Link>
                     {u.role === "ADMIN" && (

@@ -14,7 +14,7 @@ export default async function RegisterPage() {
       <h1 className="text-2xl font-bold">Crear cuenta</h1>
       <p className="mt-1 text-sm text-gray-500 dark:text-stone-400">
         ¿Ya tenés cuenta?{" "}
-        <Link href="/ingresar" className="font-medium text-brand-600 dark:text-brand-300 hover:underline">
+        <Link href="/ingresar" className="font-medium text-brand-700 dark:text-brand-300 hover:underline">
           Ingresá
         </Link>
       </p>

@@ -148,7 +148,7 @@ export function ListingOwnerActions({
                   <span className="min-w-0 flex-1 truncate text-sm font-medium">
                     {b.firstName} {b.lastName}
                     {b.fromAcceptedOffer && (
-                      <span className="ml-1 text-xs font-normal text-brand-600 dark:text-brand-300">
+                      <span className="ml-1 text-xs font-normal text-brand-700 dark:text-brand-300">
                         (oferta aceptada)
                       </span>
                     )}

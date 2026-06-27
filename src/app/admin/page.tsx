@@ -161,7 +161,7 @@ export default async function AdminOverviewPage() {
         <div className="card p-5">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="font-semibold">Denuncias recientes</h2>
-            <Link href="/admin/reportes" className="text-sm text-brand-600 dark:text-brand-300 hover:underline">
+            <Link href="/admin/reportes" className="text-sm text-brand-700 dark:text-brand-300 hover:underline">
               Ver todas
             </Link>
           </div>
@@ -171,7 +171,7 @@ export default async function AdminOverviewPage() {
             <ul className="divide-y divide-line dark:divide-stone-800">
               {recentReports.map((r) => (
                 <li key={r.id} className="flex items-center justify-between gap-3 py-2 text-sm">
-                  <Link href={`/articulos/${r.listing.id}`} className="min-w-0 truncate hover:text-brand-600 dark:hover:text-brand-300">
+                  <Link href={`/articulos/${r.listing.id}`} className="min-w-0 truncate hover:text-brand-700 dark:hover:text-brand-300">
                     {r.listing.title}
                   </Link>
                   <span className="shrink-0 text-xs text-gray-400 dark:text-stone-500">
@@ -186,7 +186,7 @@ export default async function AdminOverviewPage() {
         <div className="card p-5">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="font-semibold">Usuarios nuevos</h2>
-            <Link href="/admin/usuarios" className="text-sm text-brand-600 dark:text-brand-300 hover:underline">
+            <Link href="/admin/usuarios" className="text-sm text-brand-700 dark:text-brand-300 hover:underline">
               Ver todos
             </Link>
           </div>
@@ -196,7 +196,7 @@ export default async function AdminOverviewPage() {
             <ul className="divide-y divide-line dark:divide-stone-800">
               {recentUsers.map((u) => (
                 <li key={u.id} className="flex items-center justify-between gap-3 py-2 text-sm">
-                  <Link href={`/usuarios/${u.id}`} className="min-w-0 truncate hover:text-brand-600 dark:hover:text-brand-300">
+                  <Link href={`/usuarios/${u.id}`} className="min-w-0 truncate hover:text-brand-700 dark:hover:text-brand-300">
                     {u.firstName} {u.lastName}
                   </Link>
                   <span className="shrink-0 text-xs text-gray-400 dark:text-stone-500">

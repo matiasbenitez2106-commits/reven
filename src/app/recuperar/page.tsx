@@ -14,7 +14,7 @@ export default function ForgotPage() {
         <ForgotForm />
       </div>
       <p className="mt-4 text-center text-sm">
-        <Link href="/ingresar" className="text-brand-600 dark:text-brand-300 hover:underline">
+        <Link href="/ingresar" className="text-brand-700 dark:text-brand-300 hover:underline">
           Volver a ingresar
         </Link>
       </p>

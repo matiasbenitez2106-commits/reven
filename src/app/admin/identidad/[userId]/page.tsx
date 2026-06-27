@@ -99,7 +99,7 @@ export default async function IdentityDossierPage({
       <div className="flex items-center justify-between print:hidden">
         <Link
           href="/admin/verificaciones"
-          className="inline-flex items-center gap-1 text-sm text-gray-500 dark:text-stone-400 hover:text-brand-600 dark:hover:text-brand-300"
+          className="inline-flex items-center gap-1 text-sm text-gray-500 dark:text-stone-400 hover:text-brand-700 dark:hover:text-brand-300"
         >
           <ArrowLeft className="h-4 w-4" /> Volver
         </Link>

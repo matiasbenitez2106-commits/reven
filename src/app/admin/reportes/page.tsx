@@ -62,7 +62,7 @@ export default async function AdminReportsPage() {
               </Link>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Link href={`/articulos/${r.listing.id}`} className="truncate font-medium hover:text-brand-600 dark:hover:text-brand-300">
+                  <Link href={`/articulos/${r.listing.id}`} className="truncate font-medium hover:text-brand-700 dark:hover:text-brand-300">
                     {r.listing.title}
                   </Link>
                   <Badge color={STATUS[r.status].color}>{STATUS[r.status].label}</Badge>

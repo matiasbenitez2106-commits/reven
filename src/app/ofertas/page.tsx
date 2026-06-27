@@ -70,7 +70,7 @@ export default async function OffersInboxPage() {
                   <div className="min-w-0 flex-1">
                     <Link
                       href={`/articulos/${o.listing.id}`}
-                      className="block truncate text-sm font-medium hover:text-brand-600 dark:hover:text-brand-300"
+                      className="block truncate text-sm font-medium hover:text-brand-700 dark:hover:text-brand-300"
                     >
                       {o.listing.title}
                     </Link>

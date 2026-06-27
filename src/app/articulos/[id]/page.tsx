@@ -183,7 +183,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       <ViewTracker listingId={listing.id} />
-      <Link href="/buscar" className="mb-4 inline-block text-sm text-gray-500 dark:text-stone-400 hover:text-brand-600 dark:hover:text-brand-300">
+      <Link href="/buscar" className="mb-4 inline-block text-sm text-gray-500 dark:text-stone-400 hover:text-brand-700 dark:hover:text-brand-300">
         ← Volver a explorar
       </Link>
 
@@ -205,7 +205,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
 
         {/* Detalle */}
         <div>
-          <span className="text-xs font-medium uppercase tracking-wide text-brand-600 dark:text-brand-300">
+          <span className="text-xs font-medium uppercase tracking-wide text-brand-700 dark:text-brand-300">
             {listing.category.name}
           </span>
           <h1 className="mt-1 text-2xl font-bold">{listing.title}</h1>

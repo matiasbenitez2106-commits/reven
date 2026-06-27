@@ -107,7 +107,7 @@ export default async function AdminListingsPage({
                   <td className="max-w-[260px] px-4 py-3">
                     <Link
                       href={`/articulos/${l.id}`}
-                      className="block truncate font-medium hover:text-brand-600 dark:hover:text-brand-300"
+                      className="block truncate font-medium hover:text-brand-700 dark:hover:text-brand-300"
                     >
                       {l.title}
                     </Link>
@@ -116,7 +116,7 @@ export default async function AdminListingsPage({
                   <td className="px-4 py-3">
                     <Link
                       href={`/usuarios/${l.seller.id}`}
-                      className="text-gray-600 dark:text-stone-300 hover:text-brand-600 dark:hover:text-brand-300"
+                      className="text-gray-600 dark:text-stone-300 hover:text-brand-700 dark:hover:text-brand-300"
                     >
                       {l.seller.firstName} {l.seller.lastName}
                     </Link>

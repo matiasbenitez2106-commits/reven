@@ -143,7 +143,7 @@ export function SearchFilters({
         <button
           type="button"
           onClick={useMyLocation}
-          className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-brand-600 dark:text-brand-300 hover:underline"
+          className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-brand-700 dark:text-brand-300 hover:underline"
         >
           {coords ? <Check className="h-3.5 w-3.5" /> : <MapPin className="h-3.5 w-3.5" />}
           {coords ? "Ubicación activada" : "Usar mi ubicación"}

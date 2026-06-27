@@ -164,7 +164,7 @@ export default async function Home() {
       <section className="mx-auto max-w-6xl px-4 pb-12 pt-6">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold">Publicaciones recientes</h2>
-          <Link href="/buscar" className="inline-flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-300 hover:underline">
+          <Link href="/buscar" className="inline-flex items-center gap-1 text-sm font-medium text-brand-700 dark:text-brand-300 hover:underline">
             Ver todas <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
