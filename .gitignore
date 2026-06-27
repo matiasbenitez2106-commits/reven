@@ -26,6 +26,9 @@ yarn-error.log*
 .env
 .env*.local
 
+# sentry (secreto: token de subida de source maps)
+.env.sentry-build-plugin
+
 # vercel
 .vercel
 

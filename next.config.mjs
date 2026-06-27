@@ -1,7 +1,13 @@
+import { withSentryConfig } from "@sentry/nextjs";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false, // no exponer "X-Powered-By: Next.js"
+  experimental: {
+    // Next 14: necesario para que src/instrumentation.ts (register) se ejecute.
+    instrumentationHook: true,
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },
@@ -47,4 +53,15 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  // Organización y proyecto en Sentry (para releases y source maps).
+  org: "trato-hk",
+  project: "javascript-nextjs",
+  // El token se lee de SENTRY_AUTH_TOKEN (.env.sentry-build-plugin, gitignored).
+  // No se hardcodea acá. Sin token, el build no falla: no sube source maps.
+  silent: !process.env.CI,
+  // Sube también source maps de archivos del cliente fuera de /static.
+  widenClientFileUpload: true,
+  // Saca los logs del SDK de Sentry del bundle del cliente (menos peso).
+  disableLogger: true,
+});
