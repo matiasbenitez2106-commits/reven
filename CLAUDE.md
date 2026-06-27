@@ -26,7 +26,8 @@ npm install            # instalar dependencias
 
 npm run dev            # correr en local → http://localhost:3000
 
-# "Testear" (no hay tests automatizados; se verifica así):
+# Testear:
+npm test               # pruebas automáticas (Vitest) de la lógica pura de lib/
 npx tsc --noEmit       # chequeo de tipos (no debe tirar errores)
 npm run build          # build de producción (debe compilar OK)
 npm run lint           # linter

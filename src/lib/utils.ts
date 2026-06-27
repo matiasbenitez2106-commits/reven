@@ -64,6 +64,10 @@ export function hideContactInfo(text: string): string {
     )
     // @usuarios (Instagram, etc.)
     .replace(/(^|[\s(])@\w{2,}/g, "$1•••")
-    // Teléfonos (7+ dígitos con espacios, guiones, paréntesis o +)
-    .replace(/\+?\d[\d\s().-]{6,}\d/g, "•••");
+    // Teléfonos: secuencias largas de dígitos con espacios, guiones, paréntesis
+    // o +. El punto queda FUERA de la clase a propósito: así NO se ocultan los
+    // precios con separador de miles (p.ej. 1.500.000), que son dígitos
+    // separados solo por puntos. Los teléfonos reales (con espacios/guiones/+/
+    // paréntesis, o secuencias largas de dígitos sin puntos) sí se ocultan.
+    .replace(/\+?\d[\d\s()-]{6,}\d/g, "•••");
 }
