@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 
 const STATUS_LABELS: Record<string, { label: string; cls: string }> = {
   ACTIVE: { label: "Activa", cls: "bg-brand-100 dark:bg-brand-800/40 text-brand-700 dark:text-brand-300" },
+  RESERVED: { label: "Reservada", cls: "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300" },
   PAUSED: { label: "Pausada", cls: "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300" },
   SOLD: { label: "Vendida", cls: "bg-surface-sunken dark:bg-stone-800 text-gray-600 dark:text-stone-300" },
   DELETED: { label: "Eliminada", cls: "bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400" },
@@ -18,6 +19,7 @@ const STATUS_LABELS: Record<string, { label: string; cls: string }> = {
 const FILTERS = [
   { key: "", label: "Todas" },
   { key: "ACTIVE", label: "Activas" },
+  { key: "RESERVED", label: "Reservadas" },
   { key: "PAUSED", label: "Pausadas" },
   { key: "SOLD", label: "Vendidas" },
   { key: "DELETED", label: "Eliminadas" },

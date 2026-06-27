@@ -5,6 +5,7 @@ import {
   PaymentType,
   SubscriptionPlan,
   ReportReason,
+  OfferStatus,
 } from "@prisma/client";
 
 export const AR_PROVINCES = [
@@ -42,9 +43,19 @@ export const CONDITION_LABELS: Record<Condition, string> = {
 
 export const STATUS_LABELS: Record<ListingStatus, string> = {
   ACTIVE: "Activo",
+  RESERVED: "Reservado",
   SOLD: "Vendido",
   PAUSED: "Pausado",
   DELETED: "Eliminado",
+};
+
+export const OFFER_STATUS_LABELS: Record<OfferStatus, string> = {
+  PENDING: "Pendiente",
+  ACCEPTED: "Aceptada",
+  REJECTED: "Rechazada",
+  COUNTERED: "Contraofertada",
+  EXPIRED: "Vencida",
+  CANCELLED: "Cancelada",
 };
 
 export const VERIFICATION_LABELS: Record<VerificationStatus, string> = {

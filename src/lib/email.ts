@@ -136,6 +136,49 @@ export async function sendNewMessageEmail(
   });
 }
 
+const fmtARS = (n: number) => `$${n.toLocaleString("es-AR")}`;
+
+/** Aviso al vendedor: recibió una oferta nueva (evento clave → sí email). */
+export async function sendNewOfferEmail(
+  to: string,
+  fromName: string,
+  listingTitle: string,
+  amount: number
+): Promise<void> {
+  const link = `${appUrl()}/ofertas`;
+  await sendEmail({
+    to,
+    subject: `Nueva oferta de ${fromName} · trato`,
+    html: wrap(
+      `<p><strong>${escapeHtml(fromName)}</strong> ofertó <strong>${fmtARS(amount)}</strong> por <strong>${escapeHtml(listingTitle)}</strong>.</p>
+       <p>Tenés 48 hs para responder: aceptar, rechazar o contraofertar.</p>
+       <p><a href="${link}" style="display:inline-block;background:#66785B;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Ver la oferta</a></p>`
+    ),
+  });
+}
+
+/**
+ * Aviso a la otra parte de que se cerró el trato (oferta o contraoferta aceptada).
+ * Neutro a propósito: sirve igual si aceptó el vendedor o el comprador.
+ */
+export async function sendOfferClosedEmail(
+  to: string,
+  listingTitle: string,
+  amount: number,
+  listingId: string
+): Promise<void> {
+  const link = `${appUrl()}/articulos/${listingId}`;
+  await sendEmail({
+    to,
+    subject: `¡Trato cerrado! · trato`,
+    html: wrap(
+      `<p>Se cerró el trato por <strong>${fmtARS(amount)}</strong> en <strong>${escapeHtml(listingTitle)}</strong>. 🎉</p>
+       <p>La publicación quedó <strong>reservada</strong>. Coordiná con la otra persona para concretar la entrega.</p>
+       <p><a href="${link}" style="display:inline-block;background:#66785B;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Ver la publicación</a></p>`
+    ),
+  });
+}
+
 /** Aviso al cancelar la renovación (mantiene beneficios hasta fin del período). */
 export async function sendSubscriptionCancelledEmail(
   to: string,

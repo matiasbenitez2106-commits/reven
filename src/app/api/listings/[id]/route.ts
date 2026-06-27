@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { listingSchema } from "@/lib/validations";
+import { notify } from "@/lib/notifications";
 import { deleteImage } from "@/lib/storage";
 import { geocode } from "@/lib/geo";
 import { findDuplicateActiveListing } from "@/lib/listings";
@@ -106,6 +107,53 @@ export async function PATCH(req: Request, { params }: Params) {
       },
       select: { id: true, status: true },
     });
+
+    // Liberar la reserva: si pasó de RESERVED a ACTIVE, avisamos al comprador que
+    // tenía la oferta aceptada que la publicación volvió a estar disponible.
+    if (existing.status === "RESERVED" && status === "ACTIVE") {
+      const accepted = await prisma.offer.findFirst({
+        where: { listingId: existing.id, status: "ACCEPTED" },
+        orderBy: { updatedAt: "desc" },
+        select: { buyerId: true },
+      });
+      if (accepted) {
+        await notify({
+          userId: accepted.buyerId,
+          type: "OFFER",
+          title: "La reserva se liberó",
+          body: "La publicación que tenías reservada volvió a estar disponible.",
+          link: `/articulos/${existing.id}`,
+        });
+      }
+    }
+
+    // Si se marcó como VENDIDA, cerramos las ofertas abiertas (PENDING/COUNTERED)
+    // que hayan quedado colgadas, para que nadie pueda aceptarlas después.
+    if (status === "SOLD") {
+      const open = await prisma.offer.findMany({
+        where: { listingId: existing.id, status: { in: ["PENDING", "COUNTERED"] } },
+        select: { buyerId: true, status: true },
+      });
+      if (open.length > 0) {
+        await prisma.offer.updateMany({
+          where: { listingId: existing.id, status: { in: ["PENDING", "COUNTERED"] } },
+          data: { status: "REJECTED" },
+        });
+        const buyers = Array.from(
+          new Set(open.filter((o) => o.status === "PENDING").map((o) => o.buyerId))
+        );
+        for (const bId of buyers) {
+          await notify({
+            userId: bId,
+            type: "OFFER",
+            title: "Tu oferta fue rechazada",
+            body: "La publicación se vendió.",
+            link: `/articulos/${existing.id}`,
+          });
+        }
+      }
+    }
+
     return NextResponse.json(updated);
   }
 

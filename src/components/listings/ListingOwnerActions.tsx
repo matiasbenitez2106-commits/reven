@@ -15,6 +15,7 @@ export interface OwnerBuyer {
   firstName: string;
   lastName: string;
   avatarUrl: string | null;
+  fromAcceptedOffer?: boolean;
 }
 
 export function ListingOwnerActions({
@@ -90,7 +91,8 @@ export function ListingOwnerActions({
           <Button
             variant="secondary"
             onClick={() => {
-              setSelected(null);
+              // Preseleccioná al comprador de la oferta aceptada si lo hay.
+              setSelected(buyers.find((b) => b.fromAcceptedOffer)?.id ?? null);
               setSellOpen(true);
             }}
           >
@@ -99,6 +101,11 @@ export function ListingOwnerActions({
         ) : (
           <Button variant="secondary" loading={loading === "ACTIVE"} onClick={() => setStatus("ACTIVE")}>
             <RotateCcw className="h-4 w-4" /> Reactivar
+          </Button>
+        )}
+        {status === "RESERVED" && (
+          <Button variant="secondary" loading={loading === "ACTIVE"} onClick={() => setStatus("ACTIVE")}>
+            <RotateCcw className="h-4 w-4" /> Liberar reserva
           </Button>
         )}
         <Button variant="danger" loading={loading === "del"} onClick={remove}>
@@ -140,6 +147,11 @@ export function ListingOwnerActions({
                   <Avatar firstName={b.firstName} lastName={b.lastName} src={b.avatarUrl} size={32} />
                   <span className="min-w-0 flex-1 truncate text-sm font-medium">
                     {b.firstName} {b.lastName}
+                    {b.fromAcceptedOffer && (
+                      <span className="ml-1 text-xs font-normal text-brand-600 dark:text-brand-300">
+                        (oferta aceptada)
+                      </span>
+                    )}
                   </span>
                   {selected === b.id && (
                     <CheckCircle className="h-4 w-4 shrink-0 text-brand-600 dark:text-brand-300" />

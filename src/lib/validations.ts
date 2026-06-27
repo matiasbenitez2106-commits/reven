@@ -96,6 +96,20 @@ export const reviewSchema = z.object({
   comment: z.string().trim().max(1000).optional().or(z.literal("")),
 });
 
+// Crear una oferta (comprador). sellerId NO se acepta del cliente: lo deriva el server.
+export const offerSchema = z.object({
+  listingId: z.string().min(1),
+  amount: z.coerce.number().int().positive("El monto debe ser mayor a 0").max(999_999_999),
+  message: z.string().trim().max(500).optional().or(z.literal("")),
+});
+
+// Acción sobre una oferta. `amount`/`message` solo aplican a "counter".
+export const offerActionSchema = z.object({
+  action: z.enum(["accept", "reject", "counter", "cancel"]),
+  amount: z.coerce.number().int().positive().max(999_999_999).optional(),
+  message: z.string().trim().max(500).optional().or(z.literal("")),
+});
+
 // Parámetros de búsqueda (provenientes de query string)
 export const searchSchema = z.object({
   q: z.string().trim().optional(),

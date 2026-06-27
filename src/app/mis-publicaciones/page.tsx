@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Plus, Package, ImageOff, ShieldAlert, Eye, Sparkles } from "lucide-react";
+import { Plus, Package, ImageOff, ShieldAlert, Eye, Sparkles, Tag } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getCurrentDbUser } from "@/lib/auth";
 import { activePlan } from "@/lib/subscriptions";
@@ -28,12 +28,20 @@ export default async function MyListingsPage() {
     <div className="mx-auto max-w-4xl px-4 py-8">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Mis publicaciones</h1>
-        <Link
-          href="/publicar"
-          className="inline-flex items-center gap-1 rounded-lg bg-brand-600 px-3 py-2 text-sm font-medium text-white hover:bg-brand-700"
-        >
-          <Plus className="h-4 w-4" /> Publicar
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/ofertas"
+            className="inline-flex items-center gap-1 rounded-lg border border-line dark:border-stone-700 bg-surface dark:bg-stone-900 px-3 py-2 text-sm font-medium hover:bg-surface-hover dark:hover:bg-stone-800"
+          >
+            <Tag className="h-4 w-4" /> Ofertas
+          </Link>
+          <Link
+            href="/publicar"
+            className="inline-flex items-center gap-1 rounded-lg bg-brand-600 px-3 py-2 text-sm font-medium text-white hover:bg-brand-700"
+          >
+            <Plus className="h-4 w-4" /> Publicar
+          </Link>
+        </div>
       </div>
 
       {user.verification !== "VERIFIED" && (

@@ -276,23 +276,43 @@ export interface ListingBuyer {
   firstName: string;
   lastName: string;
   avatarUrl: string | null;
+  // true si es el comprador de la oferta aceptada (para resaltarlo/preseleccionarlo).
+  fromAcceptedOffer?: boolean;
 }
 
 /**
- * Compradores que iniciaron una conversación en una publicación. Son los
- * candidatos válidos a "comprador" al marcarla como vendida. Por el
- * @@unique([listingId, buyerId]) de Conversation, cada conversación corresponde
- * a un comprador distinto (no hay duplicados).
+ * Candidatos a "comprador" al marcar una publicación como vendida:
+ * - todos los que iniciaron una conversación, y
+ * - el comprador de la oferta ACEPTADA (aunque nunca haya abierto el chat),
+ *   marcado con fromAcceptedOffer y puesto primero.
  */
 export async function getListingBuyers(listingId: string): Promise<ListingBuyer[]> {
-  const convos = await prisma.conversation.findMany({
-    where: { listingId },
-    orderBy: { createdAt: "asc" },
-    select: {
-      buyer: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } },
-    },
-  });
-  return convos.map((c) => c.buyer);
+  const [convos, accepted] = await Promise.all([
+    prisma.conversation.findMany({
+      where: { listingId },
+      orderBy: { createdAt: "asc" },
+      select: {
+        buyer: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } },
+      },
+    }),
+    prisma.offer.findFirst({
+      where: { listingId, status: "ACCEPTED" },
+      orderBy: { updatedAt: "desc" },
+      select: {
+        buyer: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } },
+      },
+    }),
+  ]);
+
+  const byId = new Map<string, ListingBuyer>();
+  for (const c of convos) byId.set(c.buyer.id, { ...c.buyer });
+  if (accepted) {
+    byId.set(accepted.buyer.id, { ...accepted.buyer, fromAcceptedOffer: true });
+  }
+  // El de la oferta aceptada va primero.
+  return Array.from(byId.values()).sort((a, b) =>
+    a.fromAcceptedOffer === b.fromAcceptedOffer ? 0 : a.fromAcceptedOffer ? -1 : 1
+  );
 }
 
 // ── Elegibilidad para reseñar al vendedor ──

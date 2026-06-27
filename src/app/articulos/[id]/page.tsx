@@ -12,6 +12,8 @@ import { LocationMap } from "@/components/listings/LocationMap";
 import { ViewTracker } from "@/components/listings/ViewTracker";
 import { ReportButton } from "@/components/listings/ReportButton";
 import { SellerReviewAction } from "@/components/listings/SellerReviewAction";
+import { MakeOfferButton } from "@/components/listings/MakeOfferButton";
+import { BuyerOfferStatus, type BuyerOffer } from "@/components/listings/BuyerOfferStatus";
 import { Avatar } from "@/components/ui/Avatar";
 import { Stars } from "@/components/ui/Stars";
 import { VerificationBadge } from "@/components/VerificationBadge";
@@ -158,6 +160,26 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
     });
   }
 
+  // Oferta vigente del comprador (no dueño) para el bloque de ofertas del detalle.
+  // Expiry perezoso: vencé su PENDING propia si ya pasaron las 48 hs.
+  let myOffer: BuyerOffer | null = null;
+  if (user && !isOwner) {
+    await prisma.offer.updateMany({
+      where: {
+        listingId: listing.id,
+        buyerId: user.id,
+        status: "PENDING",
+        expiresAt: { lt: new Date() },
+      },
+      data: { status: "EXPIRED" },
+    });
+    myOffer = await prisma.offer.findFirst({
+      where: { listingId: listing.id, buyerId: user.id, status: { not: "COUNTERED" } },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, amount: true, status: true, proposedById: true, sellerId: true, buyerId: true },
+    });
+  }
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       <ViewTracker listingId={listing.id} />
@@ -171,6 +193,11 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
           {listing.status === "SOLD" && (
             <div className="mb-3 rounded-lg bg-gray-900 px-3 py-2 text-center text-sm font-semibold text-white">
               VENDIDO
+            </div>
+          )}
+          {listing.status === "RESERVED" && (
+            <div className="mb-3 rounded-lg bg-amber-500 px-3 py-2 text-center text-sm font-semibold text-white">
+              RESERVADA
             </div>
           )}
           <Gallery images={listing.images} title={listing.title} />
@@ -206,12 +233,20 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
             ) : (
               <>
                 {listing.status === "ACTIVE" ? (
-                  <ContactSellerButton listingId={listing.id} sellerId={listing.sellerId} />
+                  <>
+                    <ContactSellerButton listingId={listing.id} sellerId={listing.sellerId} />
+                    {user && (!myOffer || myOffer.status !== "PENDING") && (
+                      <MakeOfferButton listingId={listing.id} />
+                    )}
+                  </>
                 ) : (
                   <p className="rounded-lg bg-surface-sunken dark:bg-stone-800 p-3 text-sm text-gray-500 dark:text-stone-400">
-                    Esta publicación no está disponible para contacto.
+                    {listing.status === "RESERVED"
+                      ? "Esta publicación está reservada."
+                      : "Esta publicación no está disponible para contacto."}
                   </p>
                 )}
+                {myOffer && <BuyerOfferStatus offer={myOffer} />}
                 {isBuyer && (
                   <SellerReviewAction listingId={listing.id} initialReview={myReview} />
                 )}

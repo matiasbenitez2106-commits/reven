@@ -36,6 +36,7 @@ enum Condition {
 
 enum ListingStatus {
   ACTIVE
+  RESERVED // oferta aceptada: reservada hasta confirmar la venta (o liberar)
   SOLD
   PAUSED
   DELETED
@@ -115,6 +116,9 @@ model User {
   reviewsWritten        Review[]       @relation("ReviewsWritten")
   reviewsReceived       Review[]       @relation("ReviewsReceived")
   purchases             Listing[]      @relation("Purchases")
+  offersMade            Offer[]        @relation("OffersMade")
+  offersReceived        Offer[]        @relation("OffersReceived")
+  offersProposed        Offer[]        @relation("OffersProposed")
 
   @@index([verification])
 }
@@ -187,6 +191,7 @@ model Listing {
   payments      Payment[]
   reports       Report[]
   reviews       Review[]
+  offers        Offer[]
 
   // Publicación destacada (monetización): vigente mientras featuredUntil > now()
   featuredUntil DateTime?
@@ -365,6 +370,7 @@ enum NotificationType {
   VERIFICATION
   REPORT
   SUBSCRIPTION
+  OFFER
   GENERIC
 }
 
@@ -427,4 +433,48 @@ model Review {
 
   @@unique([listingId, authorId])
   @@index([targetId])
+}
+
+// ──────────────────────────────────────────────
+// Ofertas (estilo Depop): negociación de precio entre comprador y vendedor.
+// ──────────────────────────────────────────────
+
+enum OfferStatus {
+  PENDING // vigente, esperando respuesta de la otra parte
+  ACCEPTED // aceptada → la publicación pasa a RESERVED
+  REJECTED // rechazada por quien la recibió
+  COUNTERED // superada por una contraoferta (su hija PENDING es la vigente)
+  EXPIRED // venció a las 48 hs sin respuesta
+  CANCELLED // retirada por quien la propuso
+}
+
+// Una oferta sobre una publicación. Las contraofertas son filas nuevas ligadas
+// por parentOfferId; `proposedById` dice quién propuso ESTA oferta (comprador o
+// vendedor) — explícito, sin inferir por la cadena. La vigente de un hilo es la
+// hoja PENDING. sellerId se deriva SIEMPRE de listing.sellerId en el backend.
+model Offer {
+  id            String      @id @default(cuid())
+  listingId     String
+  listing       Listing     @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyerId       String
+  buyer         User        @relation("OffersMade", fields: [buyerId], references: [id], onDelete: Cascade)
+  sellerId      String
+  seller        User        @relation("OffersReceived", fields: [sellerId], references: [id], onDelete: Cascade)
+  proposedById  String
+  proposedBy    User        @relation("OffersProposed", fields: [proposedById], references: [id], onDelete: Cascade)
+  amount        Int // ARS, sin decimales
+  status        OfferStatus @default(PENDING)
+  message       String?
+  // Contraofertas: oferta padre de la que esta es contraoferta (self-relation).
+  parentOfferId String?
+  parent        Offer?      @relation("OfferThread", fields: [parentOfferId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  counters      Offer[]     @relation("OfferThread")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  expiresAt     DateTime
+
+  @@index([listingId])
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([status])
 }
