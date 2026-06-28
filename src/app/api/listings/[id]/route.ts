@@ -5,7 +5,7 @@ import { listingSchema } from "@/lib/validations";
 import { notify } from "@/lib/notifications";
 import { deleteImage } from "@/lib/storage";
 import { geocode } from "@/lib/geo";
-import { findDuplicateActiveListing } from "@/lib/listings";
+import { findDuplicateActiveListing, getListingBuyers } from "@/lib/listings";
 
 type Params = { params: { id: string } };
 
@@ -80,15 +80,14 @@ export async function PATCH(req: Request, { params }: Params) {
       }
       const raw = body.soldToId;
       if (typeof raw === "string" && raw.length > 0) {
-        // El comprador tiene que haber escrito por ESTA publicación (tener una
-        // conversación). Si no, se rechaza: evita asignar a cualquier usuario.
-        const convo = await prisma.conversation.findUnique({
-          where: { listingId_buyerId: { listingId: existing.id, buyerId: raw } },
-          select: { id: true },
-        });
-        if (!convo) {
+        // Validamos contra la MISMA fuente que el modal: getListingBuyers incluye a
+        // quien escribió por la publicación O a quien tiene una oferta aceptada
+        // (con Ofertas, D4, el comprador puede no haber chateado nunca). Así UI y
+        // servidor siempre coinciden y no se asigna a cualquier usuario.
+        const buyers = await getListingBuyers(existing.id);
+        if (!buyers.some((b) => b.id === raw)) {
           return NextResponse.json(
-            { error: "El comprador seleccionado no escribió por esta publicación" },
+            { error: "El comprador seleccionado no es válido para esta publicación" },
             { status: 400 }
           );
         }

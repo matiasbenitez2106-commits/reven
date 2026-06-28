@@ -1,17 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-// Prisma mockeado: nunca toca la base real. Solo necesitamos los findUnique que
-// usa canReviewListing (listing y review).
+// Prisma mockeado: nunca toca la base real. Cubrimos lo que usan canReviewListing
+// (listing/review) y getListingBuyers (conversation/offer).
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     listing: { findUnique: vi.fn() },
     review: { findUnique: vi.fn() },
+    conversation: { findMany: vi.fn() },
+    offer: { findFirst: vi.fn() },
   },
 }));
 
 import { prisma } from "@/lib/prisma";
 import {
   canReviewListing,
+  getListingBuyers,
   normalizeTitle,
   titlesAreSimilar,
   roundRating,
@@ -21,10 +24,33 @@ import {
 const db = prisma as unknown as {
   listing: { findUnique: ReturnType<typeof vi.fn> };
   review: { findUnique: ReturnType<typeof vi.fn> };
+  conversation: { findMany: ReturnType<typeof vi.fn> };
+  offer: { findFirst: ReturnType<typeof vi.fn> };
 };
 
 beforeEach(() => {
   vi.clearAllMocks();
+});
+
+describe("getListingBuyers — comprador de oferta aceptada SIN conversación", () => {
+  it("incluye al comprador de la oferta aceptada aunque no haya chateado (soldTo válido)", async () => {
+    db.conversation.findMany.mockResolvedValue([]); // nadie escribió por la publi
+    db.offer.findFirst.mockResolvedValue({
+      buyer: { id: "buyerOferta", firstName: "Ana", lastName: "P", avatarUrl: null },
+    });
+    const buyers = await getListingBuyers("l1");
+    expect(buyers).toEqual([
+      { id: "buyerOferta", firstName: "Ana", lastName: "P", avatarUrl: null, fromAcceptedOffer: true },
+    ]);
+    // El servidor valida soldToId contra esta misma lista → ese comprador es válido.
+    expect(buyers.some((b) => b.id === "buyerOferta")).toBe(true);
+  });
+
+  it("sin conversaciones ni oferta aceptada, no hay candidatos", async () => {
+    db.conversation.findMany.mockResolvedValue([]);
+    db.offer.findFirst.mockResolvedValue(null);
+    expect(await getListingBuyers("l1")).toEqual([]);
+  });
 });
 
 describe("roundRating", () => {
