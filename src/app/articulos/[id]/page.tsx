@@ -18,6 +18,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Stars } from "@/components/ui/Stars";
 import { VerificationBadge } from "@/components/VerificationBadge";
 import { ProBadge } from "@/components/ProBadge";
+import { TrustMeta } from "@/components/TrustMeta";
 import { activePlan } from "@/lib/subscriptions";
 import { getListingBuyers, reviewTargetFor } from "@/lib/listings";
 import { geocode } from "@/lib/geo";
@@ -101,10 +102,11 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
     favorited = !!f;
   }
 
-  const sellerActiveCount = await prisma.listing.count({
-    where: { sellerId: listing.sellerId, status: "ACTIVE" },
-  });
-  const memberSince = new Date(listing.seller.createdAt).getFullYear();
+  // Inventario activo + ventas concretadas (señal de confianza), en paralelo.
+  const [sellerActiveCount, sellerSoldCount] = await Promise.all([
+    prisma.listing.count({ where: { sellerId: listing.sellerId, status: "ACTIVE" } }),
+    prisma.listing.count({ where: { sellerId: listing.sellerId, status: "SOLD" } }),
+  ]);
   const sellerPlan = activePlan(listing.seller.proPlan, listing.seller.proUntil);
 
   // Reputación del vendedor (promedio + conteo) para mostrar en su tarjeta.
@@ -338,8 +340,13 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                     </span>
                   </div>
                 )}
-                <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
-                  Miembro desde {memberSince} · {sellerActiveCount}{" "}
+                <TrustMeta
+                  createdAt={listing.seller.createdAt}
+                  salesCount={sellerSoldCount}
+                  className="mt-1"
+                />
+                <p className="text-xs text-gray-400 dark:text-stone-500">
+                  {sellerActiveCount}{" "}
                   {sellerActiveCount === 1 ? "publicación activa" : "publicaciones activas"}
                 </p>
               </div>

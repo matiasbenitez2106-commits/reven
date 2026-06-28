@@ -5,6 +5,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Stars } from "@/components/ui/Stars";
 import { VerificationBadge } from "@/components/VerificationBadge";
 import { ProBadge } from "@/components/ProBadge";
+import { TrustMeta } from "@/components/TrustMeta";
 import { ListingCard } from "@/components/listings/ListingCard";
 import { activePlan } from "@/lib/subscriptions";
 import { formatRelative } from "@/lib/utils";
@@ -39,7 +40,7 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
 
   // Reputación recibida, SEPARADA por rol: como vendedor (lo principal del perfil
   // y lo que alimenta el feed) y como comprador. No se mezclan.
-  const [reviewStats, buyerStats, reviews] = await Promise.all([
+  const [reviewStats, buyerStats, reviews, salesCount] = await Promise.all([
     prisma.review.aggregate({
       where: { targetId: u.id, targetRole: "SELLER" },
       _avg: { rating: true },
@@ -62,6 +63,8 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
         author: { select: { firstName: true, lastName: true, avatarUrl: true } },
       },
     }),
+    // Ventas concretadas (señal de confianza): publicaciones del usuario en SOLD.
+    prisma.listing.count({ where: { sellerId: u.id, status: "SOLD" } }),
   ]);
   const reviewCount = reviewStats._count;
   const avg = reviewStats._avg.rating ?? 0;
@@ -122,9 +125,7 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
               </span>
             </div>
           )}
-          <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">
-            Miembro desde {new Date(u.createdAt).getFullYear()}
-          </p>
+          <TrustMeta createdAt={u.createdAt} salesCount={salesCount} className="mt-1" />
         </div>
       </div>
 
