@@ -5,7 +5,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     listing: { findUnique: vi.fn() },
-    review: { findUnique: vi.fn() },
+    review: { findUnique: vi.fn(), groupBy: vi.fn() },
     conversation: { findMany: vi.fn() },
     offer: { findFirst: vi.fn() },
   },
@@ -14,6 +14,9 @@ vi.mock("@/lib/prisma", () => ({
 import { prisma } from "@/lib/prisma";
 import {
   canReviewListing,
+  reviewTargetFor,
+  getSellerRatings,
+  getBuyerRatings,
   getListingBuyers,
   normalizeTitle,
   titlesAreSimilar,
@@ -23,7 +26,7 @@ import {
 
 const db = prisma as unknown as {
   listing: { findUnique: ReturnType<typeof vi.fn> };
-  review: { findUnique: ReturnType<typeof vi.fn> };
+  review: { findUnique: ReturnType<typeof vi.fn>; groupBy: ReturnType<typeof vi.fn> };
   conversation: { findMany: ReturnType<typeof vi.fn> };
   offer: { findFirst: ReturnType<typeof vi.fn> };
 };
@@ -94,46 +97,102 @@ describe("titlesAreSimilar (puro, sin DB)", () => {
   });
 });
 
-describe("canReviewListing (Prisma mockeado)", () => {
-  it("permite si está SOLD, soy el comprador y no reseñé", async () => {
+describe("reviewTargetFor (puro, doble sentido)", () => {
+  const listing = { sellerId: "S", status: "SOLD", soldToId: "B" };
+  it("el comprador (soldTo) califica al VENDEDOR", () => {
+    expect(reviewTargetFor(listing, "B")).toEqual({ targetId: "S", targetRole: "SELLER" });
+  });
+  it("el vendedor califica al COMPRADOR", () => {
+    expect(reviewTargetFor(listing, "S")).toEqual({ targetId: "B", targetRole: "BUYER" });
+  });
+  it("un usuario ajeno no califica", () => {
+    expect(reviewTargetFor(listing, "X")).toBe(null);
+  });
+  it("si no está vendida o no hay comprador, nadie califica", () => {
+    expect(reviewTargetFor({ sellerId: "S", status: "ACTIVE", soldToId: null }, "B")).toBe(null);
+    expect(reviewTargetFor({ sellerId: "S", status: "SOLD", soldToId: null }, "S")).toBe(null);
+  });
+});
+
+describe("canReviewListing (Prisma mockeado, doble sentido)", () => {
+  it("comprador → califica al vendedor (target SELLER) si no reseñó", async () => {
     db.listing.findUnique.mockResolvedValue({ sellerId: "s1", status: "SOLD", soldToId: "b1" });
     db.review.findUnique.mockResolvedValue(null);
     expect(await canReviewListing("b1", "l1")).toEqual({
       canReview: true,
-      sellerId: "s1",
+      targetId: "s1",
+      targetRole: "SELLER",
       alreadyReviewed: false,
     });
   });
 
-  it("no permite si la publicación no está vendida (ni consulta reviews)", async () => {
+  it("vendedor → califica al comprador (target BUYER)", async () => {
+    db.listing.findUnique.mockResolvedValue({ sellerId: "s1", status: "SOLD", soldToId: "b1" });
+    db.review.findUnique.mockResolvedValue(null);
+    expect(await canReviewListing("s1", "l1")).toEqual({
+      canReview: true,
+      targetId: "b1",
+      targetRole: "BUYER",
+      alreadyReviewed: false,
+    });
+  });
+
+  it("no permite si no está vendida (ni consulta reviews)", async () => {
     db.listing.findUnique.mockResolvedValue({ sellerId: "s1", status: "ACTIVE", soldToId: null });
     const r = await canReviewListing("b1", "l1");
     expect(r.canReview).toBe(false);
-    expect(r.sellerId).toBe("s1");
+    expect(r.targetRole).toBe(null);
     expect(db.review.findUnique).not.toHaveBeenCalled();
   });
 
-  it("no permite si no soy el comprador registrado", async () => {
-    db.listing.findUnique.mockResolvedValue({ sellerId: "s1", status: "SOLD", soldToId: "otro" });
-    expect((await canReviewListing("b1", "l1")).canReview).toBe(false);
+  it("un usuario ajeno no puede calificar", async () => {
+    db.listing.findUnique.mockResolvedValue({ sellerId: "s1", status: "SOLD", soldToId: "b1" });
+    const r = await canReviewListing("ajeno", "l1");
+    expect(r.canReview).toBe(false);
+    expect(r.targetRole).toBe(null);
   });
 
-  it("no permite si ya dejé una reseña", async () => {
+  it("no permite si ya dejó una reseña (una por listing+author)", async () => {
     db.listing.findUnique.mockResolvedValue({ sellerId: "s1", status: "SOLD", soldToId: "b1" });
     db.review.findUnique.mockResolvedValue({ id: "rev1" });
     expect(await canReviewListing("b1", "l1")).toEqual({
       canReview: false,
-      sellerId: "s1",
+      targetId: "s1",
+      targetRole: "SELLER",
       alreadyReviewed: true,
     });
   });
 
-  it("devuelve sellerId null si la publicación no existe", async () => {
+  it("targetId null si la publicación no existe", async () => {
     db.listing.findUnique.mockResolvedValue(null);
     expect(await canReviewListing("b1", "nope")).toEqual({
       canReview: false,
-      sellerId: null,
+      targetId: null,
+      targetRole: null,
       alreadyReviewed: false,
     });
+  });
+});
+
+describe("getSellerRatings / getBuyerRatings (agregados filtrados por rol)", () => {
+  it("getSellerRatings consulta con targetRole=SELLER (feed)", async () => {
+    db.review.groupBy.mockResolvedValue([{ targetId: "s1", _avg: { rating: 5 }, _count: 2 }]);
+    const map = await getSellerRatings(["s1"]);
+    expect(map.get("s1")).toEqual({ rating: 5, count: 2 });
+    expect(db.review.groupBy).toHaveBeenCalledWith(
+      expect.objectContaining({ where: expect.objectContaining({ targetRole: "SELLER" }) })
+    );
+  });
+  it("getBuyerRatings consulta con targetRole=BUYER (ofertas/perfil)", async () => {
+    db.review.groupBy.mockResolvedValue([{ targetId: "b1", _avg: { rating: 4 }, _count: 3 }]);
+    const map = await getBuyerRatings(["b1"]);
+    expect(map.get("b1")).toEqual({ rating: 4, count: 3 });
+    expect(db.review.groupBy).toHaveBeenCalledWith(
+      expect.objectContaining({ where: expect.objectContaining({ targetRole: "BUYER" }) })
+    );
+  });
+  it("sin ids no consulta", async () => {
+    expect((await getSellerRatings([])).size).toBe(0);
+    expect(db.review.groupBy).not.toHaveBeenCalled();
   });
 });

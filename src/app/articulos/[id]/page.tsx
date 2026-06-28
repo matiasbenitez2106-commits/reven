@@ -11,7 +11,7 @@ import { SaveButton } from "@/components/listings/SaveButton";
 import { LocationMap } from "@/components/listings/LocationMap";
 import { ViewTracker } from "@/components/listings/ViewTracker";
 import { ReportButton } from "@/components/listings/ReportButton";
-import { SellerReviewAction } from "@/components/listings/SellerReviewAction";
+import { ReviewAction } from "@/components/listings/ReviewAction";
 import { MakeOfferButton } from "@/components/listings/MakeOfferButton";
 import { BuyerOfferStatus, type BuyerOffer } from "@/components/listings/BuyerOfferStatus";
 import { Avatar } from "@/components/ui/Avatar";
@@ -19,7 +19,7 @@ import { Stars } from "@/components/ui/Stars";
 import { VerificationBadge } from "@/components/VerificationBadge";
 import { ProBadge } from "@/components/ProBadge";
 import { activePlan } from "@/lib/subscriptions";
-import { getListingBuyers } from "@/lib/listings";
+import { getListingBuyers, reviewTargetFor } from "@/lib/listings";
 import { geocode } from "@/lib/geo";
 import { formatPrice, formatRelative, hideContactInfo } from "@/lib/utils";
 import { CONDITION_LABELS } from "@/lib/constants";
@@ -149,11 +149,16 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
   const buyers =
     isOwner && listing.status !== "SOLD" ? await getListingBuyers(listing.id) : [];
 
-  // ¿Soy el comprador registrado de esta venta? Entonces puedo calificar al
-  // vendedor (o ver mi calificación si ya la dejé).
-  const isBuyer = !!user && listing.status === "SOLD" && listing.soldToId === user.id;
+  // ¿El usuario es parte de una venta cerrada? Entonces puede calificar a la otra
+  // parte (comprador→vendedor o vendedor→comprador). El target lo deriva reviewTargetFor.
+  const reviewTarget = user
+    ? reviewTargetFor(
+        { sellerId: listing.sellerId, status: listing.status, soldToId: listing.soldToId },
+        user.id
+      )
+    : null;
   let myReview: { rating: number; comment: string | null } | null = null;
-  if (isBuyer && user) {
+  if (reviewTarget && user) {
     myReview = await prisma.review.findUnique({
       where: { listingId_authorId: { listingId: listing.id, authorId: user.id } },
       select: { rating: true, comment: true },
@@ -247,11 +252,20 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                   </p>
                 )}
                 {myOffer && <BuyerOfferStatus offer={myOffer} />}
-                {isBuyer && (
-                  <SellerReviewAction listingId={listing.id} initialReview={myReview} />
-                )}
                 <SaveButton listingId={listing.id} initialFavorited={favorited} />
               </>
+            )}
+            {/* Calificación tras la venta — para ambas partes, según el rol del target. */}
+            {reviewTarget && (
+              <ReviewAction
+                listingId={listing.id}
+                initialReview={myReview}
+                ctaLabel={
+                  reviewTarget.targetRole === "SELLER"
+                    ? "Calificar al vendedor"
+                    : "Calificar al comprador"
+                }
+              />
             )}
           </div>
 

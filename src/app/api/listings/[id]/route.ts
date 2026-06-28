@@ -154,30 +154,45 @@ export async function PATCH(req: Request, { params }: Params) {
       }
     }
 
-    // Venta a un comprador real (no "vendí por fuera"): avisarle para que califique.
+    // Venta a un comprador real (no "vendí por fuera"): avisar a AMBOS para que se
+    // califiquen (reputación en doble sentido).
     if (status === "SOLD" && soldToId) {
+      const [buyer, seller] = await Promise.all([
+        prisma.user.findUnique({ where: { id: soldToId }, select: { email: true, firstName: true } }),
+        prisma.user.findUnique({
+          where: { id: existing.sellerId },
+          select: { email: true, firstName: true },
+        }),
+      ]);
+      const sellerName = seller?.firstName ?? "el vendedor";
+      const buyerName = buyer?.firstName ?? "el comprador";
+
+      // Comprador → calificar al vendedor.
       await notify({
         userId: soldToId,
         type: "REVIEW",
         title: "¡Felicitaciones por tu compra! 🎉",
-        body: `Contanos cómo te fue — calificá a ${user.name ?? "el vendedor"}.`,
+        body: `Contanos cómo te fue — calificá a ${sellerName}.`,
         link: `/articulos/${existing.id}`,
       });
+      // Vendedor → calificar al comprador.
+      await notify({
+        userId: existing.sellerId,
+        type: "REVIEW",
+        title: "¡Vendiste! 🎉",
+        body: `Contanos cómo te fue — calificá a ${buyerName}.`,
+        link: `/articulos/${existing.id}`,
+      });
+
       try {
-        const buyer = await prisma.user.findUnique({
-          where: { id: soldToId },
-          select: { email: true },
-        });
         if (buyer) {
-          await sendReviewPromptEmail(
-            buyer.email,
-            existing.title,
-            user.name ?? "el vendedor",
-            existing.id
-          );
+          await sendReviewPromptEmail(buyer.email, existing.title, sellerName, existing.id, "Calificar al vendedor");
+        }
+        if (seller) {
+          await sendReviewPromptEmail(seller.email, existing.title, buyerName, existing.id, "Calificar al comprador");
         }
       } catch (e) {
-        console.error("email aviso para calificar:", e);
+        console.error("emails aviso para calificar:", e);
       }
     }
 

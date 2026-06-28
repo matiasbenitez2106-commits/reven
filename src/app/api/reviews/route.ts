@@ -6,7 +6,8 @@ import { reviewSchema } from "@/lib/validations";
 import { canReviewListing } from "@/lib/listings";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
-// Crear una reseña sobre el vendedor de una publicación que el usuario compró.
+// Crear una reseña tras una venta, en DOBLE sentido (comprador→vendedor o
+// vendedor→comprador). El target y el rol los decide SIEMPRE el servidor.
 export async function POST(req: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
@@ -22,17 +23,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
   }
 
-  // El SERVIDOR decide elegibilidad y target: no se confía en ningún targetId
-  // que mande el cliente. El target es el vendedor de ESA publicación.
+  // El SERVIDOR decide elegibilidad, target y targetRole: no se confía en el cliente.
   const elig = await canReviewListing(user.id, listingId);
-  if (!elig.sellerId) {
-    return NextResponse.json({ error: "Publicación no encontrada" }, { status: 404 });
-  }
-  if (!elig.canReview) {
+  if (!elig.canReview || !elig.targetId || !elig.targetRole) {
     return NextResponse.json(
       {
         error: elig.alreadyReviewed
-          ? "Ya calificaste esta compra."
+          ? "Ya dejaste tu calificación."
           : "No podés calificar esta publicación.",
       },
       { status: 403 }
@@ -44,7 +41,8 @@ export async function POST(req: Request) {
       data: {
         listingId,
         authorId: user.id,
-        targetId: elig.sellerId, // el vendedor, determinado en el servidor
+        targetId: elig.targetId,
+        targetRole: elig.targetRole,
         rating: parsed.data.rating,
         comment: parsed.data.comment || null,
       },
@@ -54,7 +52,7 @@ export async function POST(req: Request) {
   } catch (e) {
     // @@unique([listingId, authorId]): backstop ante doble carga (carrera).
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
-      return NextResponse.json({ error: "Ya calificaste esta compra." }, { status: 409 });
+      return NextResponse.json({ error: "Ya dejaste tu calificación." }, { status: 409 });
     }
     throw e;
   }

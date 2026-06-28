@@ -37,15 +37,21 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
 
   const plan = activePlan(u.proPlan, u.proUntil);
 
-  // Reseñas recibidas: promedio + conteo (sobre todas) y la lista (hasta 50).
-  const [reviewStats, reviews] = await Promise.all([
+  // Reputación recibida, SEPARADA por rol: como vendedor (lo principal del perfil
+  // y lo que alimenta el feed) y como comprador. No se mezclan.
+  const [reviewStats, buyerStats, reviews] = await Promise.all([
     prisma.review.aggregate({
-      where: { targetId: u.id },
+      where: { targetId: u.id, targetRole: "SELLER" },
+      _avg: { rating: true },
+      _count: true,
+    }),
+    prisma.review.aggregate({
+      where: { targetId: u.id, targetRole: "BUYER" },
       _avg: { rating: true },
       _count: true,
     }),
     prisma.review.findMany({
-      where: { targetId: u.id },
+      where: { targetId: u.id, targetRole: "SELLER" },
       orderBy: { createdAt: "desc" },
       take: 50,
       select: {
@@ -59,6 +65,8 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
   ]);
   const reviewCount = reviewStats._count;
   const avg = reviewStats._avg.rating ?? 0;
+  const buyerCount = buyerStats._count;
+  const buyerAvg = buyerStats._avg.rating ?? 0;
 
   const now = new Date();
   const listings = await prisma.listing.findMany({
@@ -101,7 +109,16 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
               <Stars value={Math.round(avg)} size={15} />
               <span className="font-semibold">{avg.toFixed(1)}</span>
               <span className="text-gray-400 dark:text-stone-500">
-                · {reviewCount} {reviewCount === 1 ? "reseña" : "reseñas"}
+                · {reviewCount} como vendedor
+              </span>
+            </div>
+          )}
+          {buyerCount > 0 && (
+            <div className="mt-1 flex items-center gap-1.5 text-sm">
+              <Stars value={Math.round(buyerAvg)} size={15} />
+              <span className="font-semibold">{buyerAvg.toFixed(1)}</span>
+              <span className="text-gray-400 dark:text-stone-500">
+                · {buyerCount} como comprador
               </span>
             </div>
           )}

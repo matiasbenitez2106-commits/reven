@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Tag } from "lucide-react";
+import { Tag, Star } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getCurrentDbUser } from "@/lib/auth";
 import { Avatar } from "@/components/ui/Avatar";
@@ -8,6 +8,7 @@ import { OfferActionButtons } from "@/components/offers/OfferActionButtons";
 import { OFFER_STATUS_LABELS } from "@/lib/constants";
 import { formatPrice, formatRelative } from "@/lib/utils";
 import { proposerRole } from "@/lib/offers";
+import { getBuyerRatings } from "@/lib/listings";
 
 export const metadata = { title: "Ofertas recibidas" };
 export const dynamic = "force-dynamic";
@@ -43,6 +44,10 @@ export default async function OffersInboxPage() {
     },
   });
 
+  // Reputación COMO COMPRADOR de cada oferente (1 query batch, sin N+1): le sirve al
+  // vendedor para decidir a quién aceptar.
+  const buyerRatings = await getBuyerRatings(offers.map((o) => o.buyerId));
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <h1 className="mb-4 text-2xl font-bold">Ofertas recibidas</h1>
@@ -56,6 +61,7 @@ export default async function OffersInboxPage() {
         <div className="space-y-3">
           {offers.map((o) => {
             const proposer = proposerRole(o); // BUYER (oferta) o SELLER (tu contraoferta)
+            const br = buyerRatings.get(o.buyerId); // reputación del comprador
             const sellerIsRecipient = o.status === "PENDING" && proposer === "BUYER";
             const sellerIsProposer = o.status === "PENDING" && proposer === "SELLER";
             return (
@@ -74,9 +80,22 @@ export default async function OffersInboxPage() {
                     >
                       {o.listing.title}
                     </Link>
-                    <p className="text-xs text-gray-500 dark:text-stone-400">
-                      {o.buyer.firstName} {o.buyer.lastName} · {formatRelative(o.createdAt)}
-                      {proposer === "SELLER" ? " · tu contraoferta" : ""}
+                    <p className="flex flex-wrap items-center gap-x-1.5 text-xs text-gray-500 dark:text-stone-400">
+                      <span>
+                        {o.buyer.firstName} {o.buyer.lastName}
+                      </span>
+                      {br && br.count > 0 && (
+                        <span className="inline-flex items-center gap-0.5 text-gray-600 dark:text-stone-300">
+                          <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                          {(br.rating ?? 0).toLocaleString("es-AR", {
+                            minimumFractionDigits: 1,
+                            maximumFractionDigits: 1,
+                          })}
+                          <span className="text-gray-400 dark:text-stone-500">({br.count})</span>
+                        </span>
+                      )}
+                      <span>· {formatRelative(o.createdAt)}</span>
+                      {proposer === "SELLER" ? <span>· tu contraoferta</span> : null}
                     </p>
                   </div>
                   <div className="shrink-0 text-right">

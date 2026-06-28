@@ -50,20 +50,35 @@ export function summarizeRatings(
   return map;
 }
 
-/**
- * Reputación de un conjunto de vendedores en UNA sola consulta (sin N+1 por
- * tarjeta): groupBy de Review por targetId para los sellerIds del set de resultados.
- */
-export async function getSellerRatings(sellerIds: string[]): Promise<Map<string, SellerRating>> {
-  const ids = Array.from(new Set(sellerIds));
-  if (ids.length === 0) return new Map();
+export type ReviewRole = "SELLER" | "BUYER";
+
+/** Reputación de un conjunto de usuarios POR ROL (SELLER/BUYER) en UNA sola consulta. */
+async function getRatingsByRole(
+  ids: string[],
+  role: ReviewRole
+): Promise<Map<string, SellerRating>> {
+  const uniq = Array.from(new Set(ids));
+  if (uniq.length === 0) return new Map();
   const rows = await prisma.review.groupBy({
     by: ["targetId"],
-    where: { targetId: { in: ids } },
+    where: { targetId: { in: uniq }, targetRole: role },
     _avg: { rating: true },
     _count: true,
   });
   return summarizeRatings(rows);
+}
+
+/**
+ * Reputación como VENDEDOR (para el feed). Solo cuenta reseñas con targetRole=SELLER,
+ * para que la reputación de comprador NO se mezcle en las tarjetas.
+ */
+export async function getSellerRatings(sellerIds: string[]): Promise<Map<string, SellerRating>> {
+  return getRatingsByRole(sellerIds, "SELLER");
+}
+
+/** Reputación como COMPRADOR (bandeja de ofertas y perfil). Solo targetRole=BUYER. */
+export async function getBuyerRatings(buyerIds: string[]): Promise<Map<string, SellerRating>> {
+  return getRatingsByRole(buyerIds, "BUYER");
 }
 
 function toCard(
@@ -363,23 +378,35 @@ export async function getListingBuyers(listingId: string): Promise<ListingBuyer[
   );
 }
 
-// ── Elegibilidad para reseñar al vendedor ──
+// ── Elegibilidad para reseñar (doble sentido comprador↔vendedor) ──
+
+/**
+ * Tras una venta (SOLD con soldToId), ¿a quién califica `userId` y con qué rol?
+ *  - userId === soldToId → califica al VENDEDOR (target=sellerId, role SELLER).
+ *  - userId === sellerId → califica al COMPRADOR (target=soldToId, role BUYER).
+ *  - cualquier otro / no vendida / sin comprador → null.
+ * PURA (no toca la base). La usan canReviewListing (server) y la detail (UI).
+ */
+export function reviewTargetFor(
+  listing: { sellerId: string; status: string; soldToId: string | null },
+  userId: string
+): { targetId: string; targetRole: ReviewRole } | null {
+  if (listing.status !== "SOLD" || !listing.soldToId) return null;
+  if (userId === listing.soldToId) return { targetId: listing.sellerId, targetRole: "SELLER" };
+  if (userId === listing.sellerId) return { targetId: listing.soldToId, targetRole: "BUYER" };
+  return null;
+}
 
 export interface ReviewEligibility {
-  /** true solo si está SOLD, el usuario fue el comprador y aún no reseñó. */
   canReview: boolean;
-  /** Vendedor de la publicación (target de la reseña), o null si no existe. */
-  sellerId: string | null;
-  /** true si el usuario ya dejó una reseña para esta publicación. */
+  targetId: string | null;
+  targetRole: ReviewRole | null;
   alreadyReviewed: boolean;
 }
 
 /**
- * ¿Puede `userId` reseñar la publicación `listingId`? Solo si:
- *  - la publicación está SOLD,
- *  - su soldToId === userId (fue el comprador registrado), y
- *  - todavía no dejó una Review para esa publicación.
- * Devuelve además el sellerId, que es el target de la reseña.
+ * Eligibility de reseña, derivada SIEMPRE en el servidor: target y targetRole salen
+ * de reviewTargetFor (no se confía en el cliente) y se chequea que no haya reseñado ya.
  */
 export async function canReviewListing(
   userId: string,
@@ -389,16 +416,21 @@ export async function canReviewListing(
     where: { id: listingId },
     select: { sellerId: true, status: true, soldToId: true },
   });
-  if (!listing) return { canReview: false, sellerId: null, alreadyReviewed: false };
+  if (!listing) return { canReview: false, targetId: null, targetRole: null, alreadyReviewed: false };
 
-  const isBuyer = listing.status === "SOLD" && listing.soldToId === userId;
-  if (!isBuyer) return { canReview: false, sellerId: listing.sellerId, alreadyReviewed: false };
+  const tgt = reviewTargetFor(listing, userId);
+  if (!tgt) return { canReview: false, targetId: null, targetRole: null, alreadyReviewed: false };
 
   const existing = await prisma.review.findUnique({
     where: { listingId_authorId: { listingId, authorId: userId } },
     select: { id: true },
   });
-  return { canReview: !existing, sellerId: listing.sellerId, alreadyReviewed: !!existing };
+  return {
+    canReview: !existing,
+    targetId: tgt.targetId,
+    targetRole: tgt.targetRole,
+    alreadyReviewed: !!existing,
+  };
 }
 
 /** Devuelve el título de una publicación activa similar del mismo vendedor, o null. */

@@ -7,18 +7,22 @@ import { Button } from "@/components/ui/Button";
 import { Stars } from "@/components/ui/Stars";
 import { cn } from "@/lib/utils";
 
-// Reseña que el comprador ya dejó (si existe).
+// Reseña que el usuario ya dejó (si existe).
 export interface MyReview {
   rating: number;
   comment: string | null;
 }
 
-export function SellerReviewAction({
+// Acción genérica de calificación tras una venta. `ctaLabel` adapta el sentido
+// (comprador→vendedor o vendedor→comprador). El target lo decide el SERVIDOR.
+export function ReviewAction({
   listingId,
   initialReview,
+  ctaLabel,
 }: {
   listingId: string;
   initialReview: MyReview | null;
+  ctaLabel: string;
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -28,7 +32,7 @@ export function SellerReviewAction({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Si ya reseñó, mostramos su calificación en lugar del botón.
+  // Si ya calificó, mostramos su calificación en lugar del botón.
   if (initialReview) {
     return (
       <div className="rounded-lg border border-line dark:border-stone-700 bg-surface dark:bg-stone-900 p-3">
@@ -70,7 +74,7 @@ export function SellerReviewAction({
   return (
     <>
       <Button variant="primary" className="w-full" onClick={() => setOpen(true)}>
-        <Star className="h-4 w-4" /> Calificar al vendedor
+        <Star className="h-4 w-4" /> {ctaLabel}
       </Button>
 
       {open && (
@@ -84,7 +88,7 @@ export function SellerReviewAction({
           >
             <div className="mb-4 flex items-center justify-between">
               <h3 className="flex items-center gap-2 font-semibold">
-                <Star className="h-4 w-4 text-amber-400" /> Calificar al vendedor
+                <Star className="h-4 w-4 text-amber-400" /> {ctaLabel}
               </h3>
               <button
                 onClick={() => setOpen(false)}
@@ -128,7 +132,7 @@ export function SellerReviewAction({
               className="input"
               rows={3}
               maxLength={1000}
-              placeholder="Comentario (opcional): ¿cómo fue la compra?"
+              placeholder="Comentario (opcional): ¿cómo te fue?"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />

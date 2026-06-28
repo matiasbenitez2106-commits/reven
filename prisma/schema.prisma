@@ -418,22 +418,32 @@ model SupportMessage {
   @@index([status, createdAt])
 }
 
-// Calificación de un vendedor por parte del comprador, atada a una venta concreta.
+// Rol del CALIFICADO en la transacción: separa "reputación como vendedor" (feed)
+// de "reputación como comprador" (ofertas), para que NO se mezclen.
+enum ReviewTargetRole {
+  SELLER
+  BUYER
+}
+
+// Calificación atada a una venta concreta, en DOBLE sentido (comprador↔vendedor).
 // rating 1..5; un autor califica una publicación una sola vez (@@unique listingId+authorId).
 model Review {
-  id        String   @id @default(cuid())
-  rating    Int
-  comment   String?
-  listingId String
-  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  authorId  String
-  author    User     @relation("ReviewsWritten", fields: [authorId], references: [id], onDelete: Cascade)
-  targetId  String
-  target    User     @relation("ReviewsReceived", fields: [targetId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  id         String           @id @default(cuid())
+  rating     Int
+  comment    String?
+  listingId  String
+  listing    Listing          @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  authorId   String
+  author     User             @relation("ReviewsWritten", fields: [authorId], references: [id], onDelete: Cascade)
+  targetId   String
+  target     User             @relation("ReviewsReceived", fields: [targetId], references: [id], onDelete: Cascade)
+  // @default(SELLER) backfillea el legado (todo era comprador→vendedor); las
+  // reseñas nuevas lo setean explícito desde la eligibility.
+  targetRole ReviewTargetRole @default(SELLER)
+  createdAt  DateTime         @default(now())
 
   @@unique([listingId, authorId])
-  @@index([targetId])
+  @@index([targetId, targetRole])
 }
 
 // ──────────────────────────────────────────────
