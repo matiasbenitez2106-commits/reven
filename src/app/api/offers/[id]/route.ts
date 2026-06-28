@@ -14,6 +14,7 @@ import {
   siblingsToReject,
   isListingOpenForOffers,
 } from "@/lib/offers";
+import { findOrCreateConversation, offerMessageData } from "@/lib/conversations";
 import { formatPrice } from "@/lib/utils";
 
 type Params = { params: { id: string } };
@@ -66,20 +67,23 @@ export async function PATCH(req: Request, { params }: Params) {
   }
 
   const otherPartyId = role === "SELLER" ? offer.buyerId : offer.sellerId;
-  const otherIsSeller = otherPartyId === offer.sellerId;
-  const linkFor = (isSeller: boolean) =>
-    isSeller ? "/ofertas" : `/articulos/${offer.listingId}`;
+  // Toda la negociación vive en un hilo (listingId, buyerId): las notifs de oferta
+  // linkean a esa conversación.
+  const convLink = (id: string) => `/mensajes/${id}`;
 
   // ── Cancelar (retira el proponente) / Rechazar (declina el receptor) ──
   if (action === "cancel" || action === "reject") {
     const status = action === "cancel" ? "CANCELLED" : "REJECTED";
-    await prisma.offer.update({ where: { id: offer.id }, data: { status } });
+    const conversation = await prisma.$transaction(async (tx) => {
+      await tx.offer.update({ where: { id: offer.id }, data: { status } });
+      return findOrCreateConversation(offer.listingId, offer.buyerId, offer.sellerId, tx);
+    });
     await notify({
       userId: otherPartyId,
       type: "OFFER",
       title: action === "cancel" ? "Retiraron una oferta" : "Rechazaron una oferta",
       body: `Por "${offer.listing.title}"`,
-      link: linkFor(otherIsSeller),
+      link: convLink(conversation.id),
     });
     return NextResponse.json({ ok: true });
   }
@@ -89,9 +93,9 @@ export async function PATCH(req: Request, { params }: Params) {
     if (!amount) {
       return NextResponse.json({ error: "Falta el monto de la contraoferta." }, { status: 400 });
     }
-    const created = await prisma.$transaction(async (tx) => {
+    const { created, conversationId } = await prisma.$transaction(async (tx) => {
       await tx.offer.update({ where: { id: offer.id }, data: { status: "COUNTERED" } });
-      return tx.offer.create({
+      const created = await tx.offer.create({
         data: {
           listingId: offer.listingId,
           buyerId: offer.buyerId,
@@ -105,13 +109,21 @@ export async function PATCH(req: Request, { params }: Params) {
         },
         select: { id: true },
       });
+      // La contraoferta también aparece como card en el mismo hilo. senderId = quien
+      // contraoferta. body "Oferta: $X" NO pasa por hideContactInfo (I4 solo TEXT).
+      const conversation = await findOrCreateConversation(offer.listingId, offer.buyerId, offer.sellerId, tx);
+      await tx.message.create({
+        data: { conversationId: conversation.id, ...offerMessageData({ offerId: created.id, senderId: user.id, amount }) },
+      });
+      await tx.conversation.update({ where: { id: conversation.id }, data: { updatedAt: new Date() } });
+      return { created, conversationId: conversation.id };
     });
     await notify({
       userId: otherPartyId,
       type: "OFFER",
       title: `Contraoferta: ${formatPrice(amount)}`,
       body: `Por "${offer.listing.title}"`,
-      link: linkFor(otherIsSeller),
+      link: convLink(conversationId),
     });
     return NextResponse.json({ ok: true, id: created.id });
   }
@@ -150,6 +162,8 @@ export async function PATCH(req: Request, { params }: Params) {
       },
       data: { status: "REJECTED" },
     });
+    // El hilo del trato cerrado (comprador↔vendedor de esta oferta).
+    const conversation = await findOrCreateConversation(offer.listingId, offer.buyerId, offer.sellerId, tx);
     // Notificaciones in-app dentro de la transacción (atómicas con el estado).
     await tx.notification.create({
       data: {
@@ -157,7 +171,7 @@ export async function PATCH(req: Request, { params }: Params) {
         type: "OFFER",
         title: `¡Trato cerrado! ${formatPrice(offer.amount)}`,
         body: `"${offer.listing.title}" quedó reservada para vos.`,
-        link: `/articulos/${offer.listingId}`,
+        link: convLink(conversation.id),
       },
     });
     await tx.notification.create({
@@ -166,19 +180,28 @@ export async function PATCH(req: Request, { params }: Params) {
         type: "OFFER",
         title: `¡Trato cerrado! ${formatPrice(offer.amount)}`,
         body: `"${offer.listing.title}" quedó reservada.`,
-        link: `/articulos/${offer.listingId}`,
+        link: convLink(conversation.id),
       },
     });
-    for (const bId of rejectedBuyerIds) {
-      await tx.notification.create({
-        data: {
-          userId: bId,
-          type: "OFFER",
-          title: "Tu oferta fue rechazada",
-          body: `"${offer.listing.title}" se reservó para otro comprador.`,
-          link: `/articulos/${offer.listingId}`,
-        },
+    if (rejectedBuyerIds.length) {
+      // Cada comprador rechazado ve el card en SU propio hilo (fallback al artículo).
+      const sibConvos = await tx.conversation.findMany({
+        where: { listingId: offer.listingId, buyerId: { in: rejectedBuyerIds } },
+        select: { id: true, buyerId: true },
       });
+      const convByBuyer = new Map(sibConvos.map((c) => [c.buyerId, c.id]));
+      for (const bId of rejectedBuyerIds) {
+        const cid = convByBuyer.get(bId);
+        await tx.notification.create({
+          data: {
+            userId: bId,
+            type: "OFFER",
+            title: "Tu oferta fue rechazada",
+            body: `"${offer.listing.title}" se reservó para otro comprador.`,
+            link: cid ? convLink(cid) : `/articulos/${offer.listingId}`,
+          },
+        });
+      }
     }
   });
 

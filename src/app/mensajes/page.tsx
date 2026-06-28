@@ -98,7 +98,10 @@ export default async function MessagesPage() {
                   {last && (
                     <p className="truncate text-sm text-gray-600 dark:text-stone-300">
                       {last.senderId === user.id ? "Vos: " : ""}
-                      {unlockedSet.has(c.id) ? last.body : hideContactInfo(last.body)}
+                      {/* Las ofertas ("Oferta: $X") van crudas: I4 solo enmascara TEXT. */}
+                      {last.kind === "OFFER" || unlockedSet.has(c.id)
+                        ? last.body
+                        : hideContactInfo(last.body)}
                     </p>
                   )}
                 </div>

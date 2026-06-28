@@ -30,7 +30,23 @@ export default async function ConversationPage({ params }: { params: { id: strin
       },
       buyer: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true } },
       seller: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true } },
-      messages: { orderBy: { createdAt: "asc" }, take: 200 },
+      messages: {
+        orderBy: { createdAt: "asc" },
+        take: 200,
+        include: {
+          offer: {
+            select: {
+              id: true,
+              amount: true,
+              status: true,
+              proposedById: true,
+              buyerId: true,
+              sellerId: true,
+              expiresAt: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -48,9 +64,13 @@ export default async function ConversationPage({ params }: { params: { id: strin
 
   const initialMessages = convo.messages.map((m) => ({
     id: m.id,
+    kind: m.kind,
     body: m.body,
     senderId: m.senderId,
     createdAt: m.createdAt.toISOString(),
+    offer: m.offer
+      ? { ...m.offer, expiresAt: m.offer.expiresAt.toISOString() }
+      : null,
   }));
 
   // ¿Trato cerrado con este comprador? Si sí, el contacto se destraba (I12).

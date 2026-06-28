@@ -257,17 +257,31 @@ model Conversation {
   @@index([sellerId])
 }
 
+// Tipo de mensaje del chat. v1: TEXT (texto del usuario) u OFFER (card de oferta).
+// El default TEXT backfillea los mensajes existentes. Follow-up natural: un SYSTEM
+// (líneas de actividad — "Oferta aceptada" — y para que el card se actualice solo
+// en la otra parte por polling).
+enum MessageKind {
+  TEXT
+  OFFER
+}
+
 model Message {
   id             String       @id @default(cuid())
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   senderId       String
   sender         User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  kind           MessageKind  @default(TEXT)
   body           String
+  // Mensaje especial de oferta: renderiza un card en el chat. Solo cuando kind=OFFER.
+  offerId        String?
+  offer          Offer?       @relation(fields: [offerId], references: [id], onDelete: SetNull)
   readAt         DateTime?
   createdAt      DateTime     @default(now())
 
   @@index([conversationId])
+  @@index([offerId])
 }
 
 // Pagos de publicaciones destacadas (MercadoPago). Sin comisiones entre partes.
@@ -480,6 +494,7 @@ model Offer {
   parentOfferId String?
   parent        Offer?      @relation("OfferThread", fields: [parentOfferId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   counters      Offer[]     @relation("OfferThread")
+  messages      Message[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   expiresAt     DateTime

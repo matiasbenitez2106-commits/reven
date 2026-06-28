@@ -6,6 +6,7 @@ import { notify } from "@/lib/notifications";
 import { sendNewOfferEmail } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 import { validateNewOffer, hasLivePendingOffer, computeExpiry } from "@/lib/offers";
+import { findOrCreateConversation, offerMessageData } from "@/lib/conversations";
 import { formatPrice } from "@/lib/utils";
 
 // Crear una oferta sobre una publicación (la hace el comprador).
@@ -58,27 +59,42 @@ export async function POST(req: Request) {
     );
   }
 
-  const offer = await prisma.offer.create({
-    data: {
-      listingId,
-      buyerId: user.id,
-      sellerId: listing.sellerId,
-      proposedById: user.id,
-      amount,
-      message: message || null,
-      status: "PENDING",
-      expiresAt: computeExpiry(now),
-    },
-    select: { id: true },
+  // La oferta vive DENTRO del chat: en una sola transacción creamos la Offer,
+  // buscamos/creamos la conversación (comprador↔vendedor por esta publi) y
+  // dejamos el mensaje especial kind=OFFER. Lo creamos con prisma directo (no por
+  // el route de mensajes) a propósito: así NO dispara la notif de "nuevo mensaje"
+  // ni pasa por el gate de verificación — ofertar sigue sin verificación (D4).
+  const { offer, conversationId } = await prisma.$transaction(async (tx) => {
+    const offer = await tx.offer.create({
+      data: {
+        listingId,
+        buyerId: user.id,
+        sellerId: listing.sellerId,
+        proposedById: user.id,
+        amount,
+        message: message || null,
+        status: "PENDING",
+        expiresAt: computeExpiry(now),
+      },
+      select: { id: true },
+    });
+    const conversation = await findOrCreateConversation(listingId, user.id, listing.sellerId, tx);
+    // body "Oferta: $X": NO pasa por hideContactInfo (I4 solo enmascara TEXT).
+    await tx.message.create({
+      data: { conversationId: conversation.id, ...offerMessageData({ offerId: offer.id, senderId: user.id, amount }) },
+    });
+    // Subir la conversación al tope del inbox.
+    await tx.conversation.update({ where: { id: conversation.id }, data: { updatedAt: new Date() } });
+    return { offer, conversationId: conversation.id };
   });
 
-  // Notificar al vendedor (in-app siempre + email: evento clave).
+  // Notificar al vendedor (in-app siempre + email: evento clave). Linkea al chat.
   await notify({
     userId: listing.sellerId,
     type: "OFFER",
     title: `Nueva oferta: ${formatPrice(amount)}`,
     body: `Por "${listing.title}"`,
-    link: "/ofertas",
+    link: `/mensajes/${conversationId}`,
   });
   try {
     const seller = await prisma.user.findUnique({

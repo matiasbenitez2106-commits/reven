@@ -39,7 +39,24 @@ export async function GET(req: Request, { params }: Params) {
     if (!isNaN(d.getTime())) where.createdAt = { gt: d };
   }
 
-  const messages = await prisma.message.findMany({ where, orderBy: { createdAt: "asc" } });
+  const messages = await prisma.message.findMany({
+    where,
+    orderBy: { createdAt: "asc" },
+    include: {
+      // Para los mensajes kind=OFFER: datos para renderizar el card y sus botones.
+      offer: {
+        select: {
+          id: true,
+          amount: true,
+          status: true,
+          proposedById: true,
+          buyerId: true,
+          sellerId: true,
+          expiresAt: true,
+        },
+      },
+    },
+  });
 
   // Marca como leídos los mensajes del otro participante
   await prisma.message.updateMany({
@@ -50,9 +67,11 @@ export async function GET(req: Request, { params }: Params) {
   return NextResponse.json({
     messages: messages.map((m) => ({
       id: m.id,
+      kind: m.kind,
       body: m.body,
       senderId: m.senderId,
       createdAt: m.createdAt,
+      offer: m.offer,
     })),
   });
 }
@@ -144,7 +163,7 @@ export async function POST(req: Request, { params }: Params) {
   }
 
   return NextResponse.json(
-    { id: msg.id, body: msg.body, senderId: msg.senderId, createdAt: msg.createdAt },
+    { id: msg.id, kind: msg.kind, body: msg.body, senderId: msg.senderId, createdAt: msg.createdAt, offer: null },
     { status: 201 }
   );
 }

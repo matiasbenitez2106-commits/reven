@@ -14,12 +14,16 @@ export function OfferActionButtons({
   canReject = false,
   canCounter = false,
   canCancel = false,
+  onDone,
 }: {
   offerId: string;
   canAccept?: boolean;
   canReject?: boolean;
   canCounter?: boolean;
   canCancel?: boolean;
+  // Si se pasa, lo llama tras una acción OK (el chat re-fetchea el hilo). Si no,
+  // hace router.refresh() (lo que usa /ofertas).
+  onDone?: () => void;
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
@@ -43,7 +47,8 @@ export function OfferActionButtons({
         return;
       }
       setCounterOpen(false);
-      router.refresh();
+      if (onDone) onDone();
+      else router.refresh();
     } finally {
       setLoading(null);
     }
