@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Send, Tag, Star } from "lucide-react";
+import Link from "next/link";
+import { Send, Tag, Star, ShieldCheck } from "lucide-react";
 import type { OfferStatus } from "@prisma/client";
 import { cn, hideContactInfo, hasContactInfo, formatPrice } from "@/lib/utils";
 import { actorRole, proposerRole, canActOnOffer, isOfferExpired } from "@/lib/offers";
 import { OfferActionButtons } from "@/components/offers/OfferActionButtons";
+import { SAFETY_TIPS } from "@/lib/safety";
 
 interface OfferInfo {
   id: string;
@@ -255,6 +257,31 @@ export function ChatThread({
           Por tu seguridad, los datos de contacto se ocultan — hacé el trato dentro de Trato.
         </p>
       ) : null}
+
+      {/* Recordatorio sutil de entrega segura: aparece solo con el trato acordado
+          (lo ven las dos partes). Tono muy bajo para no competir con la nota verde
+          ni con el card de la oferta. */}
+      {unlocked && (
+        <div className="mt-1.5 rounded-lg border border-line/70 dark:border-stone-800 bg-surface-sunken/50 dark:bg-stone-800/40 px-3 py-2">
+          <p className="flex items-center gap-1.5 text-[11px] font-medium text-gray-500 dark:text-stone-400">
+            <ShieldCheck className="h-3.5 w-3.5" /> Entrega segura
+          </p>
+          <ul className="mt-1 space-y-0.5">
+            {SAFETY_TIPS.filter((t) => t.short).map((t) => (
+              <li key={t.text} className="flex items-start gap-1.5 text-[11px] text-gray-500 dark:text-stone-400">
+                <span className="mt-[6px] h-1 w-1 shrink-0 rounded-full bg-gray-300 dark:bg-stone-600" />
+                {t.short}
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/seguridad"
+            className="mt-1 inline-block text-[11px] font-medium text-brand-700 hover:underline dark:text-brand-300"
+          >
+            Más consejos de seguridad →
+          </Link>
+        </div>
+      )}
 
       <form onSubmit={send} className="mt-2 flex items-center gap-2 border-t border-line dark:border-stone-800 pt-3">
         <input

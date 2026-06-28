@@ -27,6 +27,7 @@ export function Footer() {
                 <li><Link href="/buscar" className="hover:text-brand-700 dark:hover:text-brand-300">Explorar</Link></li>
                 <li><Link href="/publicar" className="hover:text-brand-700 dark:hover:text-brand-300">Publicar</Link></li>
                 <li><Link href="/contacto" className="hover:text-brand-700 dark:hover:text-brand-300">Contacto / Soporte</Link></li>
+                <li><Link href="/seguridad" className="hover:text-brand-700 dark:hover:text-brand-300">Seguridad</Link></li>
               </ul>
             </div>
             <div>
