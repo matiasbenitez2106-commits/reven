@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
 import { formatRelative, hideContactInfo } from "@/lib/utils";
+import { resolveUnlockedConversations } from "@/lib/conversation-unlock";
 
 export const metadata = { title: "Mensajes" };
 
@@ -16,7 +17,7 @@ export default async function MessagesPage() {
   const convos = await prisma.conversation.findMany({
     where: { OR: [{ buyerId: user.id }, { sellerId: user.id }] },
     include: {
-      listing: { select: { title: true, images: { orderBy: { position: "asc" }, take: 1 } } },
+      listing: { select: { title: true, soldToId: true, images: { orderBy: { position: "asc" }, take: 1 } } },
       buyer: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } },
       seller: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } },
       messages: { orderBy: { createdAt: "desc" }, take: 1 },
@@ -33,6 +34,16 @@ export default async function MessagesPage() {
       })
     : [];
   const unreadMap = new Map(unread.map((u) => [u.conversationId, u._count._all]));
+
+  // Unlock del contacto por conversación (I12), en 1 query batch (sin N+1).
+  const unlockedSet = await resolveUnlockedConversations(
+    convos.map((c) => ({
+      id: c.id,
+      listingId: c.listingId,
+      buyerId: c.buyerId,
+      soldToId: c.listing.soldToId,
+    }))
+  );
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
@@ -87,7 +98,7 @@ export default async function MessagesPage() {
                   {last && (
                     <p className="truncate text-sm text-gray-600 dark:text-stone-300">
                       {last.senderId === user.id ? "Vos: " : ""}
-                      {hideContactInfo(last.body)}
+                      {unlockedSet.has(c.id) ? last.body : hideContactInfo(last.body)}
                     </p>
                   )}
                 </div>

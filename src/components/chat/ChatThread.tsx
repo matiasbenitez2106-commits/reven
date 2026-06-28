@@ -17,12 +17,14 @@ export function ChatThread({
   conversationId,
   meId,
   initialMessages,
+  unlocked = false,
   disabled,
   className,
 }: {
   conversationId: string;
   meId: string;
   initialMessages: Msg[];
+  unlocked?: boolean;
   disabled?: boolean;
   className?: string;
 }) {
@@ -79,8 +81,8 @@ export function ChatThread({
     }
   }
 
-  // Solo para la nota sutil: ¿algún mensaje tiene datos de contacto enmascarados?
-  const anyMasked = messages.some((m) => hasContactInfo(m.body));
+  // Nota sutil (solo si está locked): ¿algún mensaje tiene contacto enmascarado?
+  const anyMasked = !unlocked && messages.some((m) => hasContactInfo(m.body));
 
   return (
     <div className={cn("flex flex-col", className)}>
@@ -102,8 +104,11 @@ export function ChatThread({
                     : "rounded-bl-sm bg-surface-sunken dark:bg-stone-800 text-gray-800 dark:text-stone-100"
                 )}
               >
-                {/* Enmascaramos AL MOSTRAR (el Message original queda crudo en la DB). */}
-                <p className="whitespace-pre-wrap break-words">{hideContactInfo(m.body)}</p>
+                {/* Enmascaramos AL MOSTRAR salvo que el trato esté acordado (unlocked).
+                    El Message original queda CRUDO en la DB siempre (invariante de I4). */}
+                <p className="whitespace-pre-wrap break-words">
+                  {unlocked ? m.body : hideContactInfo(m.body)}
+                </p>
                 <p className={cn("mt-0.5 text-[10px]", mine ? "text-brand-100" : "text-gray-400 dark:text-stone-500")}>
                   {new Date(m.createdAt).toLocaleTimeString("es-AR", {
                     hour: "2-digit",
@@ -117,11 +122,16 @@ export function ChatThread({
         <div ref={bottomRef} />
       </div>
 
-      {anyMasked && (
+      {unlocked ? (
+        <p className="mt-1 px-1 text-[11px] text-green-700 dark:text-green-400">
+          Trato acordado ✅ Ya pueden compartir su contacto para coordinar la entrega. Cuidá
+          tus datos y encontrate en un lugar seguro.
+        </p>
+      ) : anyMasked ? (
         <p className="mt-1 px-1 text-[11px] text-gray-400 dark:text-stone-500">
           Por tu seguridad, los datos de contacto se ocultan — hacé el trato dentro de Trato.
         </p>
-      )}
+      ) : null}
 
       <form onSubmit={send} className="mt-2 flex items-center gap-2 border-t border-line dark:border-stone-800 pt-3">
         <input

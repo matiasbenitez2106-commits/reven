@@ -7,6 +7,7 @@ import { ChatThread } from "@/components/chat/ChatThread";
 import { Avatar } from "@/components/ui/Avatar";
 import { VerificationBadge } from "@/components/VerificationBadge";
 import { formatPrice } from "@/lib/utils";
+import { resolveConversationUnlocked } from "@/lib/conversation-unlock";
 
 export const metadata = { title: "Conversación" };
 
@@ -23,6 +24,7 @@ export default async function ConversationPage({ params }: { params: { id: strin
           title: true,
           price: true,
           status: true,
+          soldToId: true,
           images: { orderBy: { position: "asc" }, take: 1 },
         },
       },
@@ -50,6 +52,13 @@ export default async function ConversationPage({ params }: { params: { id: strin
     senderId: m.senderId,
     createdAt: m.createdAt.toISOString(),
   }));
+
+  // ¿Trato cerrado con este comprador? Si sí, el contacto se destraba (I12).
+  const unlocked = await resolveConversationUnlocked({
+    listingId: convo.listingId,
+    buyerId: convo.buyerId,
+    soldToId: convo.listing.soldToId,
+  });
 
   return (
     <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-3xl flex-col px-4 py-4">
@@ -90,6 +99,7 @@ export default async function ConversationPage({ params }: { params: { id: strin
         conversationId={convo.id}
         meId={user.id}
         initialMessages={initialMessages}
+        unlocked={unlocked}
         disabled={convo.listing.status === "DELETED"}
         className="min-h-0 flex-1"
       />

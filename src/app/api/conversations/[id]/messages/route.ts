@@ -6,6 +6,7 @@ import { notify } from "@/lib/notifications";
 import { sendNewMessageEmail } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 import { hideContactInfo } from "@/lib/utils";
+import { resolveConversationUnlocked } from "@/lib/conversation-unlock";
 
 type Params = { params: { id: string } };
 
@@ -96,13 +97,23 @@ export async function POST(req: Request, { params }: Params) {
   // Notifica al otro participante (in-app siempre; email solo la 1ª vez que queda sin leer)
   const convo = await prisma.conversation.findUnique({
     where: { id: params.id },
-    select: { buyerId: true, sellerId: true, listing: { select: { title: true } } },
+    select: {
+      buyerId: true,
+      sellerId: true,
+      listingId: true,
+      listing: { select: { title: true, soldToId: true } },
+    },
   });
   if (convo) {
     const recipientId = convo.buyerId === user.id ? convo.sellerId : convo.buyerId;
-    // Enmascaramos el contacto en la notif y el email (de cara al usuario). El
-    // Message ya quedó guardado CRUDO arriba, así que no se pierde para moderar.
-    const safeBody = hideContactInfo(parsed.data.body);
+    // Si el trato está cerrado con este comprador (I12), el contacto va CRUDO en la
+    // notif/email; si no, enmascarado (I4). El Message ya quedó CRUDO en la DB arriba.
+    const unlocked = await resolveConversationUnlocked({
+      listingId: convo.listingId,
+      buyerId: convo.buyerId,
+      soldToId: convo.listing.soldToId,
+    });
+    const safeBody = unlocked ? parsed.data.body : hideContactInfo(parsed.data.body);
     await notify({
       userId: recipientId,
       type: "MESSAGE",
