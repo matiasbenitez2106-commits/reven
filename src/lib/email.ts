@@ -136,6 +136,25 @@ export async function sendNewMessageEmail(
   });
 }
 
+/** Aviso al comprador para que califique al vendedor tras la venta (evento clave → sí email). */
+export async function sendReviewPromptEmail(
+  to: string,
+  listingTitle: string,
+  sellerName: string,
+  listingId: string
+): Promise<void> {
+  const link = `${appUrl()}/articulos/${listingId}`;
+  await sendEmail({
+    to,
+    subject: "¡Felicitaciones por tu compra! Contanos cómo te fue · trato",
+    html: wrap(
+      `<p>¡Felicitaciones por tu compra de <strong>${escapeHtml(listingTitle)}</strong>! 🎉</p>
+       <p>¿Cómo fue tratar con <strong>${escapeHtml(sellerName)}</strong>? Tu calificación ayuda a que la comunidad compre con más confianza.</p>
+       <p><a href="${link}" style="display:inline-block;background:#66785B;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Calificar al vendedor</a></p>`
+    ),
+  });
+}
+
 const fmtARS = (n: number) => `$${n.toLocaleString("es-AR")}`;
 
 /** Aviso al vendedor: recibió una oferta nueva (evento clave → sí email). */

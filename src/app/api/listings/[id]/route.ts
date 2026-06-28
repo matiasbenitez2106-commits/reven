@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { listingSchema } from "@/lib/validations";
 import { notify } from "@/lib/notifications";
+import { sendReviewPromptEmail } from "@/lib/email";
 import { deleteImage } from "@/lib/storage";
 import { geocode } from "@/lib/geo";
 import { findDuplicateActiveListing, getListingBuyers } from "@/lib/listings";
@@ -150,6 +151,33 @@ export async function PATCH(req: Request, { params }: Params) {
             link: `/articulos/${existing.id}`,
           });
         }
+      }
+    }
+
+    // Venta a un comprador real (no "vendí por fuera"): avisarle para que califique.
+    if (status === "SOLD" && soldToId) {
+      await notify({
+        userId: soldToId,
+        type: "REVIEW",
+        title: "¡Felicitaciones por tu compra! 🎉",
+        body: `Contanos cómo te fue — calificá a ${user.name ?? "el vendedor"}.`,
+        link: `/articulos/${existing.id}`,
+      });
+      try {
+        const buyer = await prisma.user.findUnique({
+          where: { id: soldToId },
+          select: { email: true },
+        });
+        if (buyer) {
+          await sendReviewPromptEmail(
+            buyer.email,
+            existing.title,
+            user.name ?? "el vendedor",
+            existing.id
+          );
+        }
+      } catch (e) {
+        console.error("email aviso para calificar:", e);
       }
     }
 

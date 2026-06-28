@@ -371,6 +371,7 @@ enum NotificationType {
   REPORT
   SUBSCRIPTION
   OFFER
+  REVIEW
   GENERIC
 }
 

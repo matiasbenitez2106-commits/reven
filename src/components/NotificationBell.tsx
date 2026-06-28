@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ComponentType } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Bell, MessageCircle, ShieldCheck, Flag, Crown } from "lucide-react";
+import { Bell, MessageCircle, ShieldCheck, Flag, Crown, Star } from "lucide-react";
 import { cn, formatRelative } from "@/lib/utils";
 
 interface Notif {
@@ -22,6 +22,7 @@ const ICONS: Record<string, ComponentType<{ className?: string }>> = {
   VERIFICATION: ShieldCheck,
   REPORT: Flag,
   SUBSCRIPTION: Crown,
+  REVIEW: Star,
   GENERIC: Bell,
 };
 
