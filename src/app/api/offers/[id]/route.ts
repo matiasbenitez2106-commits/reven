@@ -14,7 +14,7 @@ import {
   siblingsToReject,
   isListingOpenForOffers,
 } from "@/lib/offers";
-import { findOrCreateConversation, offerMessageData } from "@/lib/conversations";
+import { findOrCreateConversation, offerMessageData, offerNoteMessageData } from "@/lib/conversations";
 import { formatPrice } from "@/lib/utils";
 
 type Params = { params: { id: string } };
@@ -113,8 +113,12 @@ export async function PATCH(req: Request, { params }: Params) {
       // contraoferta. body "Oferta: $X" NO pasa por hideContactInfo (I4 solo TEXT).
       const conversation = await findOrCreateConversation(offer.listingId, offer.buyerId, offer.sellerId, tx);
       await tx.message.create({
-        data: { conversationId: conversation.id, ...offerMessageData({ offerId: created.id, senderId: user.id, amount }) },
+        data: { conversationId: conversation.id, ...offerMessageData({ offerId: created.id, senderId: user.id, amount }), createdAt: now },
       });
+      // Mensaje opcional de la contraoferta → burbuja TEXT debajo del card (+1ms),
+      // por I4/unlock como cualquier texto. Sin notif extra (ya va la de oferta).
+      const note = offerNoteMessageData({ senderId: user.id, message, after: now });
+      if (note) await tx.message.create({ data: { conversationId: conversation.id, ...note } });
       await tx.conversation.update({ where: { id: conversation.id }, data: { updatedAt: new Date() } });
       return { created, conversationId: conversation.id };
     });

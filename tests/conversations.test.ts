@@ -5,7 +5,7 @@ vi.mock("@/lib/prisma", () => ({
 }));
 
 import { prisma } from "@/lib/prisma";
-import { findOrCreateConversation, offerMessageData } from "@/lib/conversations";
+import { findOrCreateConversation, offerMessageData, offerNoteMessageData } from "@/lib/conversations";
 
 const db = prisma as unknown as { conversation: { upsert: ReturnType<typeof vi.fn> } };
 
@@ -27,6 +27,28 @@ describe("offerMessageData (puro)", () => {
     expect(m.kind).toBe("OFFER");
     expect(m.offerId).toBe("o2");
     expect(m.senderId).toBe("s1");
+  });
+});
+
+describe("offerNoteMessageData (mensaje opcional → burbuja TEXT)", () => {
+  const after = new Date("2026-06-28T12:00:00.000Z");
+
+  it("con mensaje → TEXT del que ofertó, createdAt 1ms después del card", () => {
+    const r = offerNoteMessageData({ senderId: "b1", message: "te paso mi 11-5555", after });
+    expect(r).toEqual({
+      senderId: "b1",
+      body: "te paso mi 11-5555",
+      createdAt: new Date(after.getTime() + 1),
+    });
+  });
+
+  it("sin mensaje (undefined) → null (no se crea nada)", () => {
+    expect(offerNoteMessageData({ senderId: "b1", after })).toBeNull();
+  });
+
+  it("vacío o solo espacios → null", () => {
+    expect(offerNoteMessageData({ senderId: "b1", message: "", after })).toBeNull();
+    expect(offerNoteMessageData({ senderId: "b1", message: "   ", after })).toBeNull();
   });
 });
 

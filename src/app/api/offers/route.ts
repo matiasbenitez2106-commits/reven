@@ -6,7 +6,7 @@ import { notify } from "@/lib/notifications";
 import { sendNewOfferEmail } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 import { validateNewOffer, hasLivePendingOffer, computeExpiry } from "@/lib/offers";
-import { findOrCreateConversation, offerMessageData } from "@/lib/conversations";
+import { findOrCreateConversation, offerMessageData, offerNoteMessageData } from "@/lib/conversations";
 import { formatPrice } from "@/lib/utils";
 
 // Crear una oferta sobre una publicación (la hace el comprador).
@@ -81,8 +81,12 @@ export async function POST(req: Request) {
     const conversation = await findOrCreateConversation(listingId, user.id, listing.sellerId, tx);
     // body "Oferta: $X": NO pasa por hideContactInfo (I4 solo enmascara TEXT).
     await tx.message.create({
-      data: { conversationId: conversation.id, ...offerMessageData({ offerId: offer.id, senderId: user.id, amount }) },
+      data: { conversationId: conversation.id, ...offerMessageData({ offerId: offer.id, senderId: user.id, amount }), createdAt: now },
     });
+    // Mensaje opcional → burbuja TEXT normal, JUSTO DEBAJO del card (createdAt +1ms).
+    // Va por I4/unlock como cualquier texto. Sin notif extra (ya va la de oferta).
+    const note = offerNoteMessageData({ senderId: user.id, message, after: now });
+    if (note) await tx.message.create({ data: { conversationId: conversation.id, ...note } });
     // Subir la conversación al tope del inbox.
     await tx.conversation.update({ where: { id: conversation.id }, data: { updatedAt: new Date() } });
     return { offer, conversationId: conversation.id };
