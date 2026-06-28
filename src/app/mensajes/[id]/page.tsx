@@ -8,6 +8,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { VerificationBadge } from "@/components/VerificationBadge";
 import { formatPrice } from "@/lib/utils";
 import { resolveConversationUnlocked } from "@/lib/conversation-unlock";
+import { getBuyerRatings } from "@/lib/listings";
 
 export const metadata = { title: "Conversación" };
 
@@ -80,6 +81,11 @@ export default async function ConversationPage({ params }: { params: { id: strin
     soldToId: convo.listing.soldToId,
   });
 
+  // Reputación COMO COMPRADOR del comprador del hilo (1 query): el card de oferta
+  // se la muestra al vendedor, justo donde acepta. Solo si tiene reseñas.
+  const br = (await getBuyerRatings([convo.buyerId])).get(convo.buyerId);
+  const buyerRating = br && br.count > 0 ? { rating: br.rating ?? 0, count: br.count } : null;
+
   return (
     <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-3xl flex-col px-4 py-4">
       {/* Encabezado */}
@@ -120,6 +126,7 @@ export default async function ConversationPage({ params }: { params: { id: strin
         meId={user.id}
         initialMessages={initialMessages}
         unlocked={unlocked}
+        buyerRating={buyerRating}
         disabled={convo.listing.status === "DELETED"}
         className="min-h-0 flex-1"
       />

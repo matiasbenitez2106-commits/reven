@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Heart,
   Crown,
+  HandCoins,
 } from "lucide-react";
 import { Avatar } from "./ui/Avatar";
 import { VerificationBadge } from "./VerificationBadge";
@@ -175,6 +176,9 @@ export function Navbar() {
                     </div>
                     <MenuLink href="/mis-publicaciones" icon={Package} onClick={() => setMenuOpen(false)}>
                       Mis publicaciones
+                    </MenuLink>
+                    <MenuLink href="/ofertas" icon={HandCoins} onClick={() => setMenuOpen(false)}>
+                      Ofertas recibidas
                     </MenuLink>
                     <MenuLink href="/favoritos" icon={Heart} onClick={() => setMenuOpen(false)}>
                       Favoritos

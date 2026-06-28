@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Send, Tag } from "lucide-react";
+import { Send, Tag, Star } from "lucide-react";
 import type { OfferStatus } from "@prisma/client";
 import { cn, hideContactInfo, hasContactInfo, formatPrice } from "@/lib/utils";
 import { actorRole, proposerRole, canActOnOffer, isOfferExpired } from "@/lib/offers";
@@ -53,6 +53,7 @@ export function ChatThread({
   meId,
   initialMessages,
   unlocked = false,
+  buyerRating = null,
   disabled,
   className,
 }: {
@@ -60,6 +61,9 @@ export function ChatThread({
   meId: string;
   initialMessages: Msg[];
   unlocked?: boolean;
+  // Reputación COMO COMPRADOR del comprador del hilo (o null si no tiene reseñas).
+  // El card de oferta se la muestra SOLO al vendedor.
+  buyerRating?: { rating: number; count: number } | null;
   disabled?: boolean;
   className?: string;
 }) {
@@ -151,6 +155,9 @@ export function ChatThread({
             const meta = offerStatusMeta(offer.status, expired);
             const actor = actorRole(offer, meId);
             const proposer = proposerRole(offer);
+            // El ★ del comprador se lo mostramos al VENDEDOR (quien acepta), no al
+            // propio comprador sobre su oferta.
+            const viewerIsSeller = meId === offer.sellerId;
             // Solo se puede actuar si la publi está disponible (no DELETED).
             const can = (action: "accept" | "reject" | "counter" | "cancel") =>
               !disabled && actor !== null &&
@@ -175,6 +182,17 @@ export function ChatThread({
                         </p>
                         {/* El monto NUNCA pasa por hideContactInfo (I4 solo enmascara TEXT). */}
                         <p className="text-lg font-bold leading-tight">{formatPrice(offer.amount)}</p>
+                        {/* Reputación del comprador, solo para el vendedor y si tiene reseñas. */}
+                        {viewerIsSeller && buyerRating && (
+                          <span className="mt-0.5 inline-flex items-center gap-0.5 text-[11px] text-gray-600 dark:text-stone-300">
+                            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                            {buyerRating.rating.toLocaleString("es-AR", {
+                              minimumFractionDigits: 1,
+                              maximumFractionDigits: 1,
+                            })}
+                            <span className="text-gray-400 dark:text-stone-500">({buyerRating.count})</span>
+                          </span>
+                        )}
                       </div>
                     </div>
                     <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium", meta.cls)}>
