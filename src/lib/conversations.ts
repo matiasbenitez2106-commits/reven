@@ -7,6 +7,18 @@ import { prisma } from "./prisma";
  */
 type Db = { conversation: { upsert: (typeof prisma)["conversation"]["upsert"] } };
 
+/**
+ * ¿`userId` es parte de la conversación? Solo el comprador o el vendedor pueden
+ * leerla. Puro y testeable: lo usan las API routes para gatear el acceso (nadie
+ * lee conversaciones ajenas).
+ */
+export function isConversationParticipant(
+  convo: { buyerId: string; sellerId: string },
+  userId: string
+): boolean {
+  return convo.buyerId === userId || convo.sellerId === userId;
+}
+
 /** Texto del Message de una oferta (para el inbox preview y como fallback). */
 function offerBody(amount: number): string {
   return `Oferta: $${amount.toLocaleString("es-AR")}`;

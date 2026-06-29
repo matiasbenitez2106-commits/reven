@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { getAuthedUser } from "@/lib/auth-token";
 import { notify } from "@/lib/notifications";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 
-// Lista de conversaciones del usuario
-export async function GET() {
-  const user = await getCurrentUser();
+// Lista de conversaciones del usuario. Auth DUAL (cookie web o bearer app). El
+// filtro OR:[buyerId=yo, sellerId=yo] garantiza que SOLO ves tus conversaciones.
+export async function GET(req: Request) {
+  const user = await getAuthedUser(req);
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
 
   const convos = await prisma.conversation.findMany({
@@ -55,6 +57,7 @@ export async function GET() {
       },
       lastMessage: c.messages[0]
         ? {
+            kind: c.messages[0].kind,
             body: c.messages[0].body,
             createdAt: c.messages[0].createdAt,
             mine: c.messages[0].senderId === user.id,

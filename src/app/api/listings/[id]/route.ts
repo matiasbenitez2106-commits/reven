@@ -6,13 +6,21 @@ import { notify } from "@/lib/notifications";
 import { sendReviewPromptEmail } from "@/lib/email";
 import { deleteImage } from "@/lib/storage";
 import { geocode } from "@/lib/geo";
-import { findDuplicateActiveListing, getListingBuyers } from "@/lib/listings";
+import {
+  findDuplicateActiveListing,
+  getListingBuyers,
+  roundRating,
+  reviewTargetFor,
+} from "@/lib/listings";
+import { getAuthedUser } from "@/lib/auth-token";
 import { logEvent } from "@/lib/analytics";
 
 type Params = { params: { id: string } };
 
-// Detalle público de una publicación
-export async function GET(_req: Request, { params }: Params) {
+// Detalle de una publicación. Base PÚBLICA (listing + vendedor + su reputación y
+// métricas de confianza). Si quien mira manda sesión (cookie web o bearer app),
+// se agrega lo suyo: su oferta vigente y si puede dejar reseña.
+export async function GET(req: Request, { params }: Params) {
   const l = await prisma.listing.findUnique({
     where: { id: params.id },
     include: {
@@ -37,9 +45,45 @@ export async function GET(_req: Request, { params }: Params) {
     return NextResponse.json({ error: "Publicación no encontrada" }, { status: 404 });
   }
 
+  // Reputación + métricas del vendedor (públicas) — para la tarjeta de confianza.
+  const [reviews, soldCount, activeCount] = await Promise.all([
+    prisma.review.aggregate({
+      where: { targetId: l.sellerId, targetRole: "SELLER" },
+      _avg: { rating: true },
+      _count: true,
+    }),
+    prisma.listing.count({ where: { sellerId: l.sellerId, status: "SOLD" } }),
+    prisma.listing.count({ where: { sellerId: l.sellerId, status: "ACTIVE" } }),
+  ]);
+
+  // Enriquecimiento OPCIONAL para quien mira (no rompe el caso público).
+  const me = await getAuthedUser(req);
+  let myOffer = null;
+  let reviewTarget = null;
+  if (me) {
+    myOffer = await prisma.offer.findFirst({
+      where: { listingId: l.id, buyerId: me.id, status: { in: ["PENDING", "COUNTERED", "ACCEPTED"] } },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, amount: true, status: true, proposedById: true, buyerId: true, sellerId: true, expiresAt: true },
+    });
+    reviewTarget = reviewTargetFor(
+      { sellerId: l.sellerId, status: l.status, soldToId: l.soldToId },
+      me.id
+    );
+  }
+
   return NextResponse.json({
     ...l,
     price: Number(l.price),
+    seller: {
+      ...l.seller,
+      rating: roundRating(reviews._avg.rating),
+      reviewCount: reviews._count,
+      soldCount,
+      activeCount,
+    },
+    myOffer,
+    reviewTarget,
   });
 }
 

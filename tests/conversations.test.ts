@@ -5,7 +5,12 @@ vi.mock("@/lib/prisma", () => ({
 }));
 
 import { prisma } from "@/lib/prisma";
-import { findOrCreateConversation, offerMessageData, offerNoteMessageData } from "@/lib/conversations";
+import {
+  findOrCreateConversation,
+  offerMessageData,
+  offerNoteMessageData,
+  isConversationParticipant,
+} from "@/lib/conversations";
 
 const db = prisma as unknown as { conversation: { upsert: ReturnType<typeof vi.fn> } };
 
@@ -49,6 +54,18 @@ describe("offerNoteMessageData (mensaje opcional → burbuja TEXT)", () => {
   it("vacío o solo espacios → null", () => {
     expect(offerNoteMessageData({ senderId: "b1", message: "", after })).toBeNull();
     expect(offerNoteMessageData({ senderId: "b1", message: "   ", after })).toBeNull();
+  });
+});
+
+describe("isConversationParticipant (gate de acceso)", () => {
+  const convo = { buyerId: "B", sellerId: "S" };
+  it("el comprador y el vendedor SÍ son parte", () => {
+    expect(isConversationParticipant(convo, "B")).toBe(true);
+    expect(isConversationParticipant(convo, "S")).toBe(true);
+  });
+  it("un tercero NO es parte (no puede leer el hilo)", () => {
+    expect(isConversationParticipant(convo, "X")).toBe(false);
+    expect(isConversationParticipant(convo, "")).toBe(false);
   });
 });
 

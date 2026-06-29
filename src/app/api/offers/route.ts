@@ -5,10 +5,75 @@ import { offerSchema } from "@/lib/validations";
 import { notify } from "@/lib/notifications";
 import { sendNewOfferEmail } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
-import { validateNewOffer, hasLivePendingOffer, computeExpiry } from "@/lib/offers";
+import { validateNewOffer, hasLivePendingOffer, computeExpiry, proposerRole } from "@/lib/offers";
 import { findOrCreateConversation, offerMessageData, offerNoteMessageData } from "@/lib/conversations";
+import { getBuyerRatings } from "@/lib/listings";
+import { getAuthedUser } from "@/lib/auth-token";
 import { logEvent } from "@/lib/analytics";
 import { formatPrice } from "@/lib/utils";
+
+// Ofertas RECIBIDAS por este usuario (privado: sellerId = yo). Espeja /ofertas:
+// una fila por negociación (sin COUNTERED), con ★ del comprador y el chat linkeado.
+export async function GET(req: Request) {
+  const user = await getAuthedUser(req);
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
+  const now = new Date();
+  // Expiry perezoso: vencé las PENDING vencidas dirigidas a este vendedor.
+  await prisma.offer.updateMany({
+    where: { sellerId: user.id, status: "PENDING", expiresAt: { lt: now } },
+    data: { status: "EXPIRED" },
+  });
+
+  // SOLO las recibidas por mí (sellerId = user.id). Nunca las de otro vendedor.
+  const offers = await prisma.offer.findMany({
+    where: { sellerId: user.id, status: { not: "COUNTERED" } },
+    orderBy: { createdAt: "desc" },
+    take: 100,
+    select: {
+      id: true,
+      amount: true,
+      status: true,
+      message: true,
+      createdAt: true,
+      proposedById: true,
+      sellerId: true,
+      buyerId: true,
+      buyer: { select: { firstName: true, lastName: true, avatarUrl: true } },
+      listing: { select: { id: true, title: true } },
+    },
+  });
+
+  const buyerRatings = await getBuyerRatings(offers.map((o) => o.buyerId));
+  // Conversaciones del vendedor → conversationId por par (listingId, buyerId).
+  const convos = await prisma.conversation.findMany({
+    where: { sellerId: user.id },
+    select: { id: true, listingId: true, buyerId: true },
+  });
+  const convoByPair = new Map(convos.map((c) => [`${c.listingId}::${c.buyerId}`, c.id]));
+
+  const result = offers.map((o) => {
+    const br = buyerRatings.get(o.buyerId);
+    return {
+      id: o.id,
+      amount: o.amount,
+      status: o.status,
+      message: o.message,
+      createdAt: o.createdAt,
+      proposer: proposerRole(o),
+      buyer: {
+        id: o.buyerId,
+        name: `${o.buyer.firstName} ${o.buyer.lastName}`,
+        avatarUrl: o.buyer.avatarUrl,
+        rating: br && br.count > 0 ? { rating: br.rating ?? 0, count: br.count } : null,
+      },
+      listing: { id: o.listing.id, title: o.listing.title },
+      conversationId: convoByPair.get(`${o.listing.id}::${o.buyerId}`) ?? null,
+    };
+  });
+
+  return NextResponse.json({ offers: result });
+}
 
 // Crear una oferta sobre una publicación (la hace el comprador).
 // D4: ofertar NO requiere verificación (a diferencia de mensajear).
