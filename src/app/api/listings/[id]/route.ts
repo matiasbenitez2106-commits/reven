@@ -7,6 +7,7 @@ import { sendReviewPromptEmail } from "@/lib/email";
 import { deleteImage } from "@/lib/storage";
 import { geocode } from "@/lib/geo";
 import { findDuplicateActiveListing, getListingBuyers } from "@/lib/listings";
+import { logEvent } from "@/lib/analytics";
 
 type Params = { params: { id: string } };
 
@@ -107,6 +108,8 @@ export async function PATCH(req: Request, { params }: Params) {
       },
       select: { id: true, status: true },
     });
+    // Evento de embudo: venta concretada (marcada como vendida).
+    if (status === "SOLD") await logEvent("venta_concretada");
 
     // Liberar la reserva: si pasó de RESERVED a ACTIVE, avisamos al comprador que
     // tenía la oferta aceptada que la publicación volvió a estar disponible.

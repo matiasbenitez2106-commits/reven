@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { notify } from "@/lib/notifications";
+import { logEvent } from "@/lib/analytics";
 
 // Revisión manual de verificaciones (solo ADMIN).
 // Útil para aprobar/rechazar casos en estado PENDING o probar el flujo.
@@ -55,6 +56,9 @@ export async function POST(req: Request) {
     }),
     prisma.user.update({ where: { id: userId }, data: { verification: decision } }),
   ]);
+
+  // Evento de embudo: solo cuando la verificación queda aprobada (no en rechazos).
+  if (decision === "VERIFIED") await logEvent("verificacion_completada");
 
   await notify({
     userId,

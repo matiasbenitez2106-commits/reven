@@ -5,6 +5,7 @@ import { listingSchema, searchSchema } from "@/lib/validations";
 import { searchListings, findDuplicateActiveListing } from "@/lib/listings";
 import { geocode } from "@/lib/geo";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
+import { logEvent } from "@/lib/analytics";
 
 // Búsqueda / listado público de publicaciones
 export async function GET(req: Request) {
@@ -96,6 +97,7 @@ export async function POST(req: Request) {
     },
     select: { id: true },
   });
+  await logEvent("publicacion_creada");
 
   return NextResponse.json(listing, { status: 201 });
 }

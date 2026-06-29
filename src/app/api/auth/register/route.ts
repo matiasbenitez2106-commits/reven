@@ -7,6 +7,7 @@ import { createAuthToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 import { appBaseUrl } from "@/lib/urls";
+import { logEvent } from "@/lib/analytics";
 
 export async function POST(req: Request) {
   const limited = await enforceRateLimit(req, "register", RATE_LIMITS.register);
@@ -51,6 +52,7 @@ export async function POST(req: Request) {
     data: { firstName, lastName, email, passwordHash, province, city, latitude, longitude },
     select: { id: true, email: true },
   });
+  await logEvent("registro");
 
   // Envío de email de verificación (no bloqueante)
   try {

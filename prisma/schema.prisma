@@ -504,3 +504,14 @@ model Offer {
   @@index([sellerId])
   @@index([status])
 }
+
+// Embudo propio, anónimo: solo el tipo de evento + cuándo. SIN userId ni PII.
+// Sirve para medir el funnel (registro → publicación → verificación → oferta → venta)
+// de forma agregada. Los tipos válidos viven en lib/analytics.ts (ANALYTICS_EVENTS).
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  type      String
+  createdAt DateTime @default(now())
+
+  @@index([type, createdAt])
+}

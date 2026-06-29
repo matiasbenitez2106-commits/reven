@@ -7,6 +7,7 @@ import { sendNewOfferEmail } from "@/lib/email";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
 import { validateNewOffer, hasLivePendingOffer, computeExpiry } from "@/lib/offers";
 import { findOrCreateConversation, offerMessageData, offerNoteMessageData } from "@/lib/conversations";
+import { logEvent } from "@/lib/analytics";
 import { formatPrice } from "@/lib/utils";
 
 // Crear una oferta sobre una publicación (la hace el comprador).
@@ -91,6 +92,7 @@ export async function POST(req: Request) {
     await tx.conversation.update({ where: { id: conversation.id }, data: { updatedAt: new Date() } });
     return { offer, conversationId: conversation.id };
   });
+  await logEvent("oferta_hecha");
 
   // Notificar al vendedor (in-app siempre + email: evento clave). Linkea al chat.
   await notify({

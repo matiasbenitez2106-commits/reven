@@ -16,6 +16,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <nav className="mb-6 flex gap-1 overflow-x-auto border-b border-line dark:border-stone-800 text-sm">
         {[
           { href: "/admin", label: "Resumen" },
+          { href: "/admin/metricas", label: "Métricas" },
           { href: "/admin/usuarios", label: "Usuarios" },
           { href: "/admin/publicaciones", label: "Publicaciones" },
           { href: "/admin/reportes", label: "Denuncias" },

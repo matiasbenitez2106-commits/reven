@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { BottomNav } from "@/components/BottomNav";
 import { EmailVerifyBanner } from "@/components/EmailVerifyBanner";
 import { ServiceWorkerRegister } from "./sw-register";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display" });
@@ -74,6 +75,8 @@ export default function RootLayout({
           <Footer />
           <BottomNav />
         </Providers>
+        {/* Vercel Web Analytics: tráfico cookieless, sin datos personales. */}
+        <Analytics />
       </body>
     </html>
   );
