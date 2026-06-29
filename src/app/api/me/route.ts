@@ -1,11 +1,59 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { getAuthedUser } from "@/lib/auth-token";
 import { profileSchema } from "@/lib/validations";
 import { geocode } from "@/lib/geo";
 import { sendBajaSolicitadaEmail } from "@/lib/email";
 import { appBaseUrl } from "@/lib/urls";
 import { enforceRateLimit, RATE_LIMITS } from "@/lib/ratelimit";
+
+// Datos de la cuenta del usuario actual. Auth DUAL (cookie web o bearer app):
+// primer consumidor de getAuthedUser. Privado: 401 si no hay sesión/token.
+export async function GET(req: Request) {
+  const authed = await getAuthedUser(req);
+  if (!authed) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
+  const u = await prisma.user.findUnique({
+    where: { id: authed.id },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      verification: true,
+      emailVerified: true,
+      city: true,
+      province: true,
+      avatarUrl: true,
+      role: true,
+      proPlan: true,
+      proUntil: true,
+      createdAt: true,
+      deletionScheduledFor: true,
+    },
+  });
+  if (!u) return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 });
+
+  return NextResponse.json({
+    id: u.id,
+    firstName: u.firstName,
+    lastName: u.lastName,
+    email: u.email,
+    verification: u.verification,
+    emailVerified: !!u.emailVerified,
+    city: u.city,
+    province: u.province,
+    avatarUrl: u.avatarUrl,
+    role: u.role,
+    proPlan: u.proPlan,
+    proUntil: u.proUntil,
+    memberSince: u.createdAt,
+    deletionScheduledFor: u.deletionScheduledFor
+      ? u.deletionScheduledFor.toISOString()
+      : null,
+  });
+}
 
 // Actualiza el perfil del usuario actual
 export async function PATCH(req: Request) {
